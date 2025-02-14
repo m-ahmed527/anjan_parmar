@@ -165,8 +165,7 @@
                                     <img src="{{ asset('assets/web/images/pay.png') }}" class="img-fluid"
                                         alt="">
                                 </span>
-                                <span>
-                                    Apple Pay </span>
+                                <span>Apple Pay </span>
                             </a>
                         </li>
                         <li>
@@ -276,7 +275,7 @@
                         });
                         setTimeout(function() {
                             window.location.href = "{{ route('index') }}";
-                        }, 1500)
+                        }, 1000)
                     } else {
                         Swal.fire({
                             position: "center",

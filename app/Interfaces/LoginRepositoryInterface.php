@@ -4,5 +4,7 @@ namespace App\Interfaces;
 
 interface LoginRepositoryInterface
 {
-    public function attemptLogin($remember = false);
+    public function attemptLogin($credentials,$remember = false);
+    public function forgotPassword($email);
+    public function resetPassword($request);
 }

@@ -9,25 +9,26 @@ trait HasAuth
 {
     public function authenticate(array $credentials, $remember = false)
     {
-        // dd($this->validatedRequest(request()->all()));
-        if ($this->validatedRequest(request()->all()) && empty($credentials)) {
+        if (empty($credentials)) {
+            $user = $this->validatedRequest(request()->all());
             
-            Auth::login($this->validatedRequest(request()->all()), $remember);
-            return true;
+            if ($user) {
+                Auth::login($user, $remember);
+                return true;
+            }
         } else {
             if (Auth::attempt($credentials, $remember)) {
-
                 return true;
             }
         }
         return false;
     }
 
+
     public function validatedRequest($request)
     {
-        if (isset($request['input_field'])) {
-            // dd($request);
-            return User::whereAny(['email', 'phone'], $request['input_field'])->first();
+        if (isset($request['email'])) {
+            return User::where('email', $request['email'])->first();
             // return User::whereAny(['user_name', 'email', 'phone'], $request['input_field'])->first();
         }
         return null;

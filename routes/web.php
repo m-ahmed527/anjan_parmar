@@ -29,13 +29,18 @@ Route::controller(AuthController::class)->group(function () {
 
         Route::get('/register', 'registerView')->name('register');
         Route::post('/register', 'register');
+
+        Route::get('/forgot-password', 'forgotPasswordView')->name('forgot.password');
+        Route::post('/forgot-password-email', 'forgotPassword')->name('password.email');
+
+
+        Route::get('/reset-password', 'resetPasswordView')->name('reset.password');
+        Route::post('/reset-password', 'resetPassword')->name('password.update');
     });
     Route::middleware('auth')->group(function () {
         Route::post('/logout', 'logout')->name('logout');
     });
 });
-Route::view('/forget-password', 'auth.web.forget-password')->name('forget-password');
-Route::view('/reset-password', 'auth.web.reset-password')->name('reset-password');
 // Route::view('/login', 'auth.web.login')->name('login');
 Route::view('/vendor-register', 'auth.web.vendors-register')->name('vendor-register');
 
@@ -164,4 +169,4 @@ Route::get('/products/{id}', function ($id) use ($products) {
 Route::view('/products', 'screens.web.products.index', ['products' => $products])->name('products');
 Route::view('/shop', 'screens.web.shop.index', ['products' => $products])->name('shop');
 
-Route::view('/', 'screens.web.index', ['products' => $products])->name('index')->middleware('auth');
+Route::view('/', 'screens.web.index', ['products' => $products])->name('index');

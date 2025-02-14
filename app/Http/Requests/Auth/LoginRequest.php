@@ -22,7 +22,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'input_field' => 'required|email|exists:users,email',
+            'email' => 'required|email|exists:users,email',
             'password' => 'required|string|min:8',
         ];
     }
@@ -30,7 +30,7 @@ class LoginRequest extends FormRequest
     public function sanitized()
     {
         return [
-            'input_field' => $this->input_field,
+            'email' => $this->email,
             'password' => $this->password,
         ];
     }

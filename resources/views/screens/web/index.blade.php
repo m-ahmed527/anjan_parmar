@@ -11,7 +11,7 @@
 
 @section('content')
     <main>
-        {{-- @dd(auth()->user()) --}}
+        {{-- @dd(auth()->user()->toArray()) --}}
         <section class="banner mx-4">
             <div class="container-fluid px-5 content-area">
                 <div class="row">

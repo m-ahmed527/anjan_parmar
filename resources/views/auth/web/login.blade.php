@@ -11,9 +11,9 @@
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
-                    <input type="email" name="input_field" class="form-control" placeholder="Enter your email address"
+                    <input type="email" name="email" class="form-control" placeholder="Enter your email address"
                         id="email">
-                    @error('input_field')
+                    @error('email')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -29,7 +29,7 @@
                     <button type="button" class="btn btn-primary w-100 mb-3" id="login-btn">Login</button>
                     <a href="{{ route('register') }}" id="showLogin" class="text-center mb-3">Don't have an account?
                         Signup</a>
-                    <a href="{{ route('forget-password') }}" id="showLogin" class="text-center">Forgot password?</a>
+                    <a href="{{ route('forgot.password') }}" id="showLogin" class="text-center">Forgot password?</a>
                 </div>
             </form>
         </div>
@@ -70,7 +70,7 @@
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: "Something went wrong",
+                            title: response.message,
                             showConfirmButton: true,
                             timer: 2000
                         })

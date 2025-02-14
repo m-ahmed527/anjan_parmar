@@ -25,6 +25,7 @@ class AuthRepository implements AuthRepositoryInterface
                     'password' => $data['password']
                 ];
                 $this->authenticate($credentials, $remember);
+                $user->update(['status' => true]);
             }
             return response([
                 'success' => true,

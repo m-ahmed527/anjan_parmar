@@ -22,7 +22,8 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $response = $this->login->attemptLogin(false);
+        $credentials = $request->only('email', 'password'); // Extract credentials from request
+        $response = $this->login->attemptLogin($credentials, false);
         $decoded = json_decode($response->getContent(), true);
 
         $success = $decoded['success'];
@@ -60,5 +61,48 @@ class AuthController extends Controller
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error']);
         }
+    }
+
+    public function forgotPasswordView()
+    {
+        return view('auth.web.forgot-password');
+    }
+    public function forgotPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+        $response = $this->login->forgotPassword($request->email);
+        $decoded = json_decode($response->getContent(), true);
+        $success = $decoded['success'];
+        $message = $decoded['message'];
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+        ]);
+    }
+
+    public function resetPasswordView(Request $request)
+    {
+        $token = $request->token;
+        $email = $request->email;
+
+        return view('auth.web.reset-password', get_defined_vars());
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+        $response = $this->login->resetPassword($request->all());
+        $decoded = json_decode($response->getContent(), true);
+        $success = $decoded['success'];
+        $message = $decoded['message'];
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+        ]);
     }
 }

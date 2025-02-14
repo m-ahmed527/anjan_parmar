@@ -6,6 +6,7 @@ use App\Interfaces\AuthRepositoryInterface;
 use App\Interfaces\LoginRepositoryInterface;
 use App\Repositories\AuthRepository;
 use App\Repositories\LoginRepository;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Blade::if('role', function ($role) {
+            return auth()->check() && auth()->user()->hasRole($role);
+        });
+
+        Blade::if('permission', function ($permission) {
+            return auth()->check() && auth()->user()->hasPermission($permission);
+        });
     }
 }
