@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\AuthRepositoryInterface;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\OtpService;
 use App\Traits\HasAuth;
@@ -14,18 +15,28 @@ class AuthRepository implements AuthRepositoryInterface
 
     public function registerByEmailPassword(array $data, $remember = false)
     {
-        // dd($data);
+        // dd(request()->has('avatar'));
         try {
-
-
             $user = User::create($data);
             if ($user) {
+                if (request()->has('avatar')) {
+                    $user->addMedia(request()->avatar, 'avatar');
+                }
                 $credentials = [
                     'email' => $data['email'],
                     'password' => $data['password']
                 ];
                 $this->authenticate($credentials, $remember);
-                $user->update(['status' => true]);
+                if (str_contains(url()->previous(), 'vendor')) {
+                    $role = Role::where('name', 'Vendor')->first();
+                    $user->roles()->sync($role->id);
+                    $user->update(['status' => false]);
+                } else {
+                    $user->update(['status' => true]);
+                }
+                if (!empty($data['category'])) {
+                    auth()->user()->categories()->sync($data['category']);
+                }
             }
             return response([
                 'success' => true,

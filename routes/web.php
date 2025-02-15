@@ -36,13 +36,14 @@ Route::controller(AuthController::class)->group(function () {
 
         Route::get('/reset-password', 'resetPasswordView')->name('reset.password');
         Route::post('/reset-password', 'resetPassword')->name('password.update');
+
+        Route::get('/vendor/register', 'vendorRegisterView')->name('vendor.register.view');
     });
     Route::middleware('auth')->group(function () {
         Route::post('/logout', 'logout')->name('logout');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');
-Route::view('/vendor-register', 'auth.web.vendors-register')->name('vendor-register');
 
 $products = [
     [

@@ -5,7 +5,7 @@
             <button class="btn-style small-btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i class="fa fa-search"></i>
             </button>
-            <a href="{{ route('vendor-register') }}" class="vendors-btn vendor-outline">
+            <a href="{{ route('vendor.register.view') }}" class="vendors-btn vendor-outline">
                 Signup as vendors
             </a>
         </div>
@@ -104,9 +104,11 @@
                 </a>
             </li>
         </ul>
-        <a href="{{ route('vendor-register') }}" class="vendors-btn">
-            Signup as vendors
-        </a>
+        @guest
+            <a href="{{ route('vendor.register.view') }}" class="vendors-btn">
+                Signup as vendors
+            </a>
+        @endguest
     </nav>
     <div class="off-canva-custom">
         <div class="menu-bar">

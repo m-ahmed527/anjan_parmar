@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Interfaces\AuthRepositoryInterface;
 use App\Interfaces\LoginRepositoryInterface;
+use App\Models\Category;
 use App\Traits\HasAuth;
 use Illuminate\Http\Request;
 use Exception;
@@ -15,6 +16,11 @@ class AuthController extends Controller
 {
     public function __construct(public AuthRepositoryInterface $register, public LoginRepositoryInterface $login) {}
 
+    public function vendorRegisterView()
+    {
+        $categories = Category::all();
+        return view('auth.web.vendors-register', get_defined_vars());
+    }
     public function loginView()
     {
         return view('auth.web.login');
@@ -40,10 +46,8 @@ class AuthController extends Controller
     }
     public function register(RegisterRequest $request)
     {
-        // dd($request->sanitized());
         $response = $this->register->registerByEmailPassword($request->sanitized(), false);
         $decoded = json_decode($response->getContent(), true);
-        // dd($decoded);
         $success = $decoded['success'];
         $message = $decoded['message'];
 

@@ -5,7 +5,7 @@
         !request()->route()->named('reset.password') &&
         !request()->route()->named('register') &&
         !request()->route()->named('login') &&
-        !request()->route()->named('vendor-register'))
+        !request()->route()->named('vendor.register.view'))
     @include('includes.web.header')
 @endif
 
@@ -16,6 +16,6 @@
         !request()->route()->named('reset.password') &&
         !request()->route()->named('register') &&
         !request()->route()->named('login') &&
-        !request()->route()->named('vendor-register'))
+        !request()->route()->named('vendor.register.view'))
     @include('includes.web.footer')
 @endif

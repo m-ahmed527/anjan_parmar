@@ -19,17 +19,33 @@ class RolePermissionsSeeder extends Seeder
         $admin = User::create([
             'first_name' => 'Ahmed',
             'last_name' => 'Ansari',
-            'slug' => Str::slug('Ahmed'. '_' . 'Ansari'),
+            'slug' => Str::slug('Ahmed' . '_' . 'Ansari'),
             'email' => 'admin@example.com',
             'phone' => '+12345678912',
             'status' => true,
             'password' => bcrypt('password'),
         ]);
         // Create roles
-        $role = Role::create([
-            'name' => 'Admin',
-            'guard_name' => 'web',
-        ]);
+        $role = Role::create(
+            [
+                'name' => 'Admin',
+                'guard_name' => 'web',
+            ],
+
+        );
+
+        $vendorRole= Role::create(
+            [
+                'name' => 'Vendor',
+                'guard_name' => 'web',
+            ],
+        );
+        $userRole= Role::create(
+            [
+                'name' => 'User',
+                'guard_name' => 'web',
+            ],
+        );
 
         // Define permissions
         $permissionsList = [
