@@ -11,6 +11,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        
         return true;
     }
 
@@ -22,44 +23,23 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'brand' => 'sometimes|array',
-            'style_number*' => 'sometimes|array',
-            'p_id' => 'sometimes|array',
-            'p_id.*' => 'sometimes|integer',
-            'parent_id*' => 'sometimes|array',
-            'category' => 'sometimes|array',
+
+            'category' => 'sometimes',
             'category.*' => 'sometimes',
-            'name' => 'sometimes|array',
-            'name.*' => 'sometimes',
-            'matal*' => 'sometimes|array',
-            'stone_type*' => 'sometimes|array',
-            'stone_shape*' => 'sometimes|array',
-            'stone_count*' => 'sometimes|array',
-            'stone_size*' => 'sometimes|array',
-            'stone_weight*' => 'sometimes|array',
-            'search_keywords*' => 'sometimes|array',
-            'price' => 'sometimes|array',
-            'price.*' => 'sometimes',
-            'wholesale_price' => 'sometimes|array',
-            'wholesale_price.*' => 'sometimes',
-            'override_retail_price' => 'sometimes|array',
-            'description' => 'sometimes|array',
-            'description.*' => 'sometimes',
-            'short_description' => 'sometimes|array',
-            'short_description.*' => 'sometimes',
-            'weight*' => 'sometimes',
-            'length*' => 'sometimes',
-            'height*' => 'sometimes',
-            'width*' => 'sometimes',
-            'radius*' => 'sometimes',
-            'attribute*' => 'sometimes',
+            'name' => 'sometimes',
+            'search_keywords*' => 'sometimes',
+            'price' => 'sometimes',
+            'wholesale_price' => 'sometimes',
+            'description' => 'sometimes',
+            'long_description' => 'sometimes',
+            'attribute' => 'sometimes',
+            'attribute*' => 'sometimes|array',
             'variant' => 'sometimes|array',
             'variant.*' => 'sometimes',
             'add_on_price*' => 'somtimes',
-            'discount*' => 'sometimes',
+            'discount' => 'sometimes',
             'images*' => 'sometimes',
-            'featured_image' => 'sometimes|array',
-            'featured_image.*' => 'sometimes'
+            'featured_image' => 'required',
         ];
     }
 

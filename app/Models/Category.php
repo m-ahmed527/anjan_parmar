@@ -15,10 +15,21 @@ class Category extends Model
     {
         return 'slug';
     }
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
+
+    public function attributes(): BelongsToMany
+    {
+        return $this->belongsToMany(Attribute::class)->withTimestamps();
+    }
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'category_product');
+    }
+
 
     public function registerMediaCollection(): void
     {

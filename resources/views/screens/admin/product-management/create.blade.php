@@ -22,10 +22,9 @@
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="card-body">
-                                        <h1 class="count-products">( 1 )</h1>
                                         <br>
                                         <div class="row">
-                                            <div class="form-group col-md-4">
+                                            {{-- <div class="form-group col-md-4">
                                                 <label for="">Select Brand (Optional) </label>
                                                 <select name="brand[]" class="form-control" id="">
                                                     <option value="" class="form-control" selected disabled>Select
@@ -38,14 +37,15 @@
                                                 @error('brand*')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
-                                            </div>
+                                            </div> --}}
                                             <div class="form-group col-md-4">
                                                 <label for="">Select Categories *</label>
-                                                <select name="category[0][]" class="form-control" multiple="multiple"
-                                                    id="">
+                                                <select name="category" class="form-control category" id="">
+                                                    <option value="" class="form-control" selected disabled>Select
+                                                    </option>
                                                     @foreach ($categories as $key => $category)
-                                                        <option value="{{ $key }}" class="form-control">
-                                                            {{ $category }}</option>
+                                                        <option value="{{ $category->slug }}" class="form-control">
+                                                            {{ $category->name }}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('category*')
@@ -54,100 +54,26 @@
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="exampleInputPassword1">Product Name *</label>
-                                                <input type="text" class="form-control" name="name[]" id=""
+                                                <input type="text" class="form-control" name="name" id=""
                                                     placeholder="Product name">
                                                 @error('name*')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Style Number (optional)</label>
-                                                <input type="text" class="form-control" name="style_number[]" id=""
-                                                    placeholder="Product name">
-                                                @error('style_number*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product ID *</label>
-                                                <input type="text" class="form-control" name="p_id[]" id=""
-                                                    placeholder="Product ID">
-                                                @error('p_id*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Parent ID *</label>
-                                                <input type="text" class="form-control" name="parent_id[]" id=""
-                                                    placeholder="Product Parent ID">
-                                                @error('parent_id*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
 
                                             <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Metal/Quality *</label>
-                                                <input type="text" class="form-control" name="matal[]" id=""
-                                                    placeholder="Karats / Stailess Steel etc. ">
-                                                @error('matal*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Stone Type (optional) </label>
-                                                <input type="text" class="form-control" name="stone_type[]" id=""
-                                                    placeholder="Diamond/Emerald etc.">
-                                                @error('stone_type*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Stone Shape (optional) </label>
-                                                <input type="text" class="form-control" name="stone_shape[]" id=""
-                                                    placeholder="Round/Oval etc.">
-                                                @error('stone_shape*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Stone Count (optional) </label>
-                                                <input type="text" class="form-control priceInput[]" name="stone_count[]" id=""
-                                                    placeholder="numbers of stones in product">
-                                                    <span class="text-danger priceError[]" id="priceError"></span>
-                                                @error('stone_count*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Stone Size (optional) </label>
-                                                <input type="text" class="form-control priceInput[]" name="stone_size[]" id=""
-                                                    placeholder="in mm">
-                                                    <span class="text-danger priceError[]" id="priceError"></span>
-                                                @error('stone_size*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Stone Weight (optional) </label>
-                                                <input type="text" class="form-control priceInput[]" name="stone_weight[]" id=""
-                                                    placeholder="in mg">
-                                                    <span class="text-danger priceError[]" id="priceError"></span>
-                                                @error('stone_weight*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Search Keyword (optional) </label>
-                                                <input type="text" class="form-control" name="search_keyword[]" id=""
-                                                    placeholder="....">
+                                                <label for="exampleInputPassword1">Product Search Keyword (optional)
+                                                </label>
+                                                <input type="text" class="form-control" name="search_keyword"
+                                                    id="" placeholder="....">
                                                 @error('search_keyword*')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
 
                                             <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Price *</label>
-                                                <input type="text" class="form-control priceInput[]" name="price[]"
+                                                <label for="exampleInputPassword1">Product Price*</label>
+                                                <input type="text" class="form-control priceInput[]" name="price"
                                                     placeholder="Enter price">
 
                                                 <span class="text-danger priceError[]" id="priceError"></span>
@@ -156,36 +82,37 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
+
                                             <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Wholesale Price *</label>
-                                                <input type="text" class="form-control priceInput[]" name="wholesale_price[]"
-                                                    placeholder="Enter wholesale_price">
-
+                                                <label for="exampleInputPassword1">Discount On Product *</label>
+                                                <input type="text" class="form-control priceInput[]" name="discount"
+                                                    placeholder="Enter discount price or percent" min="0">
                                                 <span class="text-danger priceError[]" id="priceError"></span>
+                                                <div class="form-check form-check-inline mt-2">
+                                                    <input type="checkbox" class="form-check-input" name="is_percent"
+                                                        id="is_percent">
+                                                    <label for="is_percent" class="form-check-label">Check if discount is
+                                                        in %</label>
+                                                    @error('is_percent*')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
 
-                                                @error('wholesale_price*')
+                                                </div>
+                                                @error('discount*')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Product Override Retail Price (optional)</label>
-                                                <input type="text" class="form-control priceInput[]" name="override_retail_price[]"
-                                                    placeholder="Enter override_retail_price">
-                                                <span class="text-danger priceError[]" id="priceError"></span>
-                                                @error('override_retail_price*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
+
                                             <div class="form-group col-md-12">
                                                 <label for="exampleInputPassword1">Product Description *</label>
-                                                <textarea type="text" class="form-control" name="description[]" id="" placeholder="Enter description"></textarea>
+                                                <textarea type="text" class="form-control" name="description" id="" placeholder="Enter description"></textarea>
                                                 @error('description*')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                             <div class="form-group col-md-12">
-                                                <label for="exampleInputPassword1">Product Short Description *</label>
-                                                <textarea type="text" class="form-control" name="short_description[]" id=""
+                                                <label for="exampleInputPassword1">Product Long Description *</label>
+                                                <textarea type="text" class="form-control" name="long_description" id=""
                                                     placeholder="Enter short description"></textarea>
                                                 @error('short_description*')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -196,7 +123,7 @@
                                                 <label for="exampleInputFile">Insert Featured Image *</label>
                                                 <div class="input-group">
                                                     <div class="custom-file">
-                                                        <input type="file" name="featured_image[]"
+                                                        <input type="file" name="featured_image"
                                                             class="custom-file-input" id="exampleInputFile">
                                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                                             file</label>
@@ -210,7 +137,7 @@
                                                 <label for="exampleInputFile">Insert Multiple Images (optional)</label>
                                                 <div class="input-group">
                                                     <div class="custom-file">
-                                                        <input type="file" name="images[0][]" class="custom-file-input"
+                                                        <input type="file" name="images[]" class="custom-file-input"
                                                             id="exampleInputFile" multiple>
                                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                                             files</label>
@@ -220,133 +147,29 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="exampleInputPassword1">Discount On Product *</label>
-                                                <input type="text" class="form-control priceInput[]" name="discount[]"
-                                                    placeholder="Enter discount price or percent" min="0">
-                                                <span class="text-danger priceError[]" id="priceError"></span>
-                                                <div class="form-check form-check-inline mt-2">
-                                                    <input type="checkbox" class="form-check-input" name="is_percent[]"
-                                                        id="is_percent">
-                                                    <label for="is_percent" class="form-check-label">Check if discount is
-                                                        in %</label>
-                                                    @error('is_percent*')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
 
-                                                </div>
-                                                @error('discount*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="">Product Weight *</label>
-                                                <input type="text" class="form-control priceInput[]" name="weight[]"
-                                                    placeholder="Enter Wegiht in g">
-                                                <span class="text-danger priceError[]"></span>
-                                                @error('weight*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="">Product Length (optional)</label>
-                                                <input type="text" class="form-control priceInput[]" name="length[]"
-                                                    placeholder="Enter Length in cm">
-                                                <span class="text-danger priceError[]"></span>
-                                                @error('length*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="">Product Height (optional)</label>
-                                                <input type="text" class="form-control priceInput[]" name="height[]"
-                                                    placeholder="Enter Height in cm">
-                                                <span class="text-danger priceError[]"></span>
-                                                @error('height*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="">Product Width (optional)</label>
-                                                <input type="text" class="form-control priceInput[]" name="width[]"
-                                                    placeholder="Enter Width in cm">
-                                                <span class="text-danger priceError[]"></span>
-                                                @error('width*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="">Product Radius (optional)</label>
-                                                <input type="text" class="form-control priceInput[]" name="radius[]"
-                                                    placeholder="Enter radius in cm">
-                                                <span class="text-danger priceError[]"></span>
-                                                @error('radius*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
+
                                         </div>
                                         <hr>
-                                        <h3>Attribute Variants</h3>
-                                        <div class="attribute-variants row mt-5">
-                                            <div class="form-group col-md-3">
-                                                <label for="">Select Attribute *</label>
-                                                <select name="attribute[0][]" class="form-control showattribute">
-                                                    <option class="form-control" selected disabled>None</option>
-                                                    @foreach ($attributes as $key => $attr)
-                                                        <option value="{{ $attr->id }}" class="form-control">
-                                                            {{ $attr->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('attribute*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="">Select Variants *</label>
-                                                <select name="variant[0][]" class="form-control showVariants" >
-                                                    <option value="" class="form-control" selected disabled>Select
-                                                        attribute first</option>
-                                                </select>
-                                                @error('variant*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="exampleInputPassword1">Addon Product Price *</label>
-                                                <input type="number" class="form-control priceInput[]"
-                                                    name="add_on_price[0][]" placeholder="Enter price">
-                                                <span class="text-danger priceError[]"></span>
-                                                @error('add_on_price*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                        <h3>Select Category for Attribute</h3>
+                                        <div class="parent-attribute">
+                                            <div class="row attribute-variants" id="attributes-container">
+
+                                                <!-- Attributes & Variants Will Load Here -->
                                             </div>
 
-                                            <div class="form-group col-md-3">
-                                                <label for="">Product Quantity *</label>
-                                                <input type="number" class="form-control" name="quantity[0][]"
-                                                    id="" placeholder="Enter quantity" min="0">
-                                                @error('quantity*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group col-md-12 d-flex justify-content-end">
-                                                <a href="javascript:void(0)"
-                                                    class="btn btn-danger btn-md remove-attribute"><i
-                                                        class="fas fa-trash"></i></a>
-                                            </div>
                                         </div>
-                                        <div
-                                            class="form-group col-md-12 d-flex align-items-center gap-20 justify-content-end mt-5">
 
+                                        <div class="form-group col-md-12 d-flex align-items-center gap-20 justify-content-end mt-5 "
+                                            id="add-attribute-section" style="display: none !important">
                                             <h5>Add Attribute-Variants</h5>
                                             <a href="javascript:void(0)" class="btn btn-success btn-md add-attribute"><i
                                                     class="fas fa-plus"></i></a>
-
                                         </div>
                                     </div>
                                     <div class="card-footer d-flex gap-20">
-                                        <a href="javascript:void(0)" class="btn btn-success btn-md add-more-products"><i
-                                                class="fas fa-plus"></i></a>
+                                        {{-- <a href="javascript:void(0)" class="btn btn-success btn-md add-more-products"><i
+                                                class="fas fa-plus"></i></a> --}}
                                         <a href="{{ route('admin.product.index') }}" class="btn btn-secondary">Back</a>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
@@ -387,33 +210,36 @@
 
         $(document).ready(function() {
             //Initialize Select2 Elements
-            // $('.select213').select2();
+            $('.category').select2();
             $('#select1').select2();
 
-            var productIndex = 0;
-            $(document).on("click", ".add-more-products", function(e) {
-                e.preventDefault();
-                productIndex++;
-                let count = $(".count-products");
 
-                count.html(`<h1 class="count-products" >( ${productIndex + 1} )</h1>`);
-                let newDiv = $(".card-body").first().clone(true); // Clones with events and data
-                newDiv.find('select[name^="category"]').attr('name',
-                    `category[${productIndex}][]`);
-                newDiv.find('select[name^="attribute"]').attr('name',
-                    `attribute[${productIndex}][]`);
-                newDiv.find('select[name^="variant"]').attr('name',
-                    `variant[${productIndex}][]`);
-                newDiv.find('input[name^="images"]').attr('name', `images[${productIndex}][]`);
-                newDiv.find('input[name^="add_on_price"]').attr('name',
-                    `add_on_price[${productIndex}][]`);
-                newDiv.find('input[name^="quantity"]').attr('name',
-                    `quantity[${productIndex}][]`);
-                $(".card-body").last().after(newDiv);
+            $(".category").change(function() {
+                var categorySlug = $(this).val();
+                $(".attribute-variants").html(""); // Clear previous attributes
+                if (categorySlug) {
+                    $.ajax({
+                        url: "{{ route('admin.get.attributes', '') }}/" + categorySlug,
+                        type: "GET",
 
-                // Rebind change event for attribute selection
-                bindAttributeChange(productIndex);
+                        success: function(response) {
+
+                            if (response.success) {
+                                $("#attributes-container").append(response.html);
+                                $("#add-attribute-section").css("display", "block");
+                            } else {
+                                $("#add-attribute-section").css("display", "none");
+                            }
+                        }
+                    });
+                }
             });
+
+
+
+
+            var productIndex = 0;
+
 
             function bindAttributeChange(index) {
                 $(document).on("change", `select[name='attribute[${index}][]']`, function() {
@@ -423,7 +249,7 @@
                     console.log(attribute);
                     $.ajax({
                         type: 'GET',
-                        url: "{{ route('admin.get.variant','') }}/" + attribute,
+                        url: "{{ route('admin.get.variant', '') }}/" + attribute,
                         dataType: "json",
                         success: function(response) {
                             let optElem = '';
@@ -442,69 +268,61 @@
             bindAttributeChange(productIndex);
 
 
-            // var productIndex = 0;
-            // $(document).on("click", ".add-more-products", function(e) {
-            //     e.preventDefault();
-            //     productIndex++;
 
-            //     let newDiv = $(".card-body").first().clone(true); // Clones with events and data
-            //     newDiv.find('select[name="category[0][]"]').attr('name', `category[${productIndex}][]`);
-            //     newDiv.find('select[name="attribute[0][]"]').attr('name', `attribute[${productIndex}][]`);
-            //     newDiv.find('select[name="variant[0][]"]').attr('name', `variant[${productIndex}][]`);
-            //     $(".card-body").last().after(newDiv);
-            // });
 
-            // $(document).on("change", `select[name='attribute[${productIndex}][]']`, function() {
-            //     console.log(productIndex);
-            //     let varElement = $(this).closest('.attribute-variants').find(
-            //         `select[name='variant[${productIndex}][]']`).first();
-            //     console.log(varElement);
-            //     let attribute = $(this).val();
-            //     $.ajax({
-            //         type: 'GET',
-            //         url: '/admin/get-variants/' + attribute,
-            //         dataType: "json",
-            //         success: function(response) {
-            //             let optElem = '';
-            //             // console.log(response.variants);
-            //             $.each(response.variants, function(key, val) {
-            //                 optElem +=
-            //                     `<option value="${val.id}" class="form-control" > ${val.name} </option>`
-            //             });
-            //             varElement.html(optElem);
-            //         }
-            //     })
-            // });
+
 
 
             $(document).on("click", ".add-attribute", function(e) {
                 e.preventDefault();
+
                 let parentContainer = $(this).closest(".card-body");
-                let parentElem = parentContainer.find(".attribute-variants").last()
-                // Create a new element and append it to the parent
-                let newElem = parentElem.clone();
-                parentElem.after(newElem);
+                let lastElem = parentContainer.find(".attribute-variants")
+                    .last(); // Find the last attribute variant row
 
-                // Reset input values
-                newElem.find("input").val("");
-                newElem.find('input[name="is_percent[]"]').prop('checked', false);
-                newElem.find("select[name='attribute[]']").val("None");
-                newElem.find("select[name='variant[]']").html(null);
+                // Clone the last element and append after it
+                let newElem = lastElem.clone();
 
+                // Reset input values inside the cloned element
+                newElem.find("input, select").each(function() {
+                    $(this).val(""); // Reset input/select values
+                });
+
+                // Append new element after the last one
+                lastElem.after(newElem);
             });
 
-            $(document).on("click", ".remove-attribute", function(e) {
+            // $(document).on("click", ".remove-attribute", function(e) {
 
+            //     e.preventDefault();
+            //     let parentContainer = $(this).closest(".attribute-variants");
+            //     let allElem = $(".attribute-variants");
+            //     console.log(allElem);
+
+            //     if (allElem.length > 1) {
+            //         let lastElem = parentContainer.last();
+            //         lastElem.remove();
+            //     } else {
+            //         if (!parentContainer.find('.text-danger').length) {
+            //             parentContainer.append(
+            //                 '<span class="text-danger"> At least one Attribute Variant is required </span>'
+            //             );
+            //         }
+            //     }
+            // });
+            $(document).on("click", ".remove-attribute", function(e) {
                 e.preventDefault();
-                let parentContainer = $(this).closest(".attribute-variants");
+
                 let allElem = $(".attribute-variants");
+                let parentContainer = $(this).closest(".attribute-variants");
+
                 if (allElem.length > 1) {
-                    let lastElem = parentContainer.last();
-                    lastElem.remove();
+                    parentContainer.remove();
                 } else {
+                    // If it's the last element, show an error message
                     if (!parentContainer.find('.text-danger').length) {
                         parentContainer.append(
-                            '<span class="text-danger"> At least one Attribute Variant is required </span>'
+                            '<span class="text-danger">At least one Attribute Variant is required</span>'
                         );
                     }
                 }
@@ -518,3 +336,48 @@
     <link rel="stylesheet"
         href="{{ asset('assets/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 @endpush
+{{-- <div class="attribute-variants row mt-5">
+                                            <div class="form-group col-md-3">
+                                                <label for="">Select Attribute *</label>
+                                                <select name="attribute[]" class="form-control showattribute">
+                                                    <option class="form-control" selected disabled>None</option>
+
+                                                </select>
+                                                @error('attribute*')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="">Select Variants *</label>
+                                                <select name="variant[]" class="form-control showVariants">
+                                                    <option value="" class="form-control" selected disabled>Select
+                                                        attribute first</option>
+                                                </select>
+                                                @error('variant*')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="exampleInputPassword1">Addon Product Price *</label>
+                                                <input type="number" class="form-control priceInput[]"
+                                                    name="add_on_price[]" placeholder="Enter price">
+                                                <span class="text-danger priceError[]"></span>
+                                                @error('add_on_price*')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group col-md-3">
+                                                <label for="">Product Quantity *</label>
+                                                <input type="number" class="form-control" name="quantity[]"
+                                                    id="" placeholder="Enter quantity" min="0">
+                                                @error('quantity*')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-12 d-flex justify-content-end">
+                                                <a href="javascript:void(0)"
+                                                    class="btn btn-danger btn-md remove-attribute"><i
+                                                        class="fas fa-trash"></i></a>
+                                            </div>
+                                        </div> --}}

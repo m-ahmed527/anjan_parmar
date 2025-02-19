@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCategoryRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
+use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\CategoryType;
 use Exception;
@@ -26,16 +27,17 @@ class CategoryManagementController extends Controller
     public function create(): View
     {
         $categories = Category::all();
-        // $categoryTypes = CategoryType::all();
+        $attributes = Attribute::all();
         return view('screens.admin.category-management.create', get_defined_vars());
     }
 
     public function store(StoreCategoryRequest $request)
     {
+        // dd($request->all());
         try {
             DB::beginTransaction();
             $category = Category::create($request->sanitized());
-
+            $category->attributes()->sync($request->attribute);
             if ($request->image) {
 
                 $category->addMedia($request->image, 'category');

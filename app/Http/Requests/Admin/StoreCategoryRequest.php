@@ -28,6 +28,7 @@ class StoreCategoryRequest extends FormRequest
             // 'category_type' => 'required|array',
             // 'category_type.*' => 'required',
             'name' => 'required',
+            'attribute' => 'required|array',
             'image' => 'image',
             'banner_image' => 'image',
 
@@ -41,4 +42,5 @@ class StoreCategoryRequest extends FormRequest
             'slug' => Str::slug($this->name),
         ];
     }
+
 }
