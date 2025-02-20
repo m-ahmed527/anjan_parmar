@@ -9,10 +9,13 @@ use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Variant;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ProductManagementController extends Controller
 {
@@ -41,49 +44,71 @@ class ProductManagementController extends Controller
         return view('screens.admin.product-management.create', get_defined_vars());
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        dd($request->all());
-        // dd($request->all());
-        // $product = [];
-        // foreach ($request->sanitized() as $key => $sanitized) {
-        //     $product[] = Product::create($sanitized);
+        try {
 
-        //     if ($product[$key]) {
+            DB::beginTransaction();
+            $data = $request->all();
+            $product = Product::create($request->sanitized());
+            $product->addMedia($request->featured_image, 'featured_image');
+            if ($request->has('images')) {
+                $product->addMultipleMedia($request->images, 'multiple_images');
+            }
+            if (isset($data["attributes"])) {
+                $variants = $this->prepareVariants($data);
+                foreach ($variants as $variant) {
+                    $product->variants()->create($variant);
+                }
+            }
+            DB::commit();
+            return response([
+                "success" => true,
+                "message" => "Product created successfully",
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response([
+                "success" => false,
+                "message" => "Failed to create product. Please try again.",
+            ]);
+        }
+    }
+    private function prepareVariants($data)
+    {
+        $structuredArray = [];
 
-        //         if (isset($request->images[$key])) {
-        //             $product[$key]->addMultipleMediaFromRequest(['images[' . $key . ']'])->each(function ($fileAdder) {
-        //                 $fileAdder->toMediaCollection('product-images');
-        //             });
-        //         }
+        // Extract attribute keys dynamically
+        $attributeKeys = array_keys($data["attributes"]);
 
-        //         $product[$key]->addMedia($request->featured_image[$key])->toMediaCollection('product-featured-image');
-        //         foreach ($request->category[$key] as $cat) {
-        //             $product[$key]->categories()->attach($cat);
-        //         }
+        // Find total variants count (based on first attribute's count)
+        $totalVariants = count(reset($data["attributes"]));
 
-        //         foreach ($request->sanitizedVariants()[$key]['variant_id'] as $index => $variantId) {
-        //             $addOnPrice = $request->sanitizedVariants()[$key]['add_on_price'][$index];
-        //             $quantity = $request->sanitizedVariants()[$key]['quantity'][$index];
-        //             $product[$key]->variants()->attach($variantId, [
-        //                 'add_on_price' => $addOnPrice,
-        //                 'quantity' => $quantity,
-        //             ]);
-        //         }
+        for ($i = 0; $i < $totalVariants; $i++) {
+            $variantData = [];
 
-        //         foreach ($request->sanitizedAttributes()[$key] as $attribute) {
+            // Add all attributes dynamically
+            foreach ($attributeKeys as $key) {
+                if (isset($data["attributes"][$key][$i])) {
+                    $variantData[$key] = $data["attributes"][$key][$i];
+                }
+            }
 
-        //             $product[$key]->attributes()->attach($attribute);
-        //         }
-        //     }
-        // }
-        // return redirect()->route('admin.product.index');
+            // Construct final structured array
+            $structuredArray[] = [
+                "attributes" => json_encode($variantData),
+                "variant_price" => isset($data["variant_price"][$i]) ? (int) $data["variant_price"][$i] : 0,
+                "quantity" => isset($data["quantity"][$i]) ? (int) $data["quantity"][$i] : 0
+            ];
+        }
+        return $structuredArray;
     }
 
     public function show(Product $product): View
     {
+        $var = json_decode($product->variants[0]->attributes, true);
 
-        return view('screens.admin.product-management.details', compact('product'));
+        return view('screens.admin.product-management.details', get_defined_vars());
     }
 
     public function delete(Product $product)
@@ -161,8 +186,8 @@ class ProductManagementController extends Controller
                 }),
             ];
         });
-        $html = view('includes.admin.product.fetch-attributes-variants',get_defined_vars())->render();
-        return response()->json(['success' => true,'html' => $html]);
+        $html = view('includes.admin.product.fetch-attributes-variants', get_defined_vars())->render();
+        return response()->json(['success' => true, 'html' => $html]);
     }
     public function changeStatus(Product $product)
     {

@@ -13,6 +13,10 @@ class Variant extends Model
         return 'slug';
     }
 
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('variant_price', 'quantity')->withTimestamps();
+    }
 
     public function attribute()
     {

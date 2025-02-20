@@ -46,18 +46,14 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                Categories
+                                                Category
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 Attribute
                                             </th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending">
-                                                Variants
-                                            </th>
+
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -81,8 +77,8 @@
                                         <tr class="odd">
                                             <td>
                                                 <div class="featured-image">
-                                                    @if ($product->getFirstMediaUrl('product-featured-image'))
-                                                        <img src="{{ $product->getFirstMediaUrl('product-featured-image') }}"
+                                                    @if ($product->getFirstMediaUrl('featured_image'))
+                                                        <img src="{{ $product->getFirstMediaUrl('featured_image') }}"
                                                             alt="{{ $product->name }}"
                                                             style="max-width: 100px; max-height: 100px;">
                                                     @else
@@ -92,48 +88,35 @@
                                             </td>
                                             <td>{{ $product->price }}</td>
                                             <td>
-                                                @forelse ($product->categories as $category)
-                                                    {{ $loop->iteration }} | {{ $category->name }} ,
+                                                {{ $product->category->name }}
+                                            </td>
+                                            <td>
+                                                @forelse ($product->variants as  $attribute)
+                                                    {{ $loop->iteration }} -
+                                                    @foreach (json_decode($attribute['attributes'], true) as $key => $attr)
+                                                        {{ $key }} ->{{ $attr }} ,
+                                                    @endforeach
+                                                    <br>
                                                 @empty
-                                                    No Category Found
+                                                    No Attribute Found
                                                 @endforelse
+                                            </td>
 
-                                            </td>
                                             <td>
-                                                @forelse ($product->attributes as $attribute)
-                                                    {{ $loop->iteration }} | {{ $attribute->name }} ,
+                                                @forelse ($product->variants as $attribute)
+                                                    ${{ $attribute->variant_price }} <br>
                                                 @empty
-                                                    No Category Found
+                                                    No Addon Price Found
                                                 @endforelse
                                             </td>
                                             <td>
-                                                @forelse ($product->variants as $variant)
-                                                    {{ $loop->iteration }} | {{ $variant->name }} ,
-                                                @empty
-                                                    No Variant Found
-                                                @endforelse
-                                            </td>
-                                            <td>
-                                                @forelse ($product->variants as $variant)
-                                                    {{ $loop->iteration }} | {{ $variant->pivot['add_on_price'] }} ,
-                                                @empty
-                                                    No Add on price Found
-                                                @endforelse
-                                            </td>
-                                            <td>
-                                                @forelse ($product->variants as $variant)
-                                                    {{ $loop->iteration }} | {{ $variant->pivot['quantity'] }} ,
+                                                @forelse ($product->variants as  $attribute)
+                                                    {{ $attribute->quantity }}<br>
                                                 @empty
                                                     No Quantity Found
                                                 @endforelse
                                             </td>
-                                            {{-- <td>
-                                                @forelse ($product->variants as $variant)
-                                                    {{ $loop->iteration }} | {{ $variant->pivot['discount_type'] }} ,
-                                                @empty
-                                                    No Category Found
-                                                @endforelse
-                                            </td> --}}
+
                                             <td>
                                                 <a href="{{ route('admin.product.edit', $product->slug) }}"
                                                     class="btn btn-primary">Edit</a>
@@ -154,6 +137,43 @@
                 </div>
             </div>
         </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class=" d-flex justify-content-start">
+                                    <h4>Description</h4>
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <div class="imgs-multiple">
+                                    {{ $product->description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class=" d-flex justify-content-start">
+                                    <h4>Long Description</h4>
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <div class="imgs-multiple">
+                                    {{ $product->long_description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section class="content">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
@@ -167,8 +187,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="imgs-multiple">
-                                    @forelse ($product->getMedia('product-images') as $image)
-                                        <img src="{{ $image->getUrl() }}" alt=""
+                                    @forelse ($product->getMediaCollectionUrl('multiple_images') as $image)
+                                        {{-- @dd($product->getMediaCollectionUrl('multiple_images')) --}}
+                                        <img src="{{ $image }}" alt=""
                                             style="max-width: 150px; max-height: 150px;">
                                     @empty
                                         No Image Found
@@ -183,18 +204,8 @@
     </div>
 @endsection
 @section('scripts')
+    @include('includes.admin.data-table-scripts')
     <script>
-        $(function() {
-            $("#example1").DataTable({
-                "searching": false,
-                "info": false,
-                "paging": false,
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        });
         $(document).ready(function() {
             $(document).on("click", "#status", function(e) {
                 e.preventDefault()
@@ -229,21 +240,4 @@
 
 
         });
-    </script>
-    <script src="{{ asset('assets/admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-@endsection
+    @endsection

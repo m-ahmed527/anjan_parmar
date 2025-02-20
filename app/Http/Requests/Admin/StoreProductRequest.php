@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class StoreProductRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        
+
         return true;
     }
 
@@ -24,58 +26,40 @@ class StoreProductRequest extends FormRequest
     {
         return [
 
-            'category' => 'sometimes',
-            'category.*' => 'sometimes',
-            'name' => 'sometimes',
-            'search_keywords*' => 'sometimes',
-            'price' => 'sometimes',
-            'wholesale_price' => 'sometimes',
+            'category' => 'required',
+            'name' => 'required',
+            'search_keyword' => 'sometimes',
+            'price' => 'required|numeric',
+            'discount' => 'sometimes|numeric',
             'description' => 'sometimes',
             'long_description' => 'sometimes',
-            'attribute' => 'sometimes',
-            'attribute*' => 'sometimes|array',
-            'variant' => 'sometimes|array',
-            'variant.*' => 'sometimes',
-            'add_on_price*' => 'somtimes',
-            'discount' => 'sometimes',
-            'images*' => 'sometimes',
-            'featured_image' => 'required',
+            'attributes' => 'sometimes',
+            'attributes.*' => 'sometimes|array',
+            // 'variant_price' => 'sometimes',
+            'variant_price.*' => 'numeric',
+            // 'quantity' => 'sometimes',
+            'quantity.*' => 'numeric',
+            'images' => 'sometimes',
+            'images.*' => 'sometimes|image',
+            'featured_image' => 'required|image',
         ];
     }
 
     public function sanitized(): array
     {
-        $product = [];
-        foreach ($this->name as $key => $n) {
-            $product[] = [
-                'brand_id' => $this->brand[$key] ?? null,
-                'style_number' => $this->style_number[$key] ?? null,
-                'p_id' => $this->p_id[$key] ?? null,
-                'parent_id' => $this->parent_id[$key] ?? null,
-                'slug' => \Str::slug($n),
-                'name' => $n,
-                'matal' => $this->matal[$key] ?? null,
-                'stone_type' => $this->stone_type[$key] ?? null,
-                'stone_shape' => $this->stone_shape[$key] ?? null,
-                'stone_count' => $this->stone_count[$key] ?? null,
-                'stone_size' => $this->stone_size[$key] ?? null,
-                'stone_weight' => $this->stone_weight[$key] ?? null,
-                'search_keywords' => $this->search_keywords[$key] ?? null,
-                'price' => $this->price[$key],
-                'wholesale_price' => $this->wholesale_price[$key],
-                'override_retail_price' => $this->override_retail_price[$key] ?? null,
-                'discount' => $this->discount[$key],
-                'discount_type' => isset($this->is_percent[$key]) && $this->is_percent[$key] == 'on' ? 'percent' : 'price',
-                'description' => $this->description[$key],
-                'short_description' => $this->short_description[$key],
-                'weight' => $this->weight[$key],
-                'length' => $this->length[$key],
-                'height' => $this->height[$key],
-                'width' => $this->width[$key],
-                'radius' => $this->radius[$key],
-            ];
-        }
-        return $product;
+        $category = Category::where('slug', $this->category)->first();
+        // dd($category->id);
+        return [
+            'category_id' => $category->id,
+            'slug' => Str::slug($this->name),
+            'name' => $this->name,
+            'search_keywords' => $this->search_keyword ?? null,
+            'price' => $this->price,
+            'discount' => $this->discount,
+            'discount_type' => isset($this->is_percent) && $this->is_percent == 'on' ? 'percent' : 'price',
+            'description' => $this->description ?? null,
+            'long_description' => $this->long_description ?? null,
+        ];
     }
 
     public function sanitizedVariants(): array

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Services\MediaService\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use HasMedia;
     protected $guarded = ['íd'];
 
     public function getRouteKeyName()
@@ -13,20 +15,36 @@ class Product extends Model
         return 'slug';
     }
 
-    public function categories()
+    public function category()
     {
-        return $this->belongsToMany(Category::class, 'category_products');
+        return $this->belongsTo(Category::class);
     }
 
 
     public function variants()
     {
-        return $this->belongsToMany(Variant::class, 'product_variants')->withPivot('add_on_price', 'discount_type', 'discount', 'quantity');
+        return $this->hasMany(ProductVariant::class);
     }
 
 
     public function attributes()
     {
         return $this->belongsToMany(Attribute::class, 'attribute_products');
+    }
+
+    public function discount()
+    {
+        $discountedPrice = '';
+        if ($this->discount_type == 'percent') {
+            $discountedPrice = $this->price - ($this->price * $this->discount / 100);
+            return $discountedPrice;
+        } else {
+            return ($this->price - $this->discount);
+        }
+    }
+    public function registerMediaCollection(): void
+    {
+        $this->addMediaCollection('featured_image')->single();
+        $this->addMediaCollection('multiple_images')->multiple();
     }
 }

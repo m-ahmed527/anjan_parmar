@@ -69,11 +69,11 @@
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 DISCOUNT TYPE
                                             </th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 STATUS
-                                            </th>
+                                            </th> --}}
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -82,14 +82,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach ($products as $product)
+                                        @foreach ($products as $product)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
                                                     {{ $product->id }}
                                                 </td>
                                                 <td>
-                                                    @if ($product->getFirstMediaUrl('product-featured-image'))
-                                                        <img src="{{ $product->getFirstMediaUrl('product-featured-image') }}"
+                                                    @if ($product->getFirstMediaUrl('featured-image'))
+                                                        <img src="{{ $product->getFirstMediaUrl('featured-image') }}"
                                                             alt="{{ $product->name }}"
                                                             style="max-width: 100px; max-height: 100px;">
                                                     @else
@@ -97,14 +97,14 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $product->name }}</td>
-                                                <td>{{ $product->price }}</td>
-                                                <td>{{ $product->discount() }}</td>
-                                                <td>{{ $product->discount }}</td>
+                                                <td>${{ $product->price }}</td>
+                                                <td>${{ $product->discount() }}</td>
+                                                <td>${{ $product->discount }}</td>
                                                 <td>{{ $product->discount_type }}</td>
-                                                <td>
+                                                {{-- <td>
                                                     <a href="#" data-id="{{ $product->slug }}" id="status"
                                                         data-status="{{ $product->is_active }}">{{ $product->is_active == 1 ? 'Active' : 'Inactive' }}</a>
-                                                </td>
+                                                </td> --}}
                                                 <td class="d-flex gap-20">
                                                     <a href="{{ route('admin.product.edit', $product->slug) }}"
                                                         class="btn btn-primary">Edit</a>
@@ -114,7 +114,7 @@
                                                         class="btn btn-info">Details</a>
                                                 </td>
                                             </tr>
-                                        @endforeach --}}
+                                        @endforeach
 
                                     </tbody>
                                 </table>

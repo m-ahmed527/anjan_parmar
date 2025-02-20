@@ -19,7 +19,7 @@
                         <div class="col-md-11">
                             <div class="card card-primary">
                                 <form action="{{ route('admin.product.store') }}" method="POST"
-                                    enctype="multipart/form-data">
+                                    enctype="multipart/form-data" id="create-form">
                                     @csrf
                                     <div class="card-body">
                                         <br>
@@ -48,17 +48,13 @@
                                                             {{ $category->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                @error('category*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="exampleInputPassword1">Product Name *</label>
                                                 <input type="text" class="form-control" name="name" id=""
                                                     placeholder="Product name">
-                                                @error('name*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
 
                                             <div class="form-group col-md-4">
@@ -66,9 +62,7 @@
                                                 </label>
                                                 <input type="text" class="form-control" name="search_keyword"
                                                     id="" placeholder="....">
-                                                @error('search_keyword*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
 
                                             <div class="form-group col-md-4">
@@ -78,13 +72,11 @@
 
                                                 <span class="text-danger priceError[]" id="priceError"></span>
 
-                                                @error('price*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
 
                                             <div class="form-group col-md-4">
-                                                <label for="exampleInputPassword1">Discount On Product *</label>
+                                                <label for="exampleInputPassword1">Discount On Product (optional)</label>
                                                 <input type="text" class="form-control priceInput[]" name="discount"
                                                     placeholder="Enter discount price or percent" min="0">
                                                 <span class="text-danger priceError[]" id="priceError"></span>
@@ -93,35 +85,27 @@
                                                         id="is_percent">
                                                     <label for="is_percent" class="form-check-label">Check if discount is
                                                         in %</label>
-                                                    @error('is_percent*')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
+
 
                                                 </div>
-                                                @error('discount*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
 
                                             <div class="form-group col-md-12">
                                                 <label for="exampleInputPassword1">Product Description *</label>
                                                 <textarea type="text" class="form-control" name="description" id="" placeholder="Enter description"></textarea>
-                                                @error('description*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
                                             <div class="form-group col-md-12">
                                                 <label for="exampleInputPassword1">Product Long Description *</label>
                                                 <textarea type="text" class="form-control" name="long_description" id=""
                                                     placeholder="Enter short description"></textarea>
-                                                @error('short_description*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputFile">Insert Featured Image *</label>
-                                                <div class="input-group">
+                                                <div class="input-group featured-image-ka-div">
                                                     <div class="custom-file">
                                                         <input type="file" name="featured_image"
                                                             class="custom-file-input" id="exampleInputFile">
@@ -129,9 +113,7 @@
                                                             file</label>
                                                     </div>
                                                 </div>
-                                                @error('featured_image*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputFile">Insert Multiple Images (optional)</label>
@@ -143,17 +125,15 @@
                                                             files</label>
                                                     </div>
                                                 </div>
-                                                @error('images*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+
                                             </div>
 
 
                                         </div>
                                         <hr>
                                         <h3>Select Category for Attribute</h3>
-                                        <div class="parent-attribute">
-                                            <div class="row attribute-variants" id="attributes-container">
+                                        <div class="attribute-variants-ka-parent">
+                                            <div class="row attribute-variants">
 
                                                 <!-- Attributes & Variants Will Load Here -->
                                             </div>
@@ -171,7 +151,7 @@
                                         {{-- <a href="javascript:void(0)" class="btn btn-success btn-md add-more-products"><i
                                                 class="fas fa-plus"></i></a> --}}
                                         <a href="{{ route('admin.product.index') }}" class="btn btn-secondary">Back</a>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-primary" id="create-btn">Submit</button>
                                     </div>
 
                                 </form>
@@ -185,6 +165,7 @@
 @section('scripts')
     <script src="{{ asset('assets/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
     <script src="{{ asset('assets/admin/plugins/select2/js/select2.full.min.js') }}"></script>
+    @include('includes.admin.scripts.create-script', ['redirectUrl' => route('admin.product.index')])
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const priceInputs = document.querySelectorAll('.priceInput\\[\\]');
@@ -216,8 +197,12 @@
 
             $(".category").change(function() {
                 var categorySlug = $(this).val();
-                $(".attribute-variants").html(""); // Clear previous attributes
+
                 if (categorySlug) {
+                    $(".attribute-variants").remove();
+                    $(".attribute-variants-ka-parent").append(
+                        '<div class="row attribute-variants"></div>'); // Add it back
+
                     $.ajax({
                         url: "{{ route('admin.get.attributes', '') }}/" + categorySlug,
                         type: "GET",
@@ -225,10 +210,14 @@
                         success: function(response) {
 
                             if (response.success) {
-                                $("#attributes-container").append(response.html);
-                                $("#add-attribute-section").css("display", "block");
+                                $(".attribute-variants").html(response.html);
+                                $("#add-attribute-section")
+                                    .css('display',
+                                        'block'); // Show Add button when new attributes load
                             } else {
-                                $("#add-attribute-section").css("display", "none");
+                                $("#add-attribute-section")
+                                    .css('display',
+                                        'none'); // Hide Add button if no attributes available
                             }
                         }
                     });
@@ -268,73 +257,53 @@
             bindAttributeChange(productIndex);
 
 
+            $(document).on("click", ".remove-attribute", function(e) {
+                e.preventDefault();
+                console.log($(".attribute-variants").length);
 
+                if ($(".attribute-variants").length > 1) {
 
+                    $(this).closest(".attribute-variants").remove(); // Remove the variant row
+                    if ($(".attribute-variants").length == 1) {
+                        $(".remove-attribute").addClass('d-none')
+                    }
+                } else {
+                    alert("Cannot remove the last attribute variant");
+                }
+                console.log($(".attribute-variants").length);
 
-
+            });
 
             $(document).on("click", ".add-attribute", function(e) {
                 e.preventDefault();
 
                 let parentContainer = $(this).closest(".card-body");
-                let lastElem = parentContainer.find(".attribute-variants")
-                    .last(); // Find the last attribute variant row
+                let lastElem = parentContainer.find(".attribute-variants").last();
+                console.log(parentContainer, lastElem);
 
-                // Clone the last element and append after it
+                // Clone the last element
                 let newElem = lastElem.clone();
 
                 // Reset input values inside the cloned element
                 newElem.find("input, select").each(function() {
                     $(this).val(""); // Reset input/select values
                 });
-
-                // Append new element after the last one
+                // Ensure newElem is properly added after the last one
                 lastElem.after(newElem);
-            });
-
-            // $(document).on("click", ".remove-attribute", function(e) {
-
-            //     e.preventDefault();
-            //     let parentContainer = $(this).closest(".attribute-variants");
-            //     let allElem = $(".attribute-variants");
-            //     console.log(allElem);
-
-            //     if (allElem.length > 1) {
-            //         let lastElem = parentContainer.last();
-            //         lastElem.remove();
-            //     } else {
-            //         if (!parentContainer.find('.text-danger').length) {
-            //             parentContainer.append(
-            //                 '<span class="text-danger"> At least one Attribute Variant is required </span>'
-            //             );
-            //         }
-            //     }
-            // });
-            $(document).on("click", ".remove-attribute", function(e) {
-                e.preventDefault();
-
-                let allElem = $(".attribute-variants");
-                let parentContainer = $(this).closest(".attribute-variants");
-
-                if (allElem.length > 1) {
-                    parentContainer.remove();
-                } else {
-                    // If it's the last element, show an error message
-                    if (!parentContainer.find('.text-danger').length) {
-                        parentContainer.append(
-                            '<span class="text-danger">At least one Attribute Variant is required</span>'
-                        );
-                    }
+                console.log($(".attribute-variants").length);
+                if ($(".attribute-variants").length > 1) {
+                    $(".remove-attribute").removeClass('d-none')
                 }
+
             });
+
         });
     </script>
 @endsection
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/admin/plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet"
-        href="{{ asset('assets/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 @endpush
 {{-- <div class="attribute-variants row mt-5">
                                             <div class="form-group col-md-3">
