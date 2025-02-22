@@ -1,4 +1,7 @@
 @extends('layouts.admin.app')
+@push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
 @section('content')
     <div class="content-wrapper" style="">
 
@@ -32,6 +35,26 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="">Select Atributes *</label>
+                                            <select name="attribute[]" class="form-control attribute" multiple="multiple"
+                                                id="">
+                                                @foreach ($attributes as $key => $attribute)
+                                                    @php
+                                                        $attributes = $category->attributes()->withTrashed()->get(); // Convert to Collection
+                                                        $isAttached = $attributes->contains($attribute->id);
+
+                                                    @endphp
+                                                    <option value="{{ $attribute->id }}" {{ $isAttached ? 'selected' : '' }}
+                                                        class="form-control">
+                                                        {{ $attribute->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('attribute*')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                         <div class="form-group">
                                             <label for="exampleInputFile">Image</label>
                                             <div class="input-group">
@@ -48,7 +71,8 @@
                                         </div>
                                         @if ($category->getFirstMediaUrl('category') != null)
                                             <div class="form-group">
-                                                <img src="{{ $category->getFirstMediaUrl('category') }}" alt="" width="200px">
+                                                <img src="{{ $category->getFirstMediaUrl('category') }}" alt=""
+                                                    width="200px">
                                             </div>
                                         @endif
                                         <div class="form-group">
@@ -86,8 +110,11 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
         $(document).ready(function() {
+            $('.attribute').select2();
             $(document).on('click', '#category-btn', function(e) {
                 e.preventDefault();
                 let form = $('#category-form');

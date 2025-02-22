@@ -45,6 +45,23 @@
                         $('.error-message')
                             .remove();
                         $.each(errors, function(key, value) {
+                            if (key == 'featured_image') {
+                                let inputField = $(
+                                    `.featured-image-ka-div`
+                                );
+                                let errorMessage = $(
+                                    `<span class='error-message text-danger'>${value}</span>`
+                                );
+                                inputField.after(errorMessage);
+                            } else {
+                                let inputField = $(
+                                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                                );
+                                let errorMessage = $(
+                                    `<span class='error-message text-danger'>${value}</span>`
+                                );
+                                inputField.after(errorMessage);
+                            }
                             if (key === "name") {
                                 let inputField = $(`input[name="${key}"]`);
                                 let errorMessage = $(

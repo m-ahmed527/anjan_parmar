@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
+
+class VendorManagementController extends Controller
+{
+    public function index()
+    {
+        $users = User::all();
+        // dd($vendors[0]->hasRole('Vendor'));
+        return view('screens.admin.vendor-management.index', get_defined_vars());
+    }
+
+    public function changeStatus(Request $request, User $vendor)
+    {
+        try {
+            $vendor->update([
+                'status' => $request->newStatus,
+            ]);
+            return response()->json([
+                'success' => true,
+                'status' => $request->newStatus,
+                'message' => 'Vendor status updated successfully',
+            ],200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update vendor status. Please try again.',
+            ],400);
+        }
+    }
+}

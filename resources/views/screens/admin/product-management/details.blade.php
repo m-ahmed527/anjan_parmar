@@ -88,7 +88,11 @@
                                             </td>
                                             <td>{{ $product->price }}</td>
                                             <td>
-                                                {{ $product->category->name }}
+                                                @php
+                                                    $category = $product->category()->withTrashed()->first();
+
+                                                @endphp
+                                                {{ $category->name }}
                                             </td>
                                             <td>
                                                 @forelse ($product->variants as  $attribute)
@@ -126,8 +130,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <form action="" id="delete" onclick="return confirm('Are you sure?');"
-                                    method="POST">
+                                <form action="" id="delete-form" method="POST">
                                     @csrf
                                     @method('delete')
                                 </form>

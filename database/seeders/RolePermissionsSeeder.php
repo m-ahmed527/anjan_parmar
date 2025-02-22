@@ -22,7 +22,7 @@ class RolePermissionsSeeder extends Seeder
             'slug' => Str::slug('Ahmed' . '_' . 'Ansari'),
             'email' => 'admin@example.com',
             'phone' => '+12345678912',
-            'status' => true,
+            'status' => 'approved',
             'password' => bcrypt('password'),
         ]);
         // Create roles

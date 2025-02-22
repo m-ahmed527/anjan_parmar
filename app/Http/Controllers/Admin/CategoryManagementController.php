@@ -20,6 +20,7 @@ class CategoryManagementController extends Controller
     public function index(): View
     {
         $categories = Category::all();
+        // dd($categories[0]->attributes()->withTrashed()->get());
 
         return view('screens.admin.category-management.index', get_defined_vars());
     }
@@ -27,7 +28,8 @@ class CategoryManagementController extends Controller
     public function create(): View
     {
         $categories = Category::all();
-        $attributes = Attribute::all();
+        $attributes = Attribute::withoutTrashed()->get();
+        // dd($attributes);
         return view('screens.admin.category-management.create', get_defined_vars());
     }
 
@@ -62,7 +64,7 @@ class CategoryManagementController extends Controller
 
     public function edit(Category $category): View
     {
-        // $categories = Category::whereNot('id', $category->slug)->get();
+        $attributes = Attribute::withoutTrashed()->get();
         return view('screens.admin.category-management.edit', get_defined_vars());
     }
 
@@ -79,6 +81,7 @@ class CategoryManagementController extends Controller
                 $category->addMedia($request->banner_image, 'category_banner');
             }
             $category->update($request->sanitized());
+            $category->attributes()->sync($request->attribute);
             DB::commit();
             return response()->json([
                 'success' => true,

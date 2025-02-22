@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->nullable();
             $table->foreignId('parent_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

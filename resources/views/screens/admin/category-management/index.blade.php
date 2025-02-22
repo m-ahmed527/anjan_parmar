@@ -4,7 +4,6 @@
 @endpush
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
-
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
@@ -53,6 +52,11 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
+                                                Attributes
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
                                                 Actions
                                             </th>
                                         </tr>
@@ -73,6 +77,15 @@
                                                     @else
                                                         No Image Found
                                                     @endif
+                                                </td>
+                                                @php
+                                                    $attributes = $category->attributes()->withTrashed()->get();
+                                                @endphp
+                                                <td class="dtr-control sorting_1" tabindex="1">
+                                                    @forelse ($attributes as $attribute)
+                                                        {{ $loop->iteration }}-{{ $attribute->name }}<br>
+                                                    @empty
+                                                    @endforelse
                                                 </td>
                                                 <td class="d-flex gap-20">
                                                     <a href="{{ route('admin.category.edit', $category->slug) }}"

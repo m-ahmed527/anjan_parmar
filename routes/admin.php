@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\ProductManagementController;
 use App\Http\Controllers\Admin\TestimonialsManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\ShippingChargesManagementController;
-
+use App\Http\Controllers\Admin\VendorManagementController;
 use Illuminate\Support\Facades\Route;
 
 // Route::group(function () {
@@ -35,7 +35,7 @@ Route::get('/product/create', [ProductManagementController::class, 'create'])->n
 Route::get('/get-variants/{attribute}', [ProductManagementController::class, 'getVariants'])->name('get.variant');
 Route::get('/get-selected-variants/{attribute}', [ProductManagementController::class, 'selectedVariants'])->name('get.selected.variant');
 Route::post('/product/store', [ProductManagementController::class, 'store'])->name('product.store');
-Route::delete('/product/delete/{product}', [ProductManagementController::class, 'delete'])->name('product.delete');
+Route::post('/product/delete/{product}', [ProductManagementController::class, 'delete'])->name('product.delete');
 Route::get('/product/edit/{product}', [ProductManagementController::class, 'edit'])->name('product.edit');
 Route::post('/product/update/{product}', [ProductManagementController::class, 'update'])->name('product.update');
 
@@ -88,6 +88,15 @@ Route::get('/create/new-user', [UserManagementController::class, 'create'])->nam
 Route::post('/create/new-user', [UserManagementController::class, 'store']);
 Route::get('/edit/{user}', [UserManagementController::class, 'edit'])->name('user.edit');
 Route::post('/update/{user}', [UserManagementController::class, 'update'])->name('update.user');
+
+// vendors
+Route::get('/all-vendors', [VendorManagementController::class, 'index'])->name('vendors.index');
+Route::get('/details/{vendor}', [VendorManagementController::class, 'show'])->name('vendor.detial');
+Route::get('/vendor-status/change/{vendor}', [VendorManagementController::class, 'changeStatus'])->name('vendor.change.status');
+// Route::get('/create/new-vendor', [VendorManagementController::class, 'create'])->name('create.vendor');
+// Route::post('/create/new-vendor', [VendorManagementController::class, 'store']);
+// Route::get('/edit/{vendor}', [VendorManagementController::class, 'edit'])->name('vendor.edit');
+// Route::post('/update/{vendor}', [VendorManagementController::class, 'update'])->name('update.vendor');
 
 
 //blogs categories

@@ -30,9 +30,9 @@ class AuthRepository implements AuthRepositoryInterface
                 if (str_contains(url()->previous(), 'vendor')) {
                     $role = Role::where('name', 'Vendor')->first();
                     $user->roles()->sync($role->id);
-                    $user->update(['status' => false]);
+                    $user->update(['status' => 'pending']);
                 } else {
-                    $user->update(['status' => true]);
+                    $user->update(['status' => 'approved']);
                 }
                 if (!empty($data['category'])) {
                     auth()->user()->categories()->sync($data['category']);

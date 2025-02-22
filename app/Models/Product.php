@@ -4,10 +4,11 @@ namespace App\Models;
 
 use App\Services\MediaService\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasMedia;
+    use HasMedia, SoftDeletes;
     protected $guarded = ['íd'];
 
     public function getRouteKeyName()

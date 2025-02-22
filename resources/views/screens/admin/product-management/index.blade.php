@@ -99,7 +99,8 @@
                                                 <td>{{ $product->name }}</td>
                                                 <td>${{ $product->price }}</td>
                                                 <td>${{ $product->discount() }}</td>
-                                                <td>${{ $product->discount }}</td>
+                                                <td>{{ $product->discount_type == 'price' ? '$' : '' }}{{ $product->discount }}
+                                                </td>
                                                 <td>{{ $product->discount_type }}</td>
                                                 {{-- <td>
                                                     <a href="#" data-id="{{ $product->slug }}" id="status"
@@ -108,8 +109,12 @@
                                                 <td class="d-flex gap-20">
                                                     <a href="{{ route('admin.product.edit', $product->slug) }}"
                                                         class="btn btn-primary">Edit</a>
-                                                    <a href="#" data-id="{{ $product->slug }}"
-                                                        class="delete btn btn-danger btn-sm">Delete</a>
+                                                    <form action="{{ route('admin.product.delete', $product->slug) }}"
+                                                        id="delete-form" method="POST">
+                                                        @csrf
+                                                        <button data-id="{{ $product->slug }}"
+                                                            class="delete btn btn-danger" id="delete-btn">Delete</button>
+                                                    </form>
                                                     <a href="{{ route('admin.product.details', $product->slug) }}"
                                                         class="btn btn-info">Details</a>
                                                 </td>
@@ -118,11 +123,7 @@
 
                                     </tbody>
                                 </table>
-                                <form action="" id="delete" onclick="return confirm('Are you sure?');"
-                                    method="POST">
-                                    @csrf
-                                    @method('delete')
-                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -133,6 +134,7 @@
 @endsection
 @section('scripts')
     @include('includes.admin.data-table-scripts')
+    @include('includes.admin.scripts.delete-script')
     <script>
         $(document).ready(function() {
             $(document).on("click", "#status", function(e) {
@@ -157,14 +159,7 @@
                     },
                 });
             });
-            $(document).on("click", ".delete", function(e) {
-                e.preventDefault();
-                let id = $(this).data("id");
-                if (confirm('Are you sure?')) {
-                    $("#delete").attr('action', "{{ route('admin.product.delete', '') }}/" + id)
-                    $("#delete").submit();
-                }
-            })
+
 
         });
     </script>

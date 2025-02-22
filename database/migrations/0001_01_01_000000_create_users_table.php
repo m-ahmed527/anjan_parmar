@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('user_address')->nullable();
             $table->string('business_address')->nullable();
-            $table->boolean('status')->default(false);
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('approved');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

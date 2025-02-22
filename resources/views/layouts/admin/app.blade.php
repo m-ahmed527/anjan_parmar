@@ -332,6 +332,15 @@
                             </ul>
                         </li>
                         <li class="nav-item mb-3">
+                            <a href="{{ route('admin.vendors.index') }}" class="nav-link active">
+                                <p>
+                                    Vendors Management
+                                    {{-- <i class="right fas fa-angle-left"></i> --}}
+                                </p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
                                 {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
                                 <p>

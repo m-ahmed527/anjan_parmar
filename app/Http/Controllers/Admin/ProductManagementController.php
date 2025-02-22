@@ -25,18 +25,7 @@ class ProductManagementController extends Controller
         return view('screens.admin.product-management.index', get_defined_vars());
     }
 
-    protected function keyValues($products): Collection
-    {
-        return $products->map(function ($product) {
-            return [
-                'ID' => $product->id,
-                'Image' => '',
-                'Name' => $product->name ?? '--',
-                'Price' => $product->price ?? '--',
-                'Status' =>  $product->is_active == '1' ? 'active' : 'inactive',
-            ];
-        });
-    }
+
 
     public function create(): View
     {
@@ -106,65 +95,60 @@ class ProductManagementController extends Controller
 
     public function show(Product $product): View
     {
-        $var = json_decode($product->variants[0]->attributes, true);
+
 
         return view('screens.admin.product-management.details', get_defined_vars());
     }
 
-    public function delete(Product $product)
-    {
-        $product->delete();
-        toastr()->info('Product deleted successfully !');
-        return back();
-    }
+
 
     public function edit(Product $product): View
     {
-        $product->load('variants');
-        $categories = Category::pluck('name', 'id');
-        $attributes = Attribute::with('variants')->get();
-        $variants = Variant::all();
-        $brands = Brand::all();
-        return view('screens.admin.product-management.edit', compact('product', 'categories', 'attributes', 'variants', 'brands'));
+        $categories = Category::all();
+        $variants = ProductVariant::where('product_id', $product->id)->get();
+        $attributes = $this->getAttribute($product->category);
+        // dd($attributes, $variants);
+        return view('screens.admin.product-management.edit', get_defined_vars());
     }
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $product->update($request->sanitized());
-        if ($request->hasFile('images')) {
-            $product->clearMediaCollection('product-images');
+        try {
 
-            $mediaItems = $product->addMultipleMediaFromRequest(['images']);
+            DB::beginTransaction();
+            $data = $request->all();
 
-            foreach ($mediaItems as $media) {
-                $media->toMediaCollection('product-images');
+            $product->update($request->sanitized());
+            // $product->addMedia($request->featured_image, 'featured_image');
+            if ($request->has('featured_image')) {
+                $product->addMedia($request->featured_image, 'featured_image');
             }
+            if ($request->has('images')) {
+                $product->updateMediaMultiple($request->images, 'multiple_images');
+            }
+            if (isset($data["attributes"])) {
+                $variants = $this->prepareVariants($data);
+                foreach ($product->variants as $variant) {
+                    $product->variants()->delete();
+                }
+                foreach ($variants as $variant) {
+                    $product->variants()->create($variant);
+                }
+            }
+            // dd($variants, $request->sanitized());
+            DB::commit();
+            return response([
+                "success" => true,
+                "message" => "Product updated successfully",
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response([
+                "success" => false,
+                "message" => "Failed to update product. Please try again.",
+            ]);
         }
-        if ($request->hasFile('featured_image')) {
-            $product->clearMediaCollection('product-featured-image');
-            $product->addMedia($request->featured_image)->toMediaCollection('product-featured-image');
-        }
-        $product->categories()->sync($request->category);
-
-        // Sync variants
-        $product->variants()->sync($request->sanitizedVariants());
-
-        // Sync attributes
-        $product->attributes()->sync($request->sanitizedAttributes());
-        toastr()->success('product updated successfully..!');
-        return redirect()->route('admin.product.index');
     }
-
-    public function getVariants($attribute)
-    {
-        $attribute = Attribute::where('id', $attribute)->first();
-        $variants = $attribute->variants()->get();
-        return response()->json([
-            'variants' => $variants,
-            'status' => 200,
-        ]);
-    }
-
 
 
     public function getAttribute(Category $category)
@@ -186,8 +170,35 @@ class ProductManagementController extends Controller
                 }),
             ];
         });
-        $html = view('includes.admin.product.fetch-attributes-variants', get_defined_vars())->render();
-        return response()->json(['success' => true, 'html' => $html]);
+        if (request()->ajax()) {
+            $html = view('includes.admin.product.fetch-attributes-variants', get_defined_vars())->render();
+            return response()->json(['success' => true, 'html' => $html]);
+        } else {
+            return $attributes;
+        }
+    }
+
+
+    public function delete(Product $product)
+    {
+        try {
+            DB::beginTransaction();
+            // $product->clearMediaCollection('featured_image');
+            // $product->clearMediaCollection('multiple_images');
+            $product->delete();
+            DB::commit();
+            return response()->json([
+                "message" => "Product deleted successfully.",
+                'success' => true,
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+            return response()->json([
+                "message" => "Failed to delete product.",
+                'success' => false,
+            ]);
+        }
     }
     public function changeStatus(Product $product)
     {
@@ -206,15 +217,4 @@ class ProductManagementController extends Controller
             ]);
         }
     }
-    // public function selectedVariants($attribute)
-    // {
-    //     $attribute = Attribute::where('id', $attribute)->first();
-    //     $variants = $attribute->variants()->get();
-
-    //     return response()->json([
-    //         'variants' => $variants,
-    //     ]);
-    // }
-
-
 }
