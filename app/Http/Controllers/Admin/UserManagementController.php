@@ -11,26 +11,28 @@ use Illuminate\Http\Request;
 
 class UserManagementController extends Controller
 {
-    public function index() : View {
-        $users = User::where('role','user')->get();
-        return view('screens.admin.user-management.index',compact('users'));
+    public function index(): View
+    {
+        $users = User::all();
+        return view('screens.admin.user-management.index', get_defined_vars());
     }
 
-    public function show(User $user) : View {
-        return view('screens.admin.user-management.detail',compact('user'));
+    public function show(User $user): View
+    {
+        return view('screens.admin.user-management.detail', compact('user'));
     }
 
-    public function create() : View {
+    public function create(): View
+    {
         return view('screens.admin.user-management.create');
     }
 
-    public function store(StoreNewUserRequest $request) {
+    public function store(StoreNewUserRequest $request)
+    {
         // dd($request->all(),$request->sanitized());
-        if($request)
-        {
+        if ($request) {
             $user = User::create($request->sanitized());
-            if($request->hasFile('avatar'))
-            {
+            if ($request->hasFile('avatar')) {
                 $user->addMedia($request->avatar)->toMediaCollection('avatar');
             }
             // dd($user);
@@ -42,17 +44,17 @@ class UserManagementController extends Controller
         return back();
     }
 
-    public function edit(User $user) : View {
-        return view('screens.admin.user-management.edit',compact('user'));
+    public function edit(User $user): View
+    {
+        return view('screens.admin.user-management.edit', compact('user'));
     }
 
-    public function update(UpdateUserRequest $request,User $user) {
+    public function update(UpdateUserRequest $request, User $user)
+    {
         // dd(13);
-        if($request->sanitized())
-        {
+        if ($request->sanitized()) {
             $user->update($request->sanitized());
-            if($request->sanitizedImage())
-            {
+            if ($request->sanitizedImage()) {
                 $user->addMedia($request->sanitizedImage())->toMediaCollection('avatar');
             }
             // dd(134444);

@@ -47,6 +47,11 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
+                                                OWNER'S NAME
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
                                                 STORE NAME
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
@@ -64,11 +69,11 @@
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 STATUS
                                             </th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 ACTIONS
-                                            </th>
+                                            </th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -88,8 +93,9 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $user->first_name }}</td>
+                                                    <td>{{ $user->business_name }}</td>
                                                     <td>{{ $user->email }}</td>
-                                                    <td>{{ $user->phone }}</td>
+                                                    <td class="phone">{{ $user->phone }}</td>
                                                     <td>
                                                         <Select class="form-control" id="status"
                                                             data-id="{{ $user->id }}"
@@ -107,13 +113,13 @@
 
                                                         </Select>
                                                     </td>
-                                                    <td class="d-flex gap-20">
+                                                    {{-- <td class="d-flex gap-20">
                                                         <a href="{{ route('admin.user.edit', $user->slug) }}"
                                                             class="btn btn-primary">Edit</a>
 
                                                         <a href="{{ route('admin.user.detial', $user->slug) }}"
                                                             class="btn btn-info">Details</a>
-                                                    </td>
+                                                    </td> --}}
                                                 </tr>
                                             @endif
                                         @endforeach
@@ -212,6 +218,19 @@
                     }
                 });
             });
+
+            let phones = $('.phone');
+            phones.each(function(index, element) {
+                let phone = $(element).text();
+                console.log(phone);
+
+                console.log(phone.trim().slice(2, 5));
+                let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2, 5) + ') ' + phone
+                    .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
+                console.log(newPhone);
+                $(element).text(newPhone);
+
+            })
         });
     </script>
 @endsection

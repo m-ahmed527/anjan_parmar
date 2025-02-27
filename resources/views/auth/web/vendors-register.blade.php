@@ -61,7 +61,7 @@
                         <div class="sd-multiSelect form-group">
                             <label for="category" class="form-label">Business Category</label>
                             <select multiple id="current-job-role" name="category[]" class="sd-CustomSelect">
-                                <option  selected disabled>Select</option>
+                                <option selected disabled>Select</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
@@ -72,7 +72,7 @@
 
                     <div class="col-12 mb-3">
                         <label for="address" class="form-label">Business Address</label>
-                        <textarea class="form-control" id="address" name="business_address" rows="2"
+                        <textarea class="form-control" id="autocompleteSearch" name="business_address" rows="2"
                             placeholder="Enter your business address"></textarea>
                     </div>
 
@@ -96,6 +96,7 @@
             </form>
         </div>
     </div>
+    
     <script src="{{ asset('assets/web/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/web/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/web/js/slick.min.js') }}"></script>
@@ -112,6 +113,77 @@
 
             e.target.value = !x[3] ? '+1 ' + x[2] : '+1 (' + x[2] + ') ' + x[3] + (x[4] ? '-' + x[4] : '');
         });
+
+
+
+        var placeSearch, autocomplete;
+        var componentForm = {
+            // street_number: 'short_name',
+            // route: 'long_name',
+            locality: 'long_name',
+            administrative_area_level_1: 'short_name',
+            // country: 'long_name',
+            postal_code: 'short_name'
+        };
+
+        if (typeof google === 'undefined') {
+            jQuery.getScript(
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyD28UEoebX1hKscL3odt2TiTRVfe5SSpwE&libraries=geometry,places',
+                () => {
+                    var input = document.getElementById('autocompleteSearch');
+                    autocomplete = new google.maps.places.Autocomplete(input, {
+                        types: ['geocode']
+                    });
+                    autocomplete.setFields(['address_component']);
+                    autocomplete.addListener('place_changed', fillIn);
+                    initialaddress();
+                });
+        } else {
+            var input = document.getElementById('autocompleteSearch');
+            autocomplete = new google.maps.places.Autocomplete(input, {
+                types: ['geocode']
+            });
+            autocomplete.setFields(['address_component']);
+            autocomplete.addListener('place_changed', fillIn);
+        }
+
+        // function fillIn() {
+
+        //     var adddesss = document.getElementById('autocompleteSearch').value;
+
+        //     var place = autocomplete.getPlace();
+        //     let city = '';
+        //     let state = '';
+        //     let zipcode = '';
+        //     let country = '';
+        //     for (const component of place.address_components) {
+        //         if (component.types.includes('locality')) {
+        //             city = component.long_name;
+        //         }
+        //         if (component.types.includes('administrative_area_level_1')) {
+        //             state = component.short_name;
+        //         }
+        //         if (component.types.includes('postal_code')) {
+        //             zipcode = component.long_name;
+        //         }
+        //         if (component.types.includes('country')) {
+        //             country = component.long_name;
+        //         }
+        //     }
+        //     // console.log(city, state, zipcode, country);
+        //     // Update input values
+        //     address = document.getElementById('autocompleteSearch').value;
+        //     document.getElementById('citySearch').value = city;
+        //     document.getElementById('stateSearch').value = state;
+        //     document.getElementById('zipcodeSearch').value = zipcode;
+        //     document.getElementById('countrySearch').value = country;
+        //     // document.getElementById('address').value = address
+
+
+        // }
+
+
+
 
         const inpFile = document.querySelector("#img-upload");
         const imgTag = document.querySelector("#logo-preview");

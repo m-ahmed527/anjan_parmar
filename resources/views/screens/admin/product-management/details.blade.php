@@ -86,7 +86,7 @@
                                                     @endif
                                                 </div>
                                             </td>
-                                            <td>{{ $product->price }}</td>
+                                            <td>${{ $product->price }}</td>
                                             <td>
                                                 @php
                                                     $category = $product->category()->withTrashed()->first();
@@ -96,11 +96,13 @@
                                             </td>
                                             <td>
                                                 @forelse ($product->variants as  $attribute)
-                                                    {{ $loop->iteration }} -
-                                                    @foreach (json_decode($attribute['attributes'], true) as $key => $attr)
-                                                        {{ $key }} ->{{ $attr }} ,
-                                                    @endforeach
-                                                    <br>
+                                                    @if (!empty(json_decode($attribute['attributes'], true)))
+                                                        {{ $loop->iteration }} -
+                                                        @foreach (json_decode($attribute['attributes'], true) as $key => $attr)
+                                                            {{ $key }} ->{{ $attr }} ,
+                                                        @endforeach
+                                                        <br>
+                                                    @endif
                                                 @empty
                                                     No Attribute Found
                                                 @endforelse

@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
-
+use Illuminate\Validation\Rule;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -30,15 +30,38 @@ class UpdateProductRequest extends FormRequest
             'name' => 'required',
             'search_keyword' => 'sometimes',
             'price' => 'required|numeric',
-            'discount' => 'sometimes|numeric',
+            // 'discount' => 'nullable|numeric',
+            // 'discount' => [
+            //     'nullable',
+            //     'numeric',
+            //     function ($attribute, $value, $fail) {
+            //         if (request()->has('is_percent')) {
+            //             // If the discount is a percentage, it must be <= 100
+            //             if ($value > 100) {
+            //                 $fail('Discount percentage cannot be greater than 100.');
+            //             }
+            //         } else {
+            //             // If the discount is a fixed amount, it must be <= price
+            //             if ($value > request()->input('price')) {
+            //                 $fail('Discount cannot be greater than the price. ' .'('. request()->input('price') .')');
+            //             }
+            //         }
+            //     }
+            // ],
+            'discount' => [
+                'nullable',
+                'numeric',
+                Rule::when(request()->has('is_percent'), 'max:100'),
+                Rule::when(!request()->has('is_percent'), 'lte:price'),
+            ],
             'description' => 'sometimes',
             'long_description' => 'sometimes',
             'attributes' => 'sometimes',
             'attributes.*' => 'sometimes|array',
             // 'variant_price' => 'sometimes',
-            'variant_price.*' => 'numeric',
+            'variant_price.*' => 'nullable|numeric',
             // 'quantity' => 'sometimes',
-            'quantity.*' => 'numeric',
+            'quantity.*' => 'nullable|numeric',
             'images' => 'sometimes',
             'images.*' => 'sometimes|image',
             'featured_image' => 'sometimes|image',

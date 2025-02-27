@@ -1,5 +1,6 @@
 <script>
     var redirectUrl = @json($redirectUrl);
+    console.log(@json(request()->url()).includes('product'));
 
     $(document).ready(function() {
         $(document).on('click', '#create-btn', function(e) {
@@ -37,48 +38,8 @@
                     console.log(error);
                     let errors = error.responseJSON.errors;
                     if (errors) {
-                        $('.error-message')
-                            .remove();
-                        $.each(errors, function(key, value) {
-                            console.log(value);
-                            if (key == 'featured_image') {
-                                let inputField = $(
-                                    `.featured-image-ka-div`
-                                );
-                                let errorMessage = $(
-                                    `<span class='error-message text-danger'>${value}</span>`
-                                );
-                                inputField.after(errorMessage);
-                            } else {
-                                let inputField = $(
-                                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
-                                );
-                                let errorMessage = $(
-                                    `<span class='error-message text-danger'>${value}</span>`
-                                );
-                                inputField.after(errorMessage);
-                            }
 
-                            if (key === "name") {
-                                let inputField = $(`input[name="${key}"]`);
-                                let errorMessage = $(
-                                    `<span class='error-message text-danger'>${value}</span>`
-                                );
-                                inputField.after(errorMessage);
-                            }
-
-                            // Handle errors for "variants" (array fields)
-                            if (key.startsWith("variants.")) {
-                                let index = key.split('.')[
-                                    1]; // Extract the index (0,1,2...)
-                                let variantField = $(`input[name="variants[]"]`).eq(
-                                    index);
-                                let errorMessage = $(
-                                    `<span class='error-message text-danger'>${value[0]}</span>`
-                                );
-                                variantField.after(errorMessage);
-                            }
-                        })
+                        handleValidationErrors(errors);
                     } else {
                         Swal.fire({
                             position: "center",
@@ -97,4 +58,56 @@
     $(document).on('input change keydown', 'input, select, textarea', function() {
         $(this).next('span.error-message').text('');
     });
+
+
+    // Function to handle validation errors
+    function handleValidationErrors(errors) {
+        $('.error-message')
+            .remove();
+        $.each(errors, function(key, value) {
+            if (@json(request()->url()).includes('attribute')) {
+
+
+                if (key === "name") {
+                    let inputField = $(`input[name="${key}"]`);
+                    let errorMessage = $(
+                        `<span class='error-message text-danger'>${value}</span>`
+                    );
+                    inputField.after(errorMessage);
+                }
+
+                // Handle errors for "variants" (array fields)
+                if (key.startsWith("variants.")) {
+                    let index = key.split('.')[
+                        1]; // Extract the index (0,1,2...)
+
+                        let variantField = $(`input[name="variants[]"]`).eq(
+                            index);
+                            console.log(index, variantField);
+                    let errorMessage = $(
+                        `<span class='error-message text-danger'>${value[0]}</span>`
+                    );
+                    variantField.after(errorMessage);
+                }
+            } else if (@json(request()->url()).includes('product')) {
+                if (key == 'featured_image') {
+                    let inputField = $(
+                        `.featured-image-ka-div`
+                    );
+                    let errorMessage = $(
+                        `<span class='error-message text-danger'>${value}</span>`
+                    );
+                    inputField.after(errorMessage);
+                } else {
+                    let inputField = $(
+                        `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                    );
+                    let errorMessage = $(
+                        `<span class='error-message text-danger'>${value}</span>`
+                    );
+                    inputField.after(errorMessage);
+                }
+            }
+        });
+    }
 </script>

@@ -214,6 +214,7 @@
                                 $("#add-attribute-section")
                                     .css('display',
                                         'block'); // Show Add button when new attributes load
+
                             } else {
                                 $("#add-attribute-section")
                                     .css('display',
@@ -227,34 +228,7 @@
 
 
 
-            var productIndex = 0;
 
-
-            function bindAttributeChange(index) {
-                $(document).on("change", `select[name='attribute[${index}][]']`, function() {
-                    let varElement = $(this).closest('.attribute-variants').find(
-                        `select[name='variant[${index}][]']`).first();
-                    let attribute = $(this).val();
-                    console.log(attribute);
-                    $.ajax({
-                        type: 'GET',
-                        url: "{{ route('admin.get.variant', '') }}/" + attribute,
-                        dataType: "json",
-                        success: function(response) {
-                            let optElem = '';
-                            console.log(response)
-                            $.each(response.variants, function(key, val) {
-                                optElem +=
-                                    `<option value="${val.id}" class="form-control">${val.name}</option>`;
-                            });
-                            varElement.html(optElem);
-                        }
-                    });
-                });
-            }
-
-            // Initial binding for first set of elements
-            bindAttributeChange(productIndex);
 
 
             $(document).on("click", ".remove-attribute", function(e) {
@@ -298,6 +272,10 @@
             });
 
         });
+    </script>
+    <script>
+        // Real-time validation for variant_price and quantity fields with error messages
+       
     </script>
 @endsection
 

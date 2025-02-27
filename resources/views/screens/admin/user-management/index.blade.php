@@ -1,8 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    @include('includes.admin.data-table-css')
 @endpush
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
@@ -24,9 +22,9 @@
                         <div class="card">
                             <div class="card-header">
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
-                                <div class=" d-flex justify-content-end">
+                                {{-- <div class=" d-flex justify-content-end">
                                     <a href="{{ route('admin.create.user') }}" class="btn btn-primary">Create New User</a>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="card-body">
@@ -47,7 +45,12 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                NAME
+                                                FIRST NAME
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                LAST NAME
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
@@ -57,45 +60,45 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                STATUS
+                                                PHONE
                                             </th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 ACTIONS
-                                            </th>
+                                            </th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($users as $user)
-                                            <tr class="odd">
-                                                <td class="dtr-control sorting_1" tabindex="0">
-                                                    {{ $user->id }}
-                                                </td>
-                                                <td>
-                                                    @if ($user->getFirstMediaUrl('avatar'))
-                                                        <img src="{{ $user->getFirstMediaUrl('avatar') }}"
-                                                            alt="{{ $user->name }}"
-                                                            style="max-width: 50px; max-height: 50px;">
-                                                    @else
-                                                        No Image Found
-                                                    @endif
-                                                </td>
-                                                <td>{{ $user->name }}</td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>
-                                                    <a href="#" data-id="{{ $user->slug }}" id="status"
-                                                        data-status="{{ $user->is_active }}">{{ $user->is_active == 1 ? 'Active' : 'Inactive' }}</a>
-                                                </td>
-                                                <td class="d-flex gap-20">
-                                                    <a href="{{ route('admin.user.edit', $user->slug) }}"
-                                                        class="btn btn-primary">Edit</a>
-                                                    {{-- <a href="#" data-id="{{ $user->slug }}"
-                                                        class="delete btn btn-danger btn-sm">Delete</a> --}}
-                                                    <a href="{{ route('admin.user.detial', $user->slug) }}"
-                                                        class="btn btn-info">Details</a>
-                                                </td>
-                                            </tr>
+                                            @if ($user->hasRole('User'))
+                                                <tr class="odd">
+                                                    <td class="dtr-control sorting_1" tabindex="0">
+                                                        {{ $user->id }}
+                                                    </td>
+                                                    <td>
+                                                        @if ($user->getFirstMediaUrl('avatar'))
+                                                            <img src="{{ $user->getFirstMediaUrl('avatar') }}"
+                                                                alt="{{ $user->name }}"
+                                                                style="max-width: 50px; max-height: 50px;">
+                                                        @else
+                                                            No Image Found
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $user->first_name }}</td>
+                                                    <td>{{ $user->last_name }}</td>
+                                                    <td>{{ $user->email }}</td>
+                                                    <td class="phone">
+                                                        {{ $user->phone }}
+                                                    </td>
+                                                    {{-- <td class="d-flex gap-20">
+                                                        <a href="#" data-id="{{ $user->slug }}"
+                                                        class="delete btn btn-danger btn-sm">Delete</a>
+                                                        <a href="{{ route('admin.user.detial', $user->slug) }}"
+                                                            class="btn btn-info">Details</a>
+                                                    </td> --}}
+                                                </tr>
+                                            @endif
                                         @endforeach
 
                                     </tbody>
@@ -114,6 +117,7 @@
     </div>
 @endsection
 @section('scripts')
+    @include('includes.admin.data-table-scripts')
     <script>
         $(document).ready(function() {
             $(document).on("click", "#status", function(e) {
@@ -147,31 +151,20 @@
                 }
             })
 
-        });
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+            let phones = $('.phone');
+            phones.each(function(index, element) {
+                let phone = $(element).text();
+                console.log(phone);
+
+                console.log(phone.trim().slice(2, 5));
+                let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2,5) + ') ' + phone
+                .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
+                console.log(newPhone);
+                $(element).text(newPhone);
+
+            })
 
         });
     </script>
-    <script src="{{ asset('assets/admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 @endsection

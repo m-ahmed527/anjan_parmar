@@ -31,6 +31,7 @@ Route::get('/attribute/details/{attribute}', [AttributeManagementController::cla
 
 // Products
 Route::get('/all/products', [ProductManagementController::class, 'index'])->name('product.index');
+Route::get('/all/products/premium', [ProductManagementController::class, 'premiumIndex'])->name('product.premium.index');
 Route::get('/product/create', [ProductManagementController::class, 'create'])->name('product.create');
 Route::get('/get-variants/{attribute}', [ProductManagementController::class, 'getVariants'])->name('get.variant');
 Route::get('/get-selected-variants/{attribute}', [ProductManagementController::class, 'selectedVariants'])->name('get.selected.variant');
@@ -38,6 +39,7 @@ Route::post('/product/store', [ProductManagementController::class, 'store'])->na
 Route::post('/product/delete/{product}', [ProductManagementController::class, 'delete'])->name('product.delete');
 Route::get('/product/edit/{product}', [ProductManagementController::class, 'edit'])->name('product.edit');
 Route::post('/product/update/{product}', [ProductManagementController::class, 'update'])->name('product.update');
+Route::get('/product/make-premium', [ProductManagementController::class, 'makePremium'])->name('product.make.premium');
 
 Route::get('/product/details/{product}', [ProductManagementController::class, 'show'])->name('product.details');
 // change product status

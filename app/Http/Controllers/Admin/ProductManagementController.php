@@ -21,8 +21,13 @@ class ProductManagementController extends Controller
 {
     public function index(): View
     {
-        $products = Product::all();
+        $products = Product::where('is_premium', 0)->get();
         return view('screens.admin.product-management.index', get_defined_vars());
+    }
+    public function premiumIndex(): View
+    {
+        $products = Product::where('is_premium', 1)->get();
+        return view('screens.admin.product-management.premium', get_defined_vars());
     }
 
 
@@ -39,12 +44,35 @@ class ProductManagementController extends Controller
 
             DB::beginTransaction();
             $data = $request->all();
+            // dd($data);
             $product = Product::create($request->sanitized());
             $product->addMedia($request->featured_image, 'featured_image');
             if ($request->has('images')) {
                 $product->addMultipleMedia($request->images, 'multiple_images');
             }
-            if (isset($data["attributes"])) {
+            // if (isset($data["attributes"])) {
+            //     $variants = $this->prepareVariants($data);
+            //     foreach ($variants as $variant) {
+            //         $product->variants()->create($variant);
+            //     }
+            // }
+
+            if (!empty($data["attributes"])) {
+                $filteredAttributes = array_filter($data["attributes"], function ($attrValues) {
+                    return !empty(array_filter($attrValues)); // Remove null values
+                });
+            }
+
+            $filteredPrices = array_filter($data["variant_price"], function ($price) {
+                return !is_null($price);
+            });
+
+            $filteredQuantities = array_filter($data["quantity"], function ($qty) {
+                return !is_null($qty);
+            });
+
+            // If all attributes, prices, and quantities are empty, do not process variants
+            if (!empty($filteredAttributes) && !empty($filteredPrices) && !empty($filteredQuantities)) {
                 $variants = $this->prepareVariants($data);
                 foreach ($variants as $variant) {
                     $product->variants()->create($variant);
@@ -57,12 +85,14 @@ class ProductManagementController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             return response([
                 "success" => false,
                 "message" => "Failed to create product. Please try again.",
             ]);
         }
     }
+
     private function prepareVariants($data)
     {
         $structuredArray = [];
@@ -78,20 +108,33 @@ class ProductManagementController extends Controller
 
             // Add all attributes dynamically
             foreach ($attributeKeys as $key) {
-                if (isset($data["attributes"][$key][$i])) {
+                if (!empty($data["attributes"][$key][$i])) { // Ignore null or empty values
                     $variantData[$key] = $data["attributes"][$key][$i];
                 }
             }
 
-            // Construct final structured array
-            $structuredArray[] = [
-                "attributes" => json_encode($variantData),
-                "variant_price" => isset($data["variant_price"][$i]) ? (int) $data["variant_price"][$i] : 0,
-                "quantity" => isset($data["quantity"][$i]) ? (int) $data["quantity"][$i] : 0
-            ];
+            // Check if the variant has valid data (No all-null variants)
+            $variantPrice = isset($data["variant_price"][$i]) ? (float) $data["variant_price"][$i] : null;
+            $quantity = isset($data["quantity"][$i]) ? (int) $data["quantity"][$i] : null;
+
+            // Skip variants if all values are null/empty
+            if (!empty($variantData) || !is_null($variantPrice) || !is_null($quantity)) {
+                $structuredArray[] = [
+                    "attributes" => !empty($variantData) ? json_encode($variantData) : null,
+                    "variant_price" => $variantPrice ?? null,
+                    "quantity" => $quantity ?? null
+                ];
+            }
         }
+
         return $structuredArray;
     }
+
+
+
+
+
+
 
     public function show(Product $product): View
     {
@@ -126,7 +169,23 @@ class ProductManagementController extends Controller
             if ($request->has('images')) {
                 $product->updateMediaMultiple($request->images, 'multiple_images');
             }
-            if (isset($data["attributes"])) {
+
+            if (!empty($data["attributes"])) {
+                $filteredAttributes = array_filter($data["attributes"], function ($attrValues) {
+                    return !empty(array_filter($attrValues)); // Remove null values
+                });
+            }
+
+            $filteredPrices = array_filter($data["variant_price"], function ($price) {
+                return !is_null($price);
+            });
+
+            $filteredQuantities = array_filter($data["quantity"], function ($qty) {
+                return !is_null($qty);
+            });
+
+            // If all attributes, prices, and quantities are empty, do not process variants
+            if (!empty($filteredAttributes) && !empty($filteredPrices) && !empty($filteredQuantities)) {
                 $variants = $this->prepareVariants($data);
                 foreach ($product->variants as $variant) {
                     $product->variants()->delete();
@@ -135,6 +194,15 @@ class ProductManagementController extends Controller
                     $product->variants()->create($variant);
                 }
             }
+            // if (isset($data["attributes"])) {
+            //     $variants = $this->prepareVariants($data);
+            //     foreach ($product->variants as $variant) {
+            //         $product->variants()->delete();
+            //     }
+            //     foreach ($variants as $variant) {
+            //         $product->variants()->create($variant);
+            //     }
+            // }
             // dd($variants, $request->sanitized());
             DB::commit();
             return response([
@@ -200,6 +268,33 @@ class ProductManagementController extends Controller
             ]);
         }
     }
+
+    public function makePremium(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $products = Product::whereIn('slug', $request->slugs)->get();
+            foreach ($products as $product) {
+                $product->update([
+                    'is_premium' => 1,
+                ]);
+            };
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Products made premium successfully.',
+            ]);
+        } catch (Exception $e) {
+            return response([
+                "success" => false,
+                "message" => "Failed to make premium. Please try again.",
+            ]);
+        }
+    }
+
+
+
+
     public function changeStatus(Product $product)
     {
 
@@ -218,3 +313,32 @@ class ProductManagementController extends Controller
         }
     }
 }
+// private function prepareVariants($data)
+    // {
+    //     $structuredArray = [];
+
+    //     // Extract attribute keys dynamically
+    //     $attributeKeys = array_keys($data["attributes"]);
+
+    //     // Find total variants count (based on first attribute's count)
+    //     $totalVariants = count(reset($data["attributes"]));
+
+    //     for ($i = 0; $i < $totalVariants; $i++) {
+    //         $variantData = [];
+
+    //         // Add all attributes dynamically
+    //         foreach ($attributeKeys as $key) {
+    //             if (isset($data["attributes"][$key][$i])) {
+    //                 $variantData[$key] = $data["attributes"][$key][$i];
+    //             }
+    //         }
+
+    //         // Construct final structured array
+    //         $structuredArray[] = [
+    //             "attributes" => json_encode($variantData),
+    //             "variant_price" => isset($data["variant_price"][$i]) ? (float) $data["variant_price"][$i] : null,
+    //             "quantity" => isset($data["quantity"][$i]) ? (int) $data["quantity"][$i] : null
+    //         ];
+    //     }
+    //     return $structuredArray;
+    // }

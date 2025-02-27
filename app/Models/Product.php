@@ -38,6 +38,7 @@ class Product extends Model
         $discountedPrice = '';
         if ($this->discount_type == 'percent') {
             $discountedPrice = $this->price - ($this->price * $this->discount / 100);
+            // dd($discountedPrice, $this->price, $this->discount);
             return $discountedPrice;
         } else {
             return ($this->price - $this->discount);

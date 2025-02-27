@@ -16,7 +16,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>All Products</h1>
+                        <h1>All Premium Products</h1>
                     </div>
 
                 </div>
@@ -30,11 +30,11 @@
                         <div class="card">
                             <div class="card-header">
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
-                                <div class=" d-flex justify-content-end">
+                                {{-- <div class=" d-flex justify-content-end">
                                     <a class="btn btn-primary move-btn mr-2" href="#">Make Selected</a>
                                     <a href="{{ route('admin.product.create') }}" class="btn btn-primary">Create New
                                         Product</a>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="card-body">
@@ -42,12 +42,12 @@
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 <input type="checkbox" name="premium_all" id=""
                                                     class="premium-all"> MAKE PREMIUM
-                                            </th>
+                                            </th> --}}
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -93,10 +93,10 @@
                                     <tbody>
                                         @foreach ($products as $product)
                                             <tr class="odd">
-                                                <td class="dtr-control sorting_1" tabindex="0">
+                                                {{-- <td class="dtr-control sorting_1" tabindex="0">
                                                     <input type="checkbox" name="premium" id=""
                                                         class="premium-single" value="{{ $product->slug }}">
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     @if ($product->getFirstMediaUrl('featured_image'))
                                                         <img src="{{ $product->getFirstMediaUrl('featured_image') }}"

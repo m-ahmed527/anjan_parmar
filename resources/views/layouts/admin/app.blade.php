@@ -299,10 +299,17 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+
                                 <li class="nav-item">
                                     <a href="{{ route('admin.product.index') }}" class="nav-link active">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>All Products</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.product.premium.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>All Premium</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -341,31 +348,11 @@
 
                         </li>
                         <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
-                                <p>
-                                    User Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.users.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Users</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.create.user') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create User</p>
-                                    </a>
-                                </li>
-                            </ul>
+                            <a href="{{ route('admin.users.index') }}" class="nav-link active">User Management</a>
                         </li>
-                        <li class="nav-item mb-3">
+                        {{-- <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     BlogCategory Management
                                     <i class="right fas fa-angle-left"></i>
@@ -388,7 +375,7 @@
                         </li>
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Blogs Management
                                     <i class="right fas fa-angle-left"></i>
@@ -411,7 +398,7 @@
                         </li>
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Testimonials Management
                                     <i class="right fas fa-angle-left"></i>
@@ -431,7 +418,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
                         {{-- <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
