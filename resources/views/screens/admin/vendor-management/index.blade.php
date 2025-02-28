@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    @include('includes.admin.data-table-css')
 @endpush
+@section('title', 'Vendors')
+
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
@@ -23,7 +23,15 @@
                     <div class="col-9">
                         <div class="card">
                             <div class="card-header">
-                                {{-- <h3 class="card-title">DataTable with default features</h3> --}}
+                                <div class="card-header">
+                                    <label for="status-filter" style="margin-right: 10px;">Filter by status: </label>
+                                    <select id="status-filter" class="form-control" style="width: 200px;">
+                                        <option value="">All</option>
+                                        <option value="approved">Approved</option>
+                                        <option value="rejected">Rejected</option>
+                                        <option value="pending">Pending</option>
+                                    </select>
+                                </div>
                                 <div class=" d-flex justify-content-end">
                                     {{-- <a href="{{ route('admin.create.user') }}" class="btn btn-primary">Create New User</a> --}}
                                 </div>
@@ -98,8 +106,7 @@
                                                     <td class="phone">{{ $user->phone }}</td>
                                                     <td>
                                                         <Select class="form-control" id="status"
-                                                            data-id="{{ $user->id }}"
-                                                            data-status="{{ $user->status }}">
+                                                            data-id="{{ $user->id }}" data-status="{{ $user->status }}">
 
                                                             <option value="pending"
                                                                 {{ $user->status == 'pending' ? 'selected' : '' }}
@@ -222,12 +229,10 @@
             let phones = $('.phone');
             phones.each(function(index, element) {
                 let phone = $(element).text();
-                console.log(phone);
 
-                console.log(phone.trim().slice(2, 5));
+
                 let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2, 5) + ') ' + phone
                     .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
-                console.log(newPhone);
                 $(element).text(newPhone);
 
             })

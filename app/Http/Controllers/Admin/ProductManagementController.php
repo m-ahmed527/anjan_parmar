@@ -291,6 +291,28 @@ class ProductManagementController extends Controller
             ]);
         }
     }
+    public function removePremium(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $products = Product::whereIn('slug', $request->slugs)->get();
+            foreach ($products as $product) {
+                $product->update([
+                    'is_premium' => 0,
+                ]);
+            };
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Products removed from premium successfully.',
+            ]);
+        } catch (Exception $e) {
+            return response([
+                "success" => false,
+                "message" => "Failed to remove from premium. Please try again.",
+            ]);
+        }
+    }
 
 
 

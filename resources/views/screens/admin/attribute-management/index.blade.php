@@ -2,6 +2,8 @@
 @push('styles')
     @include('includes.admin.data-table-css')
 @endpush
+@section('title', 'Attributes')
+
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 

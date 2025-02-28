@@ -9,6 +9,8 @@
         }
     </style>
 @endpush
+@section('title', 'Premium Products')
+
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
@@ -30,11 +32,11 @@
                         <div class="card">
                             <div class="card-header">
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
-                                {{-- <div class=" d-flex justify-content-end">
-                                    <a class="btn btn-primary move-btn mr-2" href="#">Make Selected</a>
-                                    <a href="{{ route('admin.product.create') }}" class="btn btn-primary">Create New
-                                        Product</a>
-                                </div> --}}
+                                <div class=" d-flex justify-content-end">
+                                    <a class="btn btn-primary move-btn mr-2" href="#">Remove Selected</a>
+                                    {{-- <a href="{{ route('admin.product.create') }}" class="btn btn-primary">Create New
+                                        Product</a> --}}
+                                </div>
                             </div>
 
                             <div class="card-body">
@@ -42,12 +44,12 @@
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
-                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 <input type="checkbox" name="premium_all" id=""
-                                                    class="premium-all"> MAKE PREMIUM
-                                            </th> --}}
+                                                    class="premium-all"> REMOVE PREMIUM
+                                            </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -93,10 +95,10 @@
                                     <tbody>
                                         @foreach ($products as $product)
                                             <tr class="odd">
-                                                {{-- <td class="dtr-control sorting_1" tabindex="0">
+                                                <td class="dtr-control sorting_1" tabindex="0">
                                                     <input type="checkbox" name="premium" id=""
                                                         class="premium-single" value="{{ $product->slug }}">
-                                                </td> --}}
+                                                </td>
                                                 <td>
                                                     @if ($product->getFirstMediaUrl('featured_image'))
                                                         <img src="{{ $product->getFirstMediaUrl('featured_image') }}"
@@ -199,11 +201,11 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, make it!'
+                    confirmButtonText: 'Yes, remove it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('admin.product.make.premium') }}",
+                            url: "{{ route('admin.product.remove.premium') }}",
                             method: 'GET',
                             data: {
                                 slugs: slugs,

@@ -1,6 +1,8 @@
 @extends('layouts.admin.app')
 @push('styles')
 @endpush
+@section('title', 'Edit Product')
+
 @section('content')
     <div class="content-wrapper" style="">
 

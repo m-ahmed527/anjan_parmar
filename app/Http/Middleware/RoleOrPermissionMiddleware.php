@@ -28,8 +28,11 @@ class RoleOrPermissionMiddleware
                 return $next($request); // Grant access if any condition is met
             }
         }
-
+        // dd(str_contains(url()->previous(),'login'));
+        if(str_contains(url()->previous(),'login')){
+            Auth::logout();
+        }
         // If no matching role or permission is found, deny access
-        abort(403, 'Unauthorized.');
+        abort(403, 'Unauthorized.You don\'t have access to this page');
     }
 }

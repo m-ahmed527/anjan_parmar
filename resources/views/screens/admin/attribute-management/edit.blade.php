@@ -6,6 +6,8 @@
         }
     </style> --}}
 @endpush
+@section('title', 'Edit Attribute')
+
 @section('content')
     <div class="content-wrapper" style="">
 

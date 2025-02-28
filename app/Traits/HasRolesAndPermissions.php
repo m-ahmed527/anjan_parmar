@@ -40,4 +40,36 @@ trait HasRolesAndPermissions
         // })->exists();
         return $this->permissions->contains('name', $permission) || $this->roles->pluck('permissions')->flatten()->contains('name', $permission);
     }
+
+    public function scopeRole($query, $role)
+    {
+        return $query->whereHas('roles', function ($q) use ($role) {
+            $q->where('name', $role);
+        });
+    }
+
+    public function scopeWithoutRole($query, $role)
+    {
+        return $query->whereDoesntHave('roles', function ($q) use ($role) {
+            $q->where('name', $role);
+        });
+    }
+
+    public function scopePermission($query, $permission)
+    {
+        return $query->whereHas('permissions', function ($q) use ($permission) {
+            $q->where('name', $permission);
+        })->orWhereHas('roles.permissions', function ($q) use ($permission) {
+            $q->where('name', $permission);
+        });
+    }
+
+    public function scopeWithoutPermission($query, $permission)
+    {
+        return $query->whereDoesntHave('permissions', function ($q) use ($permission) {
+            $q->where('name', $permission);
+        })->whereDoesntHave('roles.permissions', function ($q) use ($permission) {
+            $q->where('name', $permission);
+        });
+    }
 }

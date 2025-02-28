@@ -109,6 +109,17 @@
                 Signup as vendors
             </a>
         @endguest
+        @role('Admin')
+            <a href="{{ route('admin.index') }}" class="vendors-btn">
+                Admin Dashboard
+            </a>
+        @endrole
+        @role('Vendor')
+            <a href="#" class="vendors-btn">
+                Vendor Dashboard
+            </a>
+        @endrole
+
     </nav>
     <div class="off-canva-custom">
         <div class="menu-bar">
@@ -212,19 +223,7 @@
         </div>
     </div>
 
-    {{-- <script>
-        document.getElementById('showLogin').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('signupForm').style.display = 'none';
-            document.getElementById('loginForm').style.display = 'block';
-        });
 
-        document.getElementById('showSignup').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('signupForm').style.display = 'block';
-        });
-    </script> --}}
 
 
 </header>

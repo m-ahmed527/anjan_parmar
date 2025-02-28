@@ -2,6 +2,7 @@
 @push('styles')
     @include('includes.admin.data-table-css')
 @endpush
+@section('title', 'Users')
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
@@ -158,8 +159,8 @@
                 console.log(phone);
 
                 console.log(phone.trim().slice(2, 5));
-                let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2,5) + ') ' + phone
-                .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
+                let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2, 5) + ') ' + phone
+                    .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
                 console.log(newPhone);
                 $(element).text(newPhone);
 

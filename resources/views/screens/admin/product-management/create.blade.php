@@ -1,6 +1,9 @@
 @extends('layouts.admin.app')
 @push('styles')
 @endpush
+
+@section('title', 'Create Product')
+
 @section('content')
     <div class="content-wrapper" style="">
 
@@ -275,7 +278,6 @@
     </script>
     <script>
         // Real-time validation for variant_price and quantity fields with error messages
-       
     </script>
 @endsection
 

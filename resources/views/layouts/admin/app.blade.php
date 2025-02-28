@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard</title>
+    <title>Admin | @yield('title')</title>
+    <link rel="shortcut icon" href="{{ asset('assets/web/images/logo-headers.png') }}" type="image/x-icon" />
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -159,7 +160,12 @@
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
                 </li>
-
+                <li class="nav-item dropdown">
+                    <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                        @csrf
+                        <button type="button" class="btn btn-primary" id="logout-btn">Logout</button>
+                    </form>
+                </li>
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -330,7 +336,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.orders.index') }}" class="nav-link active">
+                                    <a href="#" class="nav-link active">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>All Orders</p>
                                     </a>
@@ -339,16 +345,26 @@
                             </ul>
                         </li>
                         <li class="nav-item mb-3">
-                            <a href="{{ route('admin.vendors.index') }}" class="nav-link active">
-                                <p>
-                                    Vendors Management
-                                    {{-- <i class="right fas fa-angle-left"></i> --}}
-                                </p>
+                            <a href="{{ route('admin.profile.index') }}" class="nav-link active">
+                                <p> Profile Management</p>
                             </a>
 
                         </li>
                         <li class="nav-item mb-3">
-                            <a href="{{ route('admin.users.index') }}" class="nav-link active">User Management</a>
+                            <a href="{{ route('admin.vendors.index') }}" class="nav-link active">
+                                <p> Vendors Management</p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.users.index') }}" class="nav-link active">
+                                <p>User Management</p>
+                            </a>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('index') }}" class="nav-link active">
+                                <p>Back to Website</p>
+                            </a>
                         </li>
                         {{-- <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
@@ -494,14 +510,7 @@
 
 
 
-        <!-- /.content-wrapper -->
-        {{-- <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.2.0
-            </div>
-        </footer> --}}
+
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
@@ -546,6 +555,8 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('scripts')
+    @include('includes.logout-script', ['redirectUrl' => route('admin.login')])
+
 </body>
 
 </html>

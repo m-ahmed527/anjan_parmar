@@ -9,6 +9,8 @@
         }
     </style>
 @endpush
+@section('title', 'Products')
+
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 

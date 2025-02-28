@@ -1,6 +1,6 @@
 <script>
     var redirectUrl = @json($redirectUrl);
-    console.log(@json(request()->url()).includes('product'));
+    // console.log(@json(request()->url()).includes('product'));
 
     $(document).ready(function() {
         $(document).on('click', '#create-btn', function(e) {

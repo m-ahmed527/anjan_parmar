@@ -1,9 +1,10 @@
 @extends('layouts.admin.app')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    @include('includes.admin.data-table-css')
 @endpush
+
+@section('title', 'Product Details')
+
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
@@ -245,4 +246,5 @@
 
 
         });
-    @endsection
+    </script>
+@endsection

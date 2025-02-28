@@ -1,6 +1,8 @@
 @extends('layouts.admin.app')
 @push('styles')
 @endpush
+@section('title', 'Create Attribute')
+
 @section('content')
     <div class="content-wrapper" style="">
 
@@ -40,7 +42,7 @@
                                                         <input type="text" class="form-control" id=""
                                                             name="variants[]" placeholder="Enter Variant">
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <div class="col-4">
                                                     <a href="javascript:void(0)"

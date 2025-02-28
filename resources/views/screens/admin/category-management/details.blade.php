@@ -1,4 +1,6 @@
 @extends('layouts.admin.app')
+@section('title', 'Category Details')
+
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
