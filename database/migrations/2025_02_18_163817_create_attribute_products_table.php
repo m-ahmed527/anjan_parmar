@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attribute_products', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('attribute_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->timestamps();
-        });
+        // Schema::create('attribute_products', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('attribute_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+        //     $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+        //     $table->timestamps();
+        // });
     }
 
     /**

@@ -15,13 +15,23 @@ class Variant extends Model
         return 'slug';
     }
 
-    public function products()
+    // public function products()
+    // {
+    //     return $this->belongsToMany(Product::class)->withPivot('variant_price', 'quantity')->withTimestamps();
+    // }
+
+    // public function attribute()
+    // {
+    //     return $this->belongsTo(Attribute::class);
+    // }
+
+    public function product()
     {
-        return $this->belongsToMany(Product::class)->withPivot('variant_price', 'quantity')->withTimestamps();
+        return $this->belongsTo(Product::class);
     }
 
-    public function attribute()
+    public function attributeValues()
     {
-        return $this->belongsTo(Attribute::class);
+        return $this->belongsToMany(AttributeValue::class, 'variant_attribute_values');
     }
 }

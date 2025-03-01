@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Web\ProductController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,6 +42,11 @@ Route::controller(AuthController::class)->group(function () {
     });
     Route::middleware('auth')->group(function () {
         Route::post('/logout', 'logout')->name('logout');
+    });
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/products', 'index')->name('products');
+        Route::get('/product/{product}', 'show')->name('product.show');
+        Route::post('/get-variant-price', 'getVariantPrice')->name('get-variant-price');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');
@@ -167,7 +173,7 @@ Route::get('/products/{id}', function ($id) use ($products) {
     return view('screens.web.products.show', ['product' => $product], ['products' => $products]);
 })->name('products.show');
 
-Route::view('/products', 'screens.web.products.index', ['products' => $products])->name('products');
+// Route::view('/products', 'screens.web.products.index', ['products' => $products])->name('products');
 Route::view('/shop', 'screens.web.shop.index', ['products' => $products])->name('shop');
 
 Route::view('/', 'screens.web.index', ['products' => $products])->name('index');

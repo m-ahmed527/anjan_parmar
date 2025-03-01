@@ -71,13 +71,15 @@ class ProductManagementController extends Controller
                 return !is_null($qty);
             });
 
+
             // If all attributes, prices, and quantities are empty, do not process variants
-            if (!empty($filteredAttributes) && !empty($filteredPrices) && !empty($filteredQuantities)) {
+            if (!empty($filteredAttributes) || !empty($filteredPrices) || !empty($filteredQuantities)) {
                 $variants = $this->prepareVariants($data);
                 foreach ($variants as $variant) {
                     $product->variants()->create($variant);
                 }
             }
+            // dd($data, $filteredAttributes, $filteredPrices, $filteredQuantities);
             DB::commit();
             return response([
                 "success" => true,
@@ -121,7 +123,7 @@ class ProductManagementController extends Controller
             if (!empty($variantData) || !is_null($variantPrice) || !is_null($quantity)) {
                 $structuredArray[] = [
                     "attributes" => !empty($variantData) ? json_encode($variantData) : null,
-                    "variant_price" => $variantPrice ?? null,
+                    "variant_price" => $variantPrice ?? 0,
                     "quantity" => $quantity ?? null
                 ];
             }
@@ -171,21 +173,25 @@ class ProductManagementController extends Controller
             }
 
             if (!empty($data["attributes"])) {
-                $filteredAttributes = array_filter($data["attributes"], function ($attrValues) {
+                $filteredAttributes = array_filter(($data["attributes"]), function ($attrValues) {
                     return !empty(array_filter($attrValues)); // Remove null values
                 });
             }
 
-            $filteredPrices = array_filter($data["variant_price"], function ($price) {
-                return !is_null($price);
-            });
+            if (!empty($data["variant_price"])) {
+                $filteredPrices = array_filter(($data["variant_price"]), function ($price) {
+                    return !is_null($price);
+                });
+            }
+            if (!empty($data["quantity"])) {
+                $filteredQuantities = array_filter(($data["quantity"]), function ($qty) {
+                    return !is_null($qty);
+                });
+            }
 
-            $filteredQuantities = array_filter($data["quantity"], function ($qty) {
-                return !is_null($qty);
-            });
 
             // If all attributes, prices, and quantities are empty, do not process variants
-            if (!empty($filteredAttributes) && !empty($filteredPrices) && !empty($filteredQuantities)) {
+            if (!empty($filteredAttributes) || !empty($filteredPrices) && !empty($filteredQuantities)) {
                 $variants = $this->prepareVariants($data);
                 foreach ($product->variants as $variant) {
                     $product->variants()->delete();

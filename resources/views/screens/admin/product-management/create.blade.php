@@ -111,7 +111,7 @@
                                                 <div class="input-group featured-image-ka-div">
                                                     <div class="custom-file">
                                                         <input type="file" name="featured_image"
-                                                            class="custom-file-input" id="exampleInputFile">
+                                                            class="custom-file-input" id="exampleInputFile" accept="image/*">
                                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                                             file</label>
                                                     </div>
@@ -123,7 +123,7 @@
                                                 <div class="input-group">
                                                     <div class="custom-file">
                                                         <input type="file" name="images[]" class="custom-file-input"
-                                                            id="exampleInputFile" multiple>
+                                                            id="exampleInputFile" multiple accept="image/*">
                                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                                             files</label>
                                                     </div>

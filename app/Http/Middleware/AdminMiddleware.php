@@ -16,15 +16,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
+        if (auth()->user()->hasRole('Admin')) {
+            return $next($request);
+        } else {
             // Agar user authenticate nahi hai to different login pages per redirect karein
             if (str_contains($request->url(), 'admin')) {
                 return redirect()->route('admin.login');
             }
-
             return redirect()->route('login'); // Default user login
         }
-
-        return $next($request);
     }
 }

@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\VendorManagementController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/login', function () {
+Route::middleware('guest')->get('/login', function () {
     return view('auth.admin.login');
 })->name('login');
 Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(function () {

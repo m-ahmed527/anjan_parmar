@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 
 class VendorManagementController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // $status = $request->status;
         $users = User::all();
         // dd($vendors[0]->hasRole('Vendor'));
         return view('screens.admin.vendor-management.index', get_defined_vars());
@@ -26,12 +27,12 @@ class VendorManagementController extends Controller
                 'success' => true,
                 'status' => $request->newStatus,
                 'message' => 'Vendor status updated successfully',
-            ],200);
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update vendor status. Please try again.',
-            ],400);
+            ], 400);
         }
     }
 }

@@ -104,7 +104,8 @@
                                                 <div class="input-group featured-image-ka-div">
                                                     <div class="custom-file">
                                                         <input type="file" name="featured_image"
-                                                            class="custom-file-input" id="exampleInputFile">
+                                                            class="custom-file-input" id="exampleInputFile"
+                                                            accept="image/*">
                                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                                             file</label>
                                                     </div>
@@ -119,7 +120,7 @@
                                                 <div class="input-group">
                                                     <div class="custom-file">
                                                         <input type="file" name="images[]" class="custom-file-input"
-                                                            id="exampleInputFile" multiple>
+                                                            id="exampleInputFile" multiple accept="image/*">
                                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                                             files</label>
                                                     </div>
@@ -148,8 +149,11 @@
                                                         {{-- Attribute Dropdown --}}
                                                         <div class="form-group col-md-4">
                                                             <label>{{ $attribute['attribute']['name'] }}</label>
-                                                            <select name="attributes[{{ $attribute['attribute']['slug'] }}][]" class="form-control variant-dropdown">
-                                                                <option value="">Select {{ $attribute['attribute']['name'] }}</option>
+                                                            <select
+                                                                name="attributes[{{ $attribute['attribute']['slug'] }}][]"
+                                                                class="form-control variant-dropdown">
+                                                                <option value="">Select
+                                                                    {{ $attribute['attribute']['name'] }}</option>
 
                                                                 @foreach ($attribute['variants'] as $variantOption)
                                                                     <option value="{{ $variantOption['slug'] }}"
@@ -164,18 +168,21 @@
                                                     {{-- Price Field --}}
                                                     <div class="form-group col-md-4">
                                                         <label>Price</label>
-                                                        <input type="number" class="form-control" name="variant_price[]" value="{{ $variant->variant_price }}">
+                                                        <input type="number" class="form-control" name="variant_price[]"
+                                                            value="{{ $variant->variant_price }}">
                                                     </div>
 
                                                     {{-- Quantity Field --}}
                                                     <div class="form-group col-md-4">
                                                         <label>Quantity</label>
-                                                        <input type="number" class="form-control" name="quantity[]" value="{{ $variant->quantity }}">
+                                                        <input type="number" class="form-control" name="quantity[]"
+                                                            value="{{ $variant->quantity }}">
                                                     </div>
 
                                                     {{-- Remove Button --}}
                                                     <div class="form-group col-md-12 d-flex justify-content-end">
-                                                        <a href="javascript:void(0)" class="btn btn-danger btn-md remove-attribute">
+                                                        <a href="javascript:void(0)"
+                                                            class="btn btn-danger btn-md remove-attribute">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
                                                     </div>

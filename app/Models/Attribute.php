@@ -21,8 +21,13 @@ class Attribute extends Model
         return $this->belongsToMany(Category::class)->withTimestamps();
     }
 
-    public function variants()
+    // public function variants()
+    // {
+    //     return $this->hasMany(Variant::class);
+    // }
+
+    public function values()
     {
-        return $this->hasMany(Variant::class);
+        return $this->hasMany(AttributeValue::class);
     }
 }

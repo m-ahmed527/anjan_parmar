@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_variants', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            // $table->foreignId('variant_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->json('attributes');
-            $table->float('variant_price')->default(0);
-            $table->integer('quantity')->default(0);
-            $table->timestamps();
-        });
+        // Schema::create('product_variants', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+        //     // $table->foreignId('variant_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+        //     $table->json('attributes');
+        //     $table->float('variant_price')->default(0);
+        //     $table->integer('quantity')->default(0);
+        //     $table->timestamps();
+        // });
     }
 
     /**

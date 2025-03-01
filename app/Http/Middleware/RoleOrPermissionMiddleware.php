@@ -25,6 +25,7 @@ class RoleOrPermissionMiddleware
         // Check if the user has any of the roles or permissions
         foreach ($rolesOrPermissions as $item) {
             if ($user->hasRole($item) || $user->hasPermission($item)) {
+                // dd($item);
                 return $next($request); // Grant access if any condition is met
             }
         }

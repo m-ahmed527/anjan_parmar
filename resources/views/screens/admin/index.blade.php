@@ -94,6 +94,8 @@
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
+                            {{-- <a href="{{ route('admin.vendors.index', ['status' => 'approved']) }}"
+                                class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
                             <a href="{{ route('admin.vendors.index') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
@@ -109,6 +111,8 @@
                             <div class="icon">
                                 <i class="ion ion-close"></i>
                             </div>
+                            {{-- <a href="{{ route('admin.vendors.index', ['status' => 'rejected']) }}"
+                                class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
                             <a href="{{ route('admin.vendors.index') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
@@ -124,6 +128,8 @@
                             <div class="icon">
                                 <i class="ion ion-load-a"></i>
                             </div>
+                            {{-- <a href="{{ route('admin.vendors.index', ['status' => 'pending']) }}"
+                                class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
                             <a href="{{ route('admin.vendors.index') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>

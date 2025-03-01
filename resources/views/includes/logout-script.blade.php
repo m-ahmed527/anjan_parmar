@@ -2,7 +2,7 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    var redirectUrl = @json($redirectUrl);
+    var redirect = @json($redirectUrl);
     // console.log(redirectUrl);
     $(document).ready(function() {
         $(document).on('click', '#logout-btn', function(e) {
@@ -28,7 +28,7 @@
                             timer: 1500
                         });
                         setTimeout(function() {
-                            window.location.href = redirectUrl;
+                            window.location.href = redirect;
                         }, 1000)
                     }
                 },

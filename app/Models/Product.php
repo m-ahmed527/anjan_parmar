@@ -24,14 +24,14 @@ class Product extends Model
 
     public function variants()
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(Variant::class);
     }
 
 
-    public function attributes()
-    {
-        return $this->belongsToMany(Attribute::class, 'attribute_products');
-    }
+    // public function attributes()
+    // {
+    //     return $this->belongsToMany(Attribute::class, 'attribute_products');
+    // }
 
     public function discount()
     {

@@ -22,21 +22,25 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-9">
                         <div class="card">
-                            <div class="card-header">
-                                <div class="card-header">
-                                    <label for="status-filter" style="margin-right: 10px;">Filter by status: </label>
-                                    <select id="status-filter" class="form-control" style="width: 200px;">
-                                        <option value="">All</option>
-                                        <option value="approved">Approved</option>
-                                        <option value="rejected">Rejected</option>
-                                        <option value="pending">Pending</option>
-                                    </select>
-                                </div>
-                                <div class=" d-flex justify-content-end">
-                                    {{-- <a href="{{ route('admin.create.user') }}" class="btn btn-primary">Create New User</a> --}}
-                                </div>
-                            </div>
+                            {{-- <div class="card-header">
 
+                                <div class=" d-flex justify-content-end">
+                                    <a href="{{ route('admin.create.user') }}" class="btn btn-primary">Create New User</a>
+                                </div>
+                            </div> --}}
+                            {{-- <div class="card-header">
+                                <label for="status-filter" style="margin-right: 10px;">Filter by status: </label>
+                                <select id="status-filter" class="form-control" style="width: 200px;">
+                                    <option value="" {{ $status == '' ? 'selected' : '' }}>All</option>
+                                    <option value="approved" {{ $status == 'approved' ? 'selected' : '' }}>Approved</option>
+                                    <option value="rejected" {{ $status == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="">All</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div> --}}
                             <div class="card-body">
                                 <table id="example1" class="table table-bordered table-striped dataTable dtr-inline"
                                     aria-describedby="example1_info">

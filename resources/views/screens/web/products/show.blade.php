@@ -63,7 +63,7 @@
                         <h1 class="sh-head">Products</h1>
                         <p class="sh-para"><a href="{{ route('index') }}" class="text-decoration-none">Home</a> / <a
                                 href="{{ route('products') }}" class="text-decoration-none">Products</a>
-                            / {{ $product['name'] }}</p>
+                            / {{ $product->name }}</p>
                     </div>
                 </div>
             </div>
@@ -74,34 +74,37 @@
                 <div class="row row-gap-3">
                     <div class="col-xl-2 col-12 p-0">
                         <div class="side-images-wrap">
-                            <div class="side-image" style="border:2px solid #4f7eff">
-                                <img src="{{ asset('assets/web/images/laptop.png') }}" alt="Product Image"
-                                    class="gallery-img-item">
-                            </div>
-                            <div class="side-image">
+                            @forelse ($product->getMediaCollectionUrl('multiple_images') as $image)
+                                <div class="side-image" style="border:2px solid #4f7eff">
+                                    <img src="{{ $image }}" alt="Product Image" class="gallery-img-item">
+                                </div>
+                            @empty
+                                No Image Found
+                            @endforelse
+                            {{-- <div class="side-image">
                                 <img src="{{ asset('assets/web/images/laptop-2.png') }}" alt="Product Image"
                                     class="gallery-img-item">
                             </div>
                             <div class="side-image">
                                 <img src="{{ asset('assets/web/images/laptop.png') }}" alt="Product Image"
                                     class="gallery-img-item">
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-6 col-12">
                         <div class="product-page">
                             <div class="product-images">
-                                <img src="{{ asset('assets/web/images/' . $product['img']) }}" alt="Product Image"
+                                <img src="{{ $product->getFirstMediaUrl('featured_image') }}" alt="Product Image"
                                     class="img-change">
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-6 col-12">
                         <div class="product-details">
-                            <h1 class="product-title mb-3">{{ $product['name'] }}</h1>
-                            <p class="product-description">{!! $product['description'] !!}</p>
-                            <p class="product-price">${{ $product['price'] }} - ${{ $product['finalPrice'] }}</p>
-                            @if ($product['category'] === 'Portable Laptops')
+                            <h1 class="product-title mb-3">{{ $product->name }}</h1>
+                            <p class="product-description">{!! $product->description !!}</p>
+                            <p class="product-price">${{ $product->price }} - ${{ $product->price }}</p>
+                            {{-- @if ($product['category'] === 'Portable Laptops')
                                 <p class="product-price">Color</p>
                                 <div class="radios-opt">
                                     <input type="radio" name="color" id="option1">
@@ -129,8 +132,35 @@
                                     <input type="radio" id="storage-512gb" name="storage" value="512GB">
                                     <label for="storage-512gb">512GB</label>
                                 </div>
-                            @endIf
-
+                            @endIf --}}
+                            {{-- @foreach ($attributeKeys as $attribute)
+                                <p class="product-price">{{ ucfirst($attribute) }}</p>
+                                <div class="attribute-btn-area storage-btn-area">
+                                    @php
+                                        $values = collect($variants)
+                                            ->pluck("attributes.$attribute")
+                                            ->unique()
+                                            ->filter();
+                                    @endphp
+                                    @foreach ($values as $value)
+                                        <input type="radio" id="{{ $attribute }}-{{ $value }}"
+                                            name="{{ $attribute }}" value="{{ $value }}">
+                                        <label
+                                            for="{{ $attribute }}-{{ $value }}">{{ ucfirst($value) }}</label>
+                                    @endforeach
+                                </div>
+                            @endforeach --}}
+                            {{-- @dd($product->variants()) --}}
+                            @foreach ($product->variants->groupBy('attributeValues.attribute') as $attribute => $values)
+                                @dd($values->unique('value'))
+                                <label>{{ $attribute }}</label>
+                                <select name="attribute_values[]">
+                                    @foreach ($values->unique('value') as $value)
+                                        <option value="{{ $value->id }}">{{ $value->value }}</option>
+                                    @endforeach
+                                </select>
+                            @endforeach
+                            <p>Selected Price: <span id="priceDisplay"></span></p>
                             <div class="buttons-group">
                                 <div class="quantity-selection counter-area">
                                     <button class="btn  decrement">-</button>
@@ -161,7 +191,7 @@
                                 </div>
                                 <div class="text-sec-pro">
                                     <div id="description">
-                                        <p class="des-text-area">{!! $product['description'] !!}
+                                        <p class="des-text-area">{{ $product->long_description }}
                                     </div>
                                     <div id="additional-information" style="display: none">
                                         <p class="des-text-area">hy,Cras aliquam ultricies ante, eu sollicitudin nulla
@@ -186,7 +216,7 @@
                                             gravida
                                             mi, sit amet pharetra justo rhoncus vitae.</p>
                                     </div>
-                                    <div class="images-area-warn mt-5">
+                                    {{-- <div class="images-area-warn mt-5">
                                         <div class="box-warn-icon">
                                             <img src="{{ asset('assets/web/images/usb-icon.png') }}" alt="">
                                             <p>Compatible</p>
@@ -207,7 +237,7 @@
                                             <img src="{{ asset('assets/web/images/face-id.png') }}" alt="">
                                             <p>Face ID</p>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -232,47 +262,49 @@
                     </div>
 
                     <div class="row">
-                        @foreach ($products as $index => $product)
-                            @if ($index < 4)
-                                <div class="col-xxl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-3">
-                                    <div class="product-card sh-prod-card">
-                                        <div class="products-img sh-prod">
-                                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                                <p class="top-img">{{ $product['category'] }}</p>
-                                                <button class="btn heart-save-btn p-0">
-                                                    <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
-                                                </button>
-                                            </div>
-                                            <img src="{{ asset('assets/web/images/' . $product['img']) }}"
-                                                class="img-fluid" alt="">
+                        {{-- @forelse ($relatedProducts as $index => $relatedProduct)
+                            <div class="col-xxl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-3">
+                                <div class="product-card sh-prod-card">
+                                    <div class="products-img sh-prod">
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <p class="top-img">{{ $relatedProduct->category->name }}</p>
+                                            <button class="btn heart-save-btn p-0">
+                                                <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
+                                            </button>
                                         </div>
-                                        <div class="product-content">
-                                            <h2 class="card-main-heading mb-4">{{ $product['name'] }}</h2>
-                                            <div class="rating-stars">
-                                                @for ($i = 0; $i < 5; $i++)
-                                                    @if ($product['id'] > $i)
-                                                        <img src="{{ asset('assets/web/images/gold-star.png') }}"
-                                                            alt="Gold Star">
-                                                    @else
-                                                        <img src="{{ asset('assets/web/images/silver-star.png') }}"
-                                                            alt="Silver Star">
-                                                    @endif
-                                                @endfor
-                                            </div>
-                                            <div class="bottom-price-area mb-3">
-                                                <p class="price-products">${{ $product['price'] }}
-                                                    {{-- ${{ $productItem['finalPrice'] }} --}}
-                                                </p>
+                                        <img src="{{ $relatedProduct->getFirstMediaUrl('featured_image') }}"
+                                            class="img-fluid" alt="">
+                                    </div>
+                                    <div class="product-content">
+                                        <h2 class="card-main-heading mb-4">{{ $relatedProduct->name }}</h2>
+                                        <div class="rating-stars">
+                                            @for ($i = 0; $i < 5; $i++)
+                                                @if ($relatedProduct['id'] > $i)
+                                                    <img src="{{ asset('assets/web/images/gold-star.png') }}"
+                                                        alt="Gold Star">
+                                                @else
+                                                    <img src="{{ asset('assets/web/images/silver-star.png') }}"
+                                                        alt="Silver Star">
+                                                @endif
+                                            @endfor
+                                        </div>
+                                        <div class="bottom-price-area mb-3">
+                                            <p class="price-products">${{ $relatedProduct->price }}
+                                            </p>
 
-                                                <a href="{{ route('products.show', ['id' => $product['id']]) }}"
-                                                    class="bid-btn text-decoration-none">Buy
-                                                    Now</a>
-                                            </div>
+                                            <a href="{{ route('product.show', $relatedProduct->slug) }}"
+                                                class="bid-btn text-decoration-none">Buy
+                                                Now</a>
                                         </div>
                                     </div>
                                 </div>
-                            @endif
-                        @endforeach
+                            </div>
+
+                        @empty
+                            <div class="col-12">
+                                <h2 class="text-center">No Related Products Found</h2>
+                            </div>
+                        @endforelse --}}
 
 
                     </div>
@@ -325,4 +357,59 @@
             tabMethod(e, btnsTab[0])
         })
     </script>
+    <script>
+        document.querySelectorAll('#variantForm select').forEach(select => {
+            select.addEventListener('change', () => {
+                const formData = new FormData(document.getElementById('variantForm'));
+                fetch('/get-variant-price', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('priceDisplay').textContent = data.price || 'N/A';
+                    });
+            });
+        });
+    </script>
+    {{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let priceDisplay = document.getElementById("variant-price");
+
+            document.querySelectorAll("input[type='radio']").forEach(function(input) {
+                input.addEventListener("change", function() {
+                    let selectedAttributes = {};
+                    document.querySelectorAll("input[type='radio']:checked").forEach(function(
+                        checkedInput) {
+                        selectedAttributes[checkedInput.name] = checkedInput.value;
+                    });
+
+                    let variants = @json($variants);
+
+                    let matchedVariant = variants.find(variant => {
+                        return Object.keys(variant.attributes).every(attr => variant
+                            .attributes[attr] === selectedAttributes[attr]);
+                    });
+
+                    if (matchedVariant) {
+                        priceDisplay.textContent = "$" + matchedVariant.price;
+                    } else {
+                        priceDisplay.textContent = "Select variant";
+                    }
+                });
+            });
+
+            document.getElementById("increase-qty").addEventListener("click", function() {
+                let qtyInput = document.getElementById("quantity");
+                qtyInput.value = parseInt(qtyInput.value) + 1;
+            });
+
+            document.getElementById("decrease-qty").addEventListener("click", function() {
+                let qtyInput = document.getElementById("quantity");
+                if (qtyInput.value > 1) {
+                    qtyInput.value = parseInt(qtyInput.value) - 1;
+                }
+            });
+        });
+    </script> --}}
 @endsection

@@ -1,5 +1,7 @@
 <script>
     var redirectUrl = @json($redirectUrl);
+    console.log(redirectUrl);
+
     $(document).ready(function() {
         $(document).on('click', '#update-btn', function(e) {
             e.preventDefault();

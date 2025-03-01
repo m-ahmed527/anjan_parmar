@@ -16,30 +16,7 @@
 
         });
     } else {
-        // $(function() {
-        //     var table = $("#example1").DataTable({
-        //         "responsive": true,
-        //         "lengthChange": true,
-        //         "autoWidth": false,
-        //         // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        //     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-        //     $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-        //         var selectedStatus = $('#status-filter').val(); // Selected status lein
-        //         var rowStatus = $(table.row(dataIndex).node()).find('select')
-        //     .val(); // Row ke dropdown se status lein
-
-        //         if (selectedStatus === "" || rowStatus === selectedStatus) {
-        //             return true; // Status match hone par row dikhao
-        //         }
-        //         return false; // Nahi toh hatao
-        //     });
-
-        //     // Status filter change event
-        //     $('#status-filter').on('change', function() {
-        //         table.draw(); // Table ko update karo
-        //     });
-        // })
         $(document).ready(function() {
             // Ensure DataTable is properly initialized
             var table = $("#example1").DataTable({
@@ -49,32 +26,38 @@
             });
 
             // Custom filter function for filtering status
-            if (request.includes("all-vendors")) {
-                filter();
-            }
+            // if (request.includes("all-vendors")) {
+            //     $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            //         var selectedStatus = $('#status-filter').val(); // Selected status from dropdown
+            //         var rowStatus = $(table.row(dataIndex).node()).find('select')
+            //             .val(); // Get status from row's select box
+            //         // console.log($(table.row(dataIndex).node()).find('select').val());
+
+            //         if (selectedStatus === "" || rowStatus === selectedStatus) {
+            //             return true; // Show row if status matches
+            //         }
+            //         return false; // Hide row otherwise
+            //     });
+
+            //     // Filter event on dropdown change
+            //     $('#status-filter').on('change', function() {
+            //         if ($.fn.DataTable.isDataTable("#example1")) { // Ensure table exists
+            //             table.draw();
+            //         }
+            //         var currentUrl = window.location.href;
+
+            //         var newUrl = currentUrl.split('?')[0];
+            //         console.log(currentUrl,newUrl);
+            //         window.history.replaceState(null, null, newUrl);
+            //     });
+            //     $(document).ready(function() {
+            //         if ($.fn.DataTable.isDataTable("#example1")) { // Ensure table exists
+            //             table.draw();
+            //         }
+            //     });
+            // }
         });
 
-    }
-
-    function filter() {
-        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-            var selectedStatus = $('#status-filter').val(); // Selected status from dropdown
-            var rowStatus = $(table.row(dataIndex).node()).find('select')
-                .val(); // Get status from row's select box
-            console.log(selectedStatus, rowStatus);
-
-            if (selectedStatus === "" || rowStatus === selectedStatus) {
-                return true; // Show row if status matches
-            }
-            return false; // Hide row otherwise
-        });
-
-        // Filter event on dropdown change
-        $('#status-filter').on('change', function() {
-            if ($.fn.DataTable.isDataTable("#example1")) { // Ensure table exists
-                table.draw();
-            }
-        });
     }
 </script>
 <script src="{{ asset('assets/admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>

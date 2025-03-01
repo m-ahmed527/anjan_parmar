@@ -50,17 +50,7 @@
                                 </label>
                             </div>
                         </div>
-                        {{-- <div class="filter-product-1 mb-4">
-                            <div class="filter-header-1">
-                                <h2 class="filter-heading">Tags</h2>
-                            </div>
-                            <div class="tab-product-area">
-                                <button class="tab-btn-products pagination-active">Luxury Products</button>
-                                <button class="tab-btn-products">Gaming Accessories</button>
-                                <button class="tab-btn-products">Tech-Products</button>
-                                <button class="tab-btn-products">Smart Watches</button>
-                            </div>
-                        </div> --}}
+
                         <div class="filter-product-1 mb-4">
                             <div class="filter-header-1">
                                 <h2 class="filter-heading">Prices</h2>
@@ -113,25 +103,25 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach ($products as $productItem)
+                        @forelse ($products as $product)
                             <div class="col-xxl-4  col-md-6 col-sm-6 col-12 mb-3 column-grid-change">
                                 <div class="product-card sh-prod-card">
                                     <div class="products-img sh-prod">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <p class="top-img">{{ $productItem['category'] }}</p>
+                                            <p class="top-img">{{ $product->category->name }}</p>
                                             <button class="btn heart-save-btn p-0">
                                                 <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
                                             </button>
                                         </div>
-                                        <img src="{{ asset('assets/web/images' . $productItem['img']) }}"
-                                            class="img-fluid" alt="">
+                                        <img src="{{ $product->getFirstMediaUrl('featured_image') }}" class="img-fluid"
+                                            alt="">
                                     </div>
                                     <div class="product-content">
-                                        <h2 class="card-main-heading mb-4">{{ $productItem['name'] }}</h2>
+                                        <h2 class="card-main-heading mb-4">{{ $product->name }}</h2>
                                         <div>
                                             <div class="rating-stars mb-3">
                                                 @for ($i = 0; $i < 5; $i++)
-                                                    @if ($productItem['id'] > $i)
+                                                    @if ($product['id'] > $i)
                                                         <img src="{{ asset('assets/web/images/gold-star.png') }}"
                                                             alt="Gold Star">
                                                     @else
@@ -141,10 +131,10 @@
                                                 @endfor
                                             </div>
                                             <div class="bottom-price-area mb-3">
-                                                <p class="price-products">${{ $productItem['price'] }} -
-                                                    ${{ $productItem['finalPrice'] }}
+                                                <p class="price-products">${{ $product->price }} -
+                                                    ${{ $product->price }}
                                                 </p>
-                                                <a href="{{ route('products.show', ['id' => $productItem['id']]) }}"
+                                                <a href="{{ route('product.show', $product->id) }}"
                                                     class="bid-btn text-decoration-none">Buy Now</a>
 
                                             </div>
@@ -152,7 +142,15 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="col-12">
+                                <div class="no-products">
+                                    <h2 class="no-products-heading">No Products Found</h2>
+                                    <p class="no-products-para">No products were found matching your selection.</p>
+                                </div>
+                            </div>
+                        @endforelse
+
                         <div class="col-12 mt-5">
                             <div class="pagination-btns">
                                 <button class="pag-btn pagination-active">1</button>
@@ -226,15 +224,14 @@
     <script>
         const btn = document.querySelectorAll(".pag-btn");
 
-        const method = (element,btns) => {
+        const method = (element, btns) => {
             element.addEventListener("click", () => {
                 btns.forEach(button => button.classList.remove("pagination-active"))
                 element.classList.add("pagination-active");
             })
         }
         btn.forEach(element => {
-            method(element,btn)
+            method(element, btn)
         });
-
     </script>
 @endsection
