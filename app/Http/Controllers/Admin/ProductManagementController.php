@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Attribute;
+use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -44,41 +45,48 @@ class ProductManagementController extends Controller
 
             DB::beginTransaction();
             $data = $request->all();
-            // dd($data);
+
             $product = Product::create($request->sanitized());
             $product->addMedia($request->featured_image, 'featured_image');
             if ($request->has('images')) {
                 $product->addMultipleMedia($request->images, 'multiple_images');
             }
-            // if (isset($data["attributes"])) {
+
+
+            // $product->variants()->create(['sku' => $product->slug . '-', 'price' => $product->price, 'quantity' => $product->quantity]);
+            // $variant1 = Variant::create(['product_id' => $product->id, 'sku' => 'TSHIRT-S-RED', 'price' => 500.00, 'quantity' => 10]);
+            // $variant1->attributeValues()->attach([$sizeS->id, $colorRed->id]);
+
+            if (isset($data["attributes"])) {
+                $variants = $this->prepareVariants($data, $product);
+                // foreach ($variants as $variant) {
+                //     $var = $product->variants()->create($variant);
+                //     $var->attributeValues()->attach($var->id);
+                // }
+            }
+
+            // if (!empty($data["attributes"])) {
+            //     $filteredAttributes = array_filter($data["attributes"], function ($attrValues) {
+            //         return !empty(array_filter($attrValues)); // Remove null values
+            //     });
+            // }
+
+            // $filteredPrices = array_filter($data["variant_price"], function ($price) {
+            //     return !is_null($price);
+            // });
+
+            // $filteredQuantities = array_filter($data["quantity"], function ($qty) {
+            //     return !is_null($qty);
+            // });
+
+
+            // // If all attributes, prices, and quantities are empty, do not process variants
+            // if (!empty($filteredAttributes) || !empty($filteredPrices) || !empty($filteredQuantities)) {
             //     $variants = $this->prepareVariants($data);
             //     foreach ($variants as $variant) {
             //         $product->variants()->create($variant);
             //     }
             // }
-
-            if (!empty($data["attributes"])) {
-                $filteredAttributes = array_filter($data["attributes"], function ($attrValues) {
-                    return !empty(array_filter($attrValues)); // Remove null values
-                });
-            }
-
-            $filteredPrices = array_filter($data["variant_price"], function ($price) {
-                return !is_null($price);
-            });
-
-            $filteredQuantities = array_filter($data["quantity"], function ($qty) {
-                return !is_null($qty);
-            });
-
-
-            // If all attributes, prices, and quantities are empty, do not process variants
-            if (!empty($filteredAttributes) || !empty($filteredPrices) || !empty($filteredQuantities)) {
-                $variants = $this->prepareVariants($data);
-                foreach ($variants as $variant) {
-                    $product->variants()->create($variant);
-                }
-            }
             // dd($data, $filteredAttributes, $filteredPrices, $filteredQuantities);
             DB::commit();
             return response([
@@ -95,8 +103,9 @@ class ProductManagementController extends Controller
         }
     }
 
-    private function prepareVariants($data)
+    private function prepareVariants($data, $product)
     {
+        $product->variants()->delete();
         $structuredArray = [];
 
         // Extract attribute keys dynamically
@@ -111,7 +120,7 @@ class ProductManagementController extends Controller
             // Add all attributes dynamically
             foreach ($attributeKeys as $key) {
                 if (!empty($data["attributes"][$key][$i])) { // Ignore null or empty values
-                    $variantData[$key] = $data["attributes"][$key][$i];
+                    $variantData[] = $data["attributes"][$key][$i];
                 }
             }
 
@@ -122,13 +131,16 @@ class ProductManagementController extends Controller
             // Skip variants if all values are null/empty
             if (!empty($variantData) || !is_null($variantPrice) || !is_null($quantity)) {
                 $structuredArray[] = [
-                    "attributes" => !empty($variantData) ? json_encode($variantData) : null,
-                    "variant_price" => $variantPrice ?? 0,
+                    "sku" => \Str::slug($data['name']) . '-' . ($variantPrice ?? 0),
+                    "price" => $variantPrice ?? 0,
                     "quantity" => $quantity ?? null
                 ];
+
+                $var = $product->variants()->create($structuredArray[$i]);
+                $var->attributeValues()->sync($variantData);
             }
         }
-
+        // dd($structuredArray,$variantData, $data);
         return $structuredArray;
     }
 
@@ -150,9 +162,8 @@ class ProductManagementController extends Controller
     public function edit(Product $product): View
     {
         $categories = Category::all();
-        $variants = ProductVariant::where('product_id', $product->id)->get();
+        $variants = Variant::where('product_id', $product->id)->get();
         $attributes = $this->getAttribute($product->category);
-        // dd($attributes, $variants);
         return view('screens.admin.product-management.edit', get_defined_vars());
     }
 
@@ -172,43 +183,16 @@ class ProductManagementController extends Controller
                 $product->updateMediaMultiple($request->images, 'multiple_images');
             }
 
-            if (!empty($data["attributes"])) {
-                $filteredAttributes = array_filter(($data["attributes"]), function ($attrValues) {
-                    return !empty(array_filter($attrValues)); // Remove null values
-                });
-            }
 
-            if (!empty($data["variant_price"])) {
-                $filteredPrices = array_filter(($data["variant_price"]), function ($price) {
-                    return !is_null($price);
-                });
+            if (isset($data["attributes"])) {
+                $variants = $this->prepareVariants($data, $product);
+                // foreach ($product->variants as $variant) {
+                //     $product->variants()->delete();
+                // }
+                // foreach ($variants as $variant) {
+                //     $product->variants()->create($variant);
+                // }
             }
-            if (!empty($data["quantity"])) {
-                $filteredQuantities = array_filter(($data["quantity"]), function ($qty) {
-                    return !is_null($qty);
-                });
-            }
-
-
-            // If all attributes, prices, and quantities are empty, do not process variants
-            if (!empty($filteredAttributes) || !empty($filteredPrices) && !empty($filteredQuantities)) {
-                $variants = $this->prepareVariants($data);
-                foreach ($product->variants as $variant) {
-                    $product->variants()->delete();
-                }
-                foreach ($variants as $variant) {
-                    $product->variants()->create($variant);
-                }
-            }
-            // if (isset($data["attributes"])) {
-            //     $variants = $this->prepareVariants($data);
-            //     foreach ($product->variants as $variant) {
-            //         $product->variants()->delete();
-            //     }
-            //     foreach ($variants as $variant) {
-            //         $product->variants()->create($variant);
-            //     }
-            // }
             // dd($variants, $request->sanitized());
             DB::commit();
             return response([
@@ -216,6 +200,7 @@ class ProductManagementController extends Controller
                 "message" => "Product updated successfully",
             ]);
         } catch (Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return response([
                 "success" => false,
@@ -234,16 +219,16 @@ class ProductManagementController extends Controller
                     'slug' => $attribute->slug,
                     'name' => $attribute->name,
                 ],
-                'variants' => $attribute->variants->map(function ($variant) {
+                'values' => $attribute->values->map(function ($value) {
                     return [
-                        'id' => $variant->id,
-                        'attribute_id' => $variant->attribute_id,
-                        'slug' => $variant->slug,
-                        'name' => $variant->name,
+                        'id' => $value->id,
+                        'attribute_id' => $value->attribute_id,
+                        'value' => $value->value,
                     ];
                 }),
             ];
         });
+        // dd($attributes);
         if (request()->ajax()) {
             $html = view('includes.admin.product.fetch-attributes-variants', get_defined_vars())->render();
             return response()->json(['success' => true, 'html' => $html]);

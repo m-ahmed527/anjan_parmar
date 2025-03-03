@@ -14,6 +14,6 @@ class AttributeValue extends Model
 
     public function variants()
     {
-        return $this->belongsToMany(Variant::class, 'variant_attribute_values');
+        return $this->belongsToMany(Variant::class, 'variant_attribute_values')->withTimestamps();
     }
 }

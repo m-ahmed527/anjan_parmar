@@ -47,12 +47,31 @@ class ProductController extends Controller
 
     public function show($product)
     {
-        $product = Product::with(['variants', 'variants.attributeValues'])->findOrFail($product);
+        $product = Product::with(['variants.attributeValues.attribute'])->findOrFail($product);
+        // dd($product->variants[0]->attributeValues[0]->attribute);
         return view('screens.web.products.show', compact('product'));
     }
+    // public function getVariantPrice(Request $request)
+    // {
+    //     $attributeValueIds = $request->input('attribute_values');
+    //     $variant = Variant::whereHas('attributeValues', function ($query) use ($attributeValueIds) {
+    //         $query->whereIn('attribute_value_id', $attributeValueIds);
+    //     }, '=', count($attributeValueIds))->first();
+    //     // dd($variant,$request->all());
+
+    //     return response()->json(['price' => $variant ? $variant->price : null]);
+    // }
+
+
     public function getVariantPrice(Request $request)
     {
-        $attributeValueIds = $request->input('attribute_values');
+        $attributeValueIds = $request->input('attribute_values', []);
+        // dd($request->all(), $attributeValueIds);
+        // Ensure it's an array
+        if (!is_array($attributeValueIds) || empty($attributeValueIds)) {
+            return response()->json(['price' => null, 'error' => 'No attribute values provided.']);
+        }
+
         $variant = Variant::whereHas('attributeValues', function ($query) use ($attributeValueIds) {
             $query->whereIn('attribute_value_id', $attributeValueIds);
         }, '=', count($attributeValueIds))->first();

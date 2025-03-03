@@ -40,7 +40,7 @@
                                                     <div class="form-group mb-0">
                                                         <label for="">Variant:</label>
                                                         <input type="text" class="form-control" id=""
-                                                            name="variants[]" placeholder="Enter Variant">
+                                                            name="values[]" placeholder="Enter Variant">
                                                     </div>
 
                                                 </div>

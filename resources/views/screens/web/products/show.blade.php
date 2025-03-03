@@ -151,15 +151,47 @@
                                 </div>
                             @endforeach --}}
                             {{-- @dd($product->variants()) --}}
-                            @foreach ($product->variants->groupBy('attributeValues.attribute') as $attribute => $values)
-                                @dd($values->unique('value'))
-                                <label>{{ $attribute }}</label>
-                                <select name="attribute_values[]">
-                                    @foreach ($values->unique('value') as $value)
-                                        <option value="{{ $value->id }}">{{ $value->value }}</option>
-                                    @endforeach
-                                </select>
-                            @endforeach
+                            @php
+                                // Group variants by attribute name
+                                $groupedVariants = $product->variants
+                                    ->flatMap(function ($variant) {
+                                        return $variant->attributeValues->map(function ($attributeValue) use (
+                                            $variant,
+                                        ) {
+                                            return [
+                                                'attribute_name' => $attributeValue->attribute->name,
+                                                'attribute_value' => $attributeValue->value,
+                                                'attribute_value_id' => $attributeValue->id,
+                                            ];
+                                        });
+                                    })
+                                    ->groupBy('attribute_name');
+                            @endphp
+                            <form id="variantForm">
+                                @csrf
+                                @foreach ($groupedVariants as $attributeName => $attributeValues)
+                                    {{-- <label>{{ $attributeName }}</label> --}}
+                                    <p class="product-price">{{ $attributeName }}</p>
+                                    <div class="storage-btn-area">
+                                        @foreach ($attributeValues->unique('attribute_value') as $value)
+                                            @php
+                                                $radioId = $attributeName . '-' . $value['attribute_value_id'];
+                                            @endphp
+                                            <input type="radio" id="{{ $radioId }}" class="custom-radios"
+                                                name="attribute_values[]-{{ $attributeName }}"
+                                                value="{{ $value['attribute_value_id'] }}">
+                                            <label for="{{ $radioId }}">{{ $value['attribute_value'] }}</label>
+                                        @endforeach
+                                    </div>
+                                    {{-- <select name="attribute_values[]" class="form-control">
+                                        @foreach ($attributeValues->unique('attribute_value') as $value)
+                                            <option value="{{ $value['attribute_value_id'] }}">
+                                                {{ $value['attribute_value'] }}
+                                            </option>
+                                        @endforeach
+                                    </select> --}}
+                                @endforeach
+                            </form>
                             <p>Selected Price: <span id="priceDisplay"></span></p>
                             <div class="buttons-group">
                                 <div class="quantity-selection counter-area">
@@ -358,19 +390,25 @@
         })
     </script>
     <script>
-        document.querySelectorAll('#variantForm select').forEach(select => {
+        document.querySelectorAll('#variantForm .custom-radios').forEach(select => {
             select.addEventListener('change', () => {
-                const formData = new FormData(document.getElementById('variantForm'));
+
+                const form = document.getElementById('variantForm');
+                const formData = new FormData(form);
+
                 fetch('/get-variant-price', {
                         method: 'POST',
                         body: formData
                     })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('priceDisplay').textContent = data.price || 'N/A';
-                    });
+                        document.getElementById('priceDisplay').textContent = "Price: " + (data.price ||
+                            'N/A');
+                    })
+                    .catch(error => console.error('Error:', error));
             });
         });
+
     </script>
     {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {

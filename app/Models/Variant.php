@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variant extends Model
 {
-    use SoftDeletes;
     protected $guarded = ['id'];
 
     public function getRouteKeyName()
@@ -32,6 +31,6 @@ class Variant extends Model
 
     public function attributeValues()
     {
-        return $this->belongsToMany(AttributeValue::class, 'variant_attribute_values');
+        return $this->belongsToMany(AttributeValue::class, 'variant_attribute_values')->withTimestamps();
     }
 }

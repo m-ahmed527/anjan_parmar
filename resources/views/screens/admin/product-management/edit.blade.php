@@ -141,24 +141,22 @@
                                         <h3>Attribute Variants</h3>
                                         <div class="attribute-variants-ka-parent">
                                             @foreach ($variants as $variant)
-                                                @php
-                                                    $selectedAttributes = json_decode($variant->attributes, true);
-                                                @endphp
+                                                {{-- @dd($variant->attributeValues) --}}
                                                 <div class="row attribute-variants">
-                                                    @foreach ($attributes as $attribute)
+                                                    @foreach ($variant->attributeValues as $attribute)
                                                         {{-- Attribute Dropdown --}}
+                                                        {{-- @dd($attribute, $attribute->attribute->values) --}}
                                                         <div class="form-group col-md-4">
-                                                            <label>{{ $attribute['attribute']['name'] }}</label>
-                                                            <select
-                                                                name="attributes[{{ $attribute['attribute']['slug'] }}][]"
+                                                            <label>{{ $attribute->attribute->name }}</label>
+                                                            <select name="attributes[{{ $attribute->attribute->slug }}][]"
                                                                 class="form-control variant-dropdown">
                                                                 <option value="">Select
-                                                                    {{ $attribute['attribute']['name'] }}</option>
+                                                                    {{ $attribute->attribute->name }}</option>
 
-                                                                @foreach ($attribute['variants'] as $variantOption)
-                                                                    <option value="{{ $variantOption['slug'] }}"
-                                                                        {{ isset($selectedAttributes[$attribute['attribute']['slug']]) && $selectedAttributes[$attribute['attribute']['slug']] == $variantOption['slug'] ? 'selected' : '' }}>
-                                                                        {{ $variantOption['name'] }}
+                                                                @foreach ($attribute->attribute->values as $value)
+                                                                    <option value="{{ $value->id }}"
+                                                                        {{ $attribute->id == $value->id ? 'selected' : '' }}>
+                                                                        {{$value->value }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -169,7 +167,7 @@
                                                     <div class="form-group col-md-4">
                                                         <label>Price</label>
                                                         <input type="number" class="form-control" name="variant_price[]"
-                                                            value="{{ $variant->variant_price }}">
+                                                            value="{{ $variant->price }}">
                                                     </div>
 
                                                     {{-- Quantity Field --}}

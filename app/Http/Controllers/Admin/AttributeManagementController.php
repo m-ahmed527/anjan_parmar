@@ -34,10 +34,11 @@ class AttributeManagementController extends Controller
     {
         try {
             $attribute = Attribute::create($request->sanitized());
-            foreach ($request->variants as $varaint) {
-                $attribute->variants()->create([
-                    'slug' => Str::slug($varaint),
-                    'name' => $varaint,
+            foreach ($request->values as $value) {
+                // dd($value);
+                $attribute->values()->create([
+                    // 'slug' => Str::slug($values),
+                    'value' => $value,
                 ]);
             }
             return response()->json([
@@ -46,6 +47,7 @@ class AttributeManagementController extends Controller
 
             ]);
         } catch (Exception $e) {
+            // dd($e->getMessage());
             return response()->json([
                 'error' => true,
                 'message' => 'An error occurred while creating attribute'
@@ -104,7 +106,7 @@ class AttributeManagementController extends Controller
     }
 
 
-    
+
     public function delete(Attribute $attribute)
     {
         try {

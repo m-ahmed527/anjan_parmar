@@ -23,21 +23,22 @@ class StoreAttributeRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'variants.*' => 'required'
+            'values.*' => 'required'
         ];
     }
 
-    function sanitized() : array {
+    function sanitized(): array
+    {
         return [
             'slug' => \Str::slug($this->name),
             'name' => $this->name,
         ];
-
     }
 
-    public function sanitizedVariants() : array {
+    public function sanitizedValues(): array
+    {
         return [
-            'variants' => $this->variants,
+            'values' => $this->values,
         ];
     }
 }

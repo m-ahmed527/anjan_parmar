@@ -1983,7 +1983,12 @@ a {
     border-color: #0096ff;
     background: #007bff;
 }
-.storage-btn-area label {
+.tab-active{
+    color: #fff !important;
+    border-color: #0096ff !important;
+    background: #007bff !important;
+}
+.storage-btn-area label,.btn-tab-product {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -3,8 +3,9 @@
         <label>{{ $attribute['attribute']['name'] }}</label>
         <select name="attributes[{{ $attribute['attribute']['slug'] }}][]" class="form-control variant-dropdown">
             <option value="">Select {{ $attribute['attribute']['name'] }}</option>
-            @forelse ($attribute['variants'] as $variant)
-                <option value="{{ $variant['slug'] }}">{{ $variant['name'] }}</option>
+            @forelse ($attribute['values'] as $value)
+
+                <option value="{{ $value['id'] }}">{{ $value['value'] }}</option>
             @empty
             @endforelse
         </select>
