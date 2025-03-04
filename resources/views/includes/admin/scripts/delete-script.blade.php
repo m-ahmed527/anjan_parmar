@@ -1,4 +1,3 @@
-
 <script>
     $(document).ready(function() {
         $(document).on('click', '#delete-btn', function(e) {
@@ -41,11 +40,11 @@
                         },
                         error: function(error) {
                             $.LoadingOverlay("hide");
-                            console.log(error);
+                            // console.log(error.responseJSON.message);
                             Swal.fire({
                                 position: "center",
                                 icon: "error",
-                                title: error.message,
+                                title: error.responseJSON.message,
                                 showConfirmButton: false,
                                 timer: 2000
                             })

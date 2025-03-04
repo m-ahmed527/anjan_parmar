@@ -24,15 +24,15 @@ class UpdateAttributeRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'variants.*' => 'required'
+            'values.*' => 'required'
         ];
     }
 
     public function sanitized(): array
     {
         return [
-            'slug' => Str::slug($this->name),
-            'name' => $this->name,
+            // 'slug' => Str::slug($this->name),
+            'value' => $this->value,
         ];
     }
     public function sanitizedVariants(): array

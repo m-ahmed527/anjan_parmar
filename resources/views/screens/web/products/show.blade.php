@@ -103,54 +103,8 @@
                         <div class="product-details">
                             <h1 class="product-title mb-3">{{ $product->name }}</h1>
                             <p class="product-description">{!! $product->description !!}</p>
-                            <p class="product-price">${{ $product->price }} - ${{ $product->price }}</p>
-                            {{-- @if ($product['category'] === 'Portable Laptops')
-                                <p class="product-price">Color</p>
-                                <div class="radios-opt">
-                                    <input type="radio" name="color" id="option1">
-                                    <label for="option1"></label>
-                                    <input type="radio" name="color" id="option2">
-                                    <label for="option2"></label>
-                                    <input type="radio" name="color" id="option3">
-                                    <label for="option3"></label>
-                                    <input type="radio" name="color" id="option4">
-                                    <label for="option4"></label>
-                                    <input type="radio" name="color" id="option5">
-                                    <label for="option5"></label>
-                                </div>
-                                <p class="product-price">Storage</p>
-                                <div class="storage-btn-area">
-                                    <input type="radio" id="storage-64gb" name="storage" value="64GB">
-                                    <label for="storage-64gb">64GB</label>
+                            <p class="product-price">${{ $product->getMinPrice() }} - ${{ $product->getMaxPrice() }}</p>
 
-                                    <input type="radio" id="storage-128gb" name="storage" value="128GB">
-                                    <label for="storage-128gb">128GB</label>
-
-                                    <input type="radio" id="storage-256gb" name="storage" value="256GB">
-                                    <label for="storage-256gb">256GB</label>
-
-                                    <input type="radio" id="storage-512gb" name="storage" value="512GB">
-                                    <label for="storage-512gb">512GB</label>
-                                </div>
-                            @endIf --}}
-                            {{-- @foreach ($attributeKeys as $attribute)
-                                <p class="product-price">{{ ucfirst($attribute) }}</p>
-                                <div class="attribute-btn-area storage-btn-area">
-                                    @php
-                                        $values = collect($variants)
-                                            ->pluck("attributes.$attribute")
-                                            ->unique()
-                                            ->filter();
-                                    @endphp
-                                    @foreach ($values as $value)
-                                        <input type="radio" id="{{ $attribute }}-{{ $value }}"
-                                            name="{{ $attribute }}" value="{{ $value }}">
-                                        <label
-                                            for="{{ $attribute }}-{{ $value }}">{{ ucfirst($value) }}</label>
-                                    @endforeach
-                                </div>
-                            @endforeach --}}
-                            {{-- @dd($product->variants()) --}}
                             @php
                                 // Group variants by attribute name
                                 $groupedVariants = $product->variants
@@ -166,11 +120,15 @@
                                         });
                                     })
                                     ->groupBy('attribute_name');
+                                    // dd($groupedVariants);
                             @endphp
                             <form id="variantForm">
                                 @csrf
                                 @foreach ($groupedVariants as $attributeName => $attributeValues)
-                                    {{-- <label>{{ $attributeName }}</label> --}}
+                                    {{-- @php
+                                        $iteration = $loop->iteration;
+                                    @endphp --}}
+                                    <input type="hidden" name="attributes[]" value="{{ $attributeName }}" id="">
                                     <p class="product-price">{{ $attributeName }}</p>
                                     <div class="storage-btn-area">
                                         @foreach ($attributeValues->unique('attribute_value') as $value)
@@ -178,20 +136,15 @@
                                                 $radioId = $attributeName . '-' . $value['attribute_value_id'];
                                             @endphp
                                             <input type="radio" id="{{ $radioId }}" class="custom-radios"
-                                                name="attribute_values[]-{{ $attributeName }}"
+                                                name="attribute_values[]-{{ $attributeName }}" 
                                                 value="{{ $value['attribute_value_id'] }}">
                                             <label for="{{ $radioId }}">{{ $value['attribute_value'] }}</label>
                                         @endforeach
                                     </div>
-                                    {{-- <select name="attribute_values[]" class="form-control">
-                                        @foreach ($attributeValues->unique('attribute_value') as $value)
-                                            <option value="{{ $value['attribute_value_id'] }}">
-                                                {{ $value['attribute_value'] }}
-                                            </option>
-                                        @endforeach
-                                    </select> --}}
                                 @endforeach
                             </form>
+
+
                             <p>Selected Price: <span id="priceDisplay"></span></p>
                             <div class="buttons-group">
                                 <div class="quantity-selection counter-area">
@@ -395,8 +348,9 @@
 
                 const form = document.getElementById('variantForm');
                 const formData = new FormData(form);
-
-                fetch('/get-variant-price', {
+                console.log(select.value);
+                let value = select.value;
+                fetch('/get-variant-price/'+value, {
                         method: 'POST',
                         body: formData
                     })
@@ -408,8 +362,73 @@
                     .catch(error => console.error('Error:', error));
             });
         });
-
     </script>
+    {{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let variantCombinations = []; // Backend se valid combinations yahan load honge
+
+            // Backend se valid variant combinations fetch karo
+            fetch('/get-variant-combinations')
+                .then(response => response.json())
+                .then(data => {
+                    variantCombinations = data;
+                })
+                .catch(error => console.error('Error fetching combinations:', error));
+
+            document.querySelectorAll('#variantForm .custom-radios').forEach(select => {
+                select.addEventListener('change', function() {
+                    updateOptions();
+                    updatePrice();
+                });
+            });
+
+            function updateOptions() {
+                let selectedValues = getSelectedValues();
+
+                document.querySelectorAll('#variantForm .custom-radios').forEach(input => {
+                    let currentValue = input.value;
+                    let parentName = input.getAttribute("name").split('-')[1];
+
+                    // Check karo ke ye value kisi valid combination ka part hai ya nahi
+                    let isValid = variantCombinations.some(combination => {
+                        return selectedValues.every(val => combination.includes(val)) || combination
+                            .includes(currentValue);
+                    });
+
+                    // Sirf disable karo agar ye valid nahi hai, lekin agar ye already selected hai to enable rehne do
+                    if (!input.checked) {
+                        input.disabled = !isValid;
+                    }
+                });
+            }
+
+            function updatePrice() {
+                const form = document.getElementById('variantForm');
+                const formData = new FormData(form);
+
+                fetch('/get-variant-price', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('priceDisplay').textContent = "Price: " + (data.price || 'N/A');
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function getSelectedValues() {
+                let selected = [];
+                document.querySelectorAll('#variantForm .custom-radios:checked').forEach(input => {
+                    selected.push(input.value);
+                });
+                return selected;
+            }
+        });
+    </script> --}}
+
+
+
     {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             let priceDisplay = document.getElementById("variant-price");
@@ -451,3 +470,10 @@
         });
     </script> --}}
 @endsection
+{{-- <select name="attribute_values[]" class="form-control">
+                                        @foreach ($attributeValues->unique('attribute_value') as $value)
+                                            <option value="{{ $value['attribute_value_id'] }}">
+                                                {{ $value['attribute_value'] }}
+                                            </option>
+                                        @endforeach
+                                    </select> --}}

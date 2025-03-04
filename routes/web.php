@@ -46,7 +46,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index')->name('products');
         Route::get('/product/{product}', 'show')->name('product.show');
-        Route::post('/get-variant-price', 'getVariantPrice')->name('get-variant-price');
+        Route::post('/get-variant-price/{attributeValue}', 'getVariantPrice')->name('get-variant-price');
+        Route::get('/get-variant-combinations', 'getVariantCombinations');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');

@@ -44,12 +44,12 @@
                                             <select name="attribute[]" class="form-control attribute" multiple="multiple"
                                                 id="">
                                                 @foreach ($attributes as $key => $attribute)
-                                                    @php
+                                                    {{-- @php
                                                         $attributes = $category->attributes()->withTrashed()->get(); // Convert to Collection
                                                         $isAttached = $attributes->contains($attribute->id);
 
-                                                    @endphp
-                                                    <option value="{{ $attribute->id }}" {{ $isAttached ? 'selected' : '' }}
+                                                    @endphp --}}
+                                                    <option value="{{ $attribute->id }}" {{ $category->attributes->contains($attribute) ? 'selected' : '' }}
                                                         class="form-control">
                                                         {{ $attribute->name }}</option>
                                                 @endforeach

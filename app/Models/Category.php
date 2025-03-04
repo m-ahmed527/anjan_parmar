@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasMedia, SoftDeletes;
+    use HasMedia;
     protected $guarded = ['id'];
 
     public function getRouteKeyName()

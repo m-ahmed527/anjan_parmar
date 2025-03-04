@@ -41,17 +41,19 @@
                                             @enderror
                                         </div>
                                         <h3>Variants</h3>
-                                        @forelse ($attribute->variants as $variant)
+                                        @forelse ($attribute->values as $value)
                                             <div class="variants">
                                                 <div class="row variant align-items-end mb-2">
                                                     <div class="col-8">
                                                         <div class="form-group mb-0">
                                                             <label for="">Variant:</label>
+                                                            <input type="hidden" name="ids[]"
+                                                                value="{{ $value->id }}"> <!-- ID hidden input -->
                                                             <input type="text" class="form-control" id=""
-                                                                name="variants[]" placeholder="Enter Variant"
-                                                                value="{{ $variant->name }}">
+                                                                name="values[]" placeholder="Enter Variant"
+                                                                value="{{ $value->value }}">
                                                         </div>
-                                                        @error('variants*')
+                                                        @error('values*')
                                                             <span class="text-danger">{{ $message }}</span>
                                                         @enderror
                                                     </div>
@@ -71,10 +73,12 @@
                                                     <div class="col-8">
                                                         <div class="form-group mb-0">
                                                             <label for="">Variant:</label>
+                                                            <input type="hidden" name="ids[]" value="">
+                                                            <!-- Empty ID for new values -->
                                                             <input type="text" class="form-control" id=""
-                                                                name="variants[]" placeholder="Enter Variant">
+                                                                name="values[]" placeholder="Enter Variant">
                                                         </div>
-                                                        @error('variants*')
+                                                        @error('values*')
                                                             <span class="text-danger">{{ $message }}</span>
                                                         @enderror
                                                     </div>

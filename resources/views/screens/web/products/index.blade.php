@@ -131,10 +131,10 @@
                                                 @endfor
                                             </div>
                                             <div class="bottom-price-area mb-3">
-                                                <p class="price-products">${{ $product->price }} -
-                                                    ${{ $product->price }}
+                                                <p class="price-products">${{ $product->getMinPrice() }} -
+                                                    ${{ $product->getMaxPrice() }}
                                                 </p>
-                                                <a href="{{ route('product.show', $product->id) }}"
+                                                <a href="{{ route('product.show', $product->slug) }}"
                                                     class="bid-btn text-decoration-none">Buy Now</a>
 
                                             </div>

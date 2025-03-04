@@ -28,7 +28,7 @@ class CategoryManagementController extends Controller
     public function create(): View
     {
         $categories = Category::all();
-        $attributes = Attribute::withoutTrashed()->get();
+        $attributes = Attribute::all();
         // dd($attributes);
         return view('screens.admin.category-management.create', get_defined_vars());
     }
@@ -64,7 +64,7 @@ class CategoryManagementController extends Controller
 
     public function edit(Category $category): View
     {
-        $attributes = Attribute::withoutTrashed()->get();
+        $attributes = Attribute::all();
         return view('screens.admin.category-management.edit', get_defined_vars());
     }
 
@@ -99,9 +99,9 @@ class CategoryManagementController extends Controller
     {
         try {
             DB::beginTransaction();
+            $category->delete();
             $category->clearMediaCollection('category');
             $category->clearMediaCollection('category_banner');
-            $category->delete();
             DB::commit();
             return response()->json([
                 "message" => "Category deleted successfully.",
@@ -109,11 +109,18 @@ class CategoryManagementController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
-            return response()->json([
-                "message" => "Failed to delete category.",
-                'success' => false,
-            ]);
+            // dd($e->getMessage());
+            if (str_contains($e->getMessage(), '1451')) {
+                return response()->json([
+                    "message" => "This category has related products or vendors. You cannot delete it.",
+                    'success' => false,
+                ], 400);
+            } else {
+                return response()->json([
+                    "message" => "Failed to delete category.",
+                    'success' => false,
+                ], 400);
+            }
         }
     }
 

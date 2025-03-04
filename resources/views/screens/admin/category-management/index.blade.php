@@ -80,11 +80,11 @@
                                                         No Image Found
                                                     @endif
                                                 </td>
-                                                @php
+                                                {{-- @php
                                                     $attributes = $category->attributes()->withTrashed()->get();
-                                                @endphp
+                                                @endphp --}}
                                                 <td class="dtr-control sorting_1" tabindex="1">
-                                                    @forelse ($attributes as $attribute)
+                                                    @forelse ($category->attributes as $attribute)
                                                         {{ $loop->iteration }}-{{ $attribute->name }}<br>
                                                     @empty
                                                     @endforelse

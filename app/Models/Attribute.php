@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Attribute extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
     protected $guarded = ['id'];
 
     public function getRouteKeyName()
@@ -21,7 +21,7 @@ class Attribute extends Model
         return $this->belongsToMany(Category::class)->withTimestamps();
     }
 
-    
+
 
     public function values()
     {

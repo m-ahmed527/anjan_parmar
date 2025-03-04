@@ -200,7 +200,6 @@ class ProductManagementController extends Controller
                 "message" => "Product updated successfully",
             ]);
         } catch (Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return response([
                 "success" => false,

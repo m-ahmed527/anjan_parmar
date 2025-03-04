@@ -1,12 +1,25 @@
 <script>
     var redirectUrl = @json($redirectUrl);
     console.log(redirectUrl);
+    let deletedValues = [];
+
+    $(document).on('click', '.remove-variant', function() {
+        let variantRow = $(this).closest('.variant');
+        let variantId = variantRow.find('input[name="ids[]"]').val();
+
+        if (variantId) {
+            deletedValues.push(variantId); // Save deleted ID
+        }
+
+        variantRow.remove();
+    });
 
     $(document).ready(function() {
         $(document).on('click', '#update-btn', function(e) {
             e.preventDefault();
             let form = $('#update-form');
             let formData = new FormData(form[0]);
+            formData.append('deleted_values', JSON.stringify(deletedValues));
             $.LoadingOverlay("show");
             $.ajax({
                 url: form.attr('action'),
@@ -49,7 +62,7 @@
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: error.message,
+                            title: error.responseJSON.message,
                             showConfirmButton: true,
                             timer: 2000
                         })

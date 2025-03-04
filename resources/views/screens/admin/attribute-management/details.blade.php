@@ -65,8 +65,8 @@
                                                 {{ $attribute->name }}</td>
                                             <td class="dtr-control sorting_1" tabindex="2">
 
-                                                @forelse ($attribute->variants as $var)
-                                                    {{ $loop->iteration }} ) {{ $var->name }}
+                                                @forelse ($attribute->values as $value)
+                                                    {{ $loop->iteration }} ) {{ $value->value }}
                                                 @empty
                                                 @endforelse
                                             </td>

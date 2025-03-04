@@ -61,34 +61,89 @@ class AttributeManagementController extends Controller
         return view('screens.admin.attribute-management.edit', get_defined_vars());
     }
 
+    // public function update(UpdateAttributeRequest $request, Attribute $attribute)
+    // {
+    //     dd($request->all());
+    //     // Validate that variants are not empty
+    //     if (!$request->filled('values') || empty(array_filter($request->values))) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Values cannot be null',
+    //         ]);
+    //     }
+
+    //     try {
+    //         DB::beginTransaction();
+    //         // Update attribute name
+    //         $attribute->update($request->sanitized());
+    //         // Sync Variants
+    //         $newValues = collect($request->values)->filter()->unique()->values();
+    //         // dd($newValues, $attribute->values);
+    //         // Remove existing variants that are not in the new list
+    //         $attribute->values()->whereNotIn('value', $newValues)->delete();
+
+    //         // Add new variants
+    //         foreach ($newValues as $value) {
+    //             $attribute->values()->updateOrCreate(
+    //                 ['value' => $value],
+    //                 [
+    //                     'value' => $value,
+    //                 ]
+    //             );
+    //         }
+
+    //         DB::commit();
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Attributes updated successfully',
+    //         ]);
+    //     } catch (Exception $e) {
+    //         dd($e->getMessage());
+    //         DB::rollBack();
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Failed to update Attributes',
+    //         ]);
+    //     }
+    // }
+
     public function update(UpdateAttributeRequest $request, Attribute $attribute)
     {
-        // Validate that variants are not empty
-        if (!$request->filled('variants') || empty(array_filter($request->variants))) {
+        if (!$request->filled('values') || empty(array_filter($request->values))) {
             return response()->json([
                 'success' => false,
-                'message' => 'Variants cannot be null',
+                'message' => 'Values cannot be null',
             ]);
         }
 
         try {
             DB::beginTransaction();
-            // Update attribute name
-            $attribute->update($request->sanitized());
-            // Sync Variants
-            $newVariants = collect($request->variants)->filter()->unique()->values();
-            // Remove existing variants that are not in the new list
-            $attribute->variants()->whereNotIn('name', $newVariants)->delete();
 
-            // Add new variants
-            foreach ($newVariants as $variantName) {
-                $attribute->variants()->updateOrCreate(
-                    ['name' => $variantName],
-                    [
-                        'name' => $variantName,
-                        'slug' => Str::slug($variantName)
-                    ]
-                );
+            $attribute->update($request->sanitized());
+
+            // Jo variants pehle se mojood hain
+            $existingValues = $attribute->values()->pluck('value', 'id')->toArray();
+
+            // Request se values aur IDs le lo
+            $inputValues = $request->values;
+            $inputIds = $request->ids;
+
+            // Update or Create Logic
+            foreach ($inputValues as $key => $value) {
+                $id = $inputIds[$key] ?? null;
+                if ($id && isset($existingValues[$id])) {
+                    // Agar ID mojood hai, toh update karein
+                    $attribute->values()->where('id', $id)->update(['value' => $value]);
+                } else {
+                    // Agar koi ID nahi hai, toh naya insert karein
+                    $attribute->values()->create(['value' => $value]);
+                }
+            }
+
+            // Handle Deleted Values
+            if ($request->has('deleted_values')) {
+                $deletedValues = json_decode($request->deleted_values, true);
+                $attribute->values()->whereIn('id', $deletedValues)->delete();
             }
 
             DB::commit();
@@ -98,10 +153,18 @@ class AttributeManagementController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update Attributes',
-            ]);
+            // dd($e->getMessage());
+            if (str_contains($e->getMessage(), '1451')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The Values you deleted related with some products.',
+                ], 400);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update Attributes',
+                ], 400);
+            }
         }
     }
 
@@ -112,7 +175,7 @@ class AttributeManagementController extends Controller
         try {
             // dd($attribute);
             DB::beginTransaction();
-            $attribute->variants()->delete();
+            $attribute->values()->delete();
             $attribute->delete();
             DB::commit();
             return response()->json([
@@ -120,11 +183,19 @@ class AttributeManagementController extends Controller
                 'message' => 'Attribute and its variants deleted successfully',
             ]);
         } catch (\Exception $e) {
+            // dd(str_contains($e->getMessage(), '1451'));
             DB::rollBack();
-            return response()->json([
-                'error' => true,
-                'message' => 'Failed to delete attribute',
-            ], 500);
+            if (str_contains($e->getMessage(), '1451')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete attribute. It has related products or categories.',
+                ], 400);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to delete attribute',
+                ], 400);
+            }
         }
     }
 }
