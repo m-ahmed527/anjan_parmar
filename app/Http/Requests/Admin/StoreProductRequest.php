@@ -60,6 +60,7 @@ class StoreProductRequest extends FormRequest
             'long_description' => 'sometimes',
             'attributes' => 'sometimes',
             'attributes.*' => 'sometimes|array',
+            'sku.*' => 'nullable',
             'variant_price.*' => 'nullable|numeric',
             'quantity.*' => 'nullable|numeric',
             'images' => 'sometimes',

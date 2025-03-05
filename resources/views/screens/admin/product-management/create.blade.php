@@ -55,7 +55,7 @@
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="exampleInputPassword1">Product Name *</label>
-                                                <input type="text" class="form-control" name="name" id=""
+                                                <input type="text" class="form-control" name="name" id="product_name"
                                                     placeholder="Product name">
 
                                             </div>

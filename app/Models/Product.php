@@ -36,20 +36,20 @@ class Product extends Model
         return $this->variants()->max('price') + $this->price ?? $this->price;
     }
 
-    public function getValidCombinations()
-    {
-        $combinations = [];
-        $variants = $this->variants;
-        foreach ($variants as $variant) {
-            $combination = [];
-            foreach ($variant->attributeValues as $attribute) {
-                $combination[$attribute->attribute->name] = $attribute->value;
-            }
-            $combinations[] = $combination;
-        }
-        // dd($combinations);
-        return $combinations;
-    }
+    // public function getValidCombinations()
+    // {
+    //     $combinations = [];
+    //     $variants = $this->variants;
+    //     foreach ($variants as $variant) {
+    //         $combination = [];
+    //         foreach ($variant->attributeValues as $attribute) {
+    //             $combination[$attribute->attribute->name] = $attribute->value;
+    //         }
+    //         $combinations[] = $combination;
+    //     }
+    //     // dd($combinations);
+    //     return $combinations;
+    // }
     // public function attributes()
     // {
     //     return $this->belongsToMany(Attribute::class, 'attribute_products');

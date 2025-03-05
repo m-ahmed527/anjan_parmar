@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('variant_attribute_values', function (Blueprint $table) {
-            // $table->id();
+            $table->id();
             $table->foreignId('variant_id')->constrained()->onDelete('cascade');
             $table->foreignId('attribute_value_id')->constrained();
-            $table->primary(['variant_id', 'attribute_value_id']);
+            $table->foreignId('attribute_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            // $table->primary(['variant_id', 'attribute_value_id']);
             $table->timestamps();
         });
     }

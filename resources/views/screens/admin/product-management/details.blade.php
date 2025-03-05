@@ -89,21 +89,22 @@
                                             </td>
                                             <td>${{ $product->price }}</td>
                                             <td>
-                                                @php
+                                                {{-- @php
                                                     $category = $product->category()->withTrashed()->first();
 
-                                                @endphp
-                                                {{ $category->name }}
+                                                @endphp --}}
+                                                {{ $product->category->name }}
                                             </td>
                                             <td>
                                                 @forelse ($product->variants as  $attribute)
-                                                    @if (!empty(json_decode($attribute['attributes'], true)))
-                                                        {{ $loop->iteration }} -
-                                                        @foreach (json_decode($attribute['attributes'], true) as $key => $attr)
-                                                            {{ $key }} ->{{ $attr }} ,
-                                                        @endforeach
-                                                        <br>
-                                                    @endif
+                                                    {{-- @dd($attribute->attributeValues) --}}
+                                                    {{-- @if (!empty(json_decode($attribute['attributes'], true))) --}}
+                                                    {{ $loop->iteration }} -
+                                                    @foreach ($attribute->attributeValues as $key => $attr)
+                                                        {{ $attr->attribute->name }} ->{{ $attr->value }} ,
+                                                    @endforeach
+                                                    <br>
+                                                    {{-- @endif --}}
                                                 @empty
                                                     No Attribute Found
                                                 @endforelse
@@ -111,7 +112,7 @@
 
                                             <td>
                                                 @forelse ($product->variants as $attribute)
-                                                    ${{ $attribute->variant_price }} <br>
+                                                    ${{ $attribute->price }} <br>
                                                 @empty
                                                     No Addon Price Found
                                                 @endforelse

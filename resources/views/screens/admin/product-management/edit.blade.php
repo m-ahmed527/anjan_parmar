@@ -143,9 +143,8 @@
                                             @foreach ($variants as $variant)
                                                 {{-- @dd($variant->attributeValues) --}}
                                                 <div class="row attribute-variants">
-                                                    @foreach ($variant->attributeValues as $attribute)
-                                                        {{-- Attribute Dropdown --}}
-                                                        {{-- @dd($attribute, $attribute->attribute->values) --}}
+                                                    {{-- @foreach ($variant->attributeValues as $attribute)
+
                                                         <div class="form-group col-md-4">
                                                             <label>{{ $attribute->attribute->name }}</label>
                                                             <select name="attributes[{{ $attribute->attribute->slug }}][]"
@@ -161,19 +160,38 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                    @endforeach
+                                                    @endforeach --}}
+                                                    @foreach ($variant->attributes as $attribute)
+                                                        {{-- Attribute Dropdown --}}
+                                                        <div class="form-group col-md-4">
+                                                            <label>{{ $attribute->name }}</label>
+                                                            <select name="attributes[{{ $attribute->slug }}][]"
+                                                                class="form-control variant-dropdown"
+                                                                data-attribute="{{ $attribute->slug }}">
+                                                                <option value="">Select
+                                                                    {{ $attribute->name }}
+                                                                </option>
 
+                                                                @foreach ($attribute->values as $value)
+                                                                    <option value="{{ $value->id }}"
+                                                                        {{ in_array($value->id, $variant->attributes->pluck('pivot.attribute_value_id')->toArray()) ? 'selected' : '' }}>
+                                                                        {{ $value->value }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @endforeach
                                                     {{-- Price Field --}}
                                                     <div class="form-group col-md-4">
                                                         <label>Price</label>
-                                                        <input type="number" class="form-control" name="variant_price[]"
+                                                        <input type="number" class="form-control variant_price" name="variant_price[]"
                                                             value="{{ $variant->price }}">
                                                     </div>
 
                                                     {{-- Quantity Field --}}
                                                     <div class="form-group col-md-4">
                                                         <label>Quantity</label>
-                                                        <input type="number" class="form-control" name="quantity[]"
+                                                        <input type="number" class="form-control quantity" name="quantity[]"
                                                             value="{{ $variant->quantity }}">
                                                     </div>
 

@@ -86,12 +86,13 @@
                 </div>
                 <div class="col-lg-5 px-5 justify-content-center form-area-block">
                     <div>
-                        <form action="" class="form-block">
-                            <input type="text" placeholder="Name">
-                            <input type="email" placeholder="Email Address">
-                            <input type="number" placeholder="Phone Number" name="" id="">
-                            <textarea name="" placeholder="Additional Message" id="" cols="30" rows="10"></textarea>
-                            <button type="submit" class="submit-btn submit-btn-2">Submit</button>
+                        <form action="{{ route('contacts.store') }}" method="POST" class="form-block" id="create-form">
+                            @csrf
+                            <input type="text" name="name" placeholder="Name">
+                            <input type="email" name="email" placeholder="Email Address">
+                            <input type="text" name="phone" placeholder="Phone Number" name="" id="phone">
+                            <textarea name="message" placeholder="Additional Message" id="" cols="30" rows="10"></textarea>
+                            <button type="button" id="create-btn" class="submit-btn submit-btn-2">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -99,3 +100,21 @@
         </div>
     </main>
 @endsection
+@push('scripts')
+    @include('includes.admin.scripts.create-script', ['redirectUrl' => route('contacts.index')])
+    <script>
+        var phoneInput = document.getElementById('phone');
+
+        // coming value
+
+        // var x = phoneInput.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,4})/);
+        // phoneInput.value = !x[3] ? '+1 ' + x[2] : '+1 (' + x[2] + ') ' + x[3] + (x[4] ? '-' + x[4] : '');
+
+        // on input change
+        phoneInput.addEventListener('input', function(e) {
+            var x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,4})/);
+
+            e.target.value = !x[3] ? '+1 ' + x[2] : '+1 (' + x[2] + ') ' + x[3] + (x[4] ? '-' + x[4] : '');
+        });
+    </script>
+@endpush

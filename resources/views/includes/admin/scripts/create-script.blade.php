@@ -1,6 +1,6 @@
 <script>
     var redirectUrl = @json($redirectUrl);
-    // console.log(@json(request()->url()).includes('product'));
+    console.log(@json(request()->url()));
 
     $(document).ready(function() {
         $(document).on('click', '#create-btn', function(e) {
@@ -8,6 +8,30 @@
             let form = $('#create-form');
             let formData = new FormData(form[0]);
             // console.log(form.attr('action'));
+            let variants = [];
+            $(".attribute-variants").each(function() {
+                let variantData = {
+                    price: $(this).find(".variant_price").val(),
+                    quantity: $(this).find(".quantity").val(),
+                    attributes: {}
+                };
+
+                // Get selected attributes
+                $(this).find(".variant-dropdown").each(function() {
+                    let attrName = $(this).attr("data-attribute");
+                    let attrValue = $(this).val();
+                    if (attrValue) {
+                        variantData.attributes[attrName] = attrValue;
+                    }
+                });
+                console.log();
+
+                variants.push(variantData);
+            });
+            console.log(variants);
+
+            // Convert variants array to JSON and append it to FormData
+            formData.append("variants", JSON.stringify(variants));
 
             $.LoadingOverlay("show");
             $.ajax({
@@ -27,10 +51,14 @@
                             showConfirmButton: false,
                             timer: 1500
                         });
-                        setTimeout(function() {
-                            window.location.href =
-                                redirectUrl;
-                        }, 1500)
+                        if (@json(request()->url()).includes('contact-us')) {
+                            form[0].reset();
+                        } else {
+                            setTimeout(function() {
+                                window.location.href =
+                                    redirectUrl;
+                            }, 1500)
+                        }
                     }
                 },
                 error: function(error) {
@@ -38,7 +66,6 @@
                     console.log(error);
                     let errors = error.responseJSON.errors;
                     if (errors) {
-
                         handleValidationErrors(errors);
                     } else {
                         Swal.fire({
@@ -81,9 +108,9 @@
                     let index = key.split('.')[
                         1]; // Extract the index (0,1,2...)
 
-                        let variantField = $(`input[name="variants[]"]`).eq(
-                            index);
-                            console.log(index, variantField);
+                    let variantField = $(`input[name="variants[]"]`).eq(
+                        index);
+                    console.log(index, variantField);
                     let errorMessage = $(
                         `<span class='error-message text-danger'>${value[0]}</span>`
                     );
@@ -107,6 +134,14 @@
                     );
                     inputField.after(errorMessage);
                 }
+            } else if (@json(request()->url()).includes('contact-us')) {
+                let inputField = $(
+                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                );
+                let errorMessage = $(
+                    `<span class='error-message text-danger'>${value}</span>`
+                );
+                inputField.after(errorMessage);
             }
         });
     }

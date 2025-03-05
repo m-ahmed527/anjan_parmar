@@ -104,14 +104,19 @@
                             <h1 class="product-title mb-3">{{ $product->name }}</h1>
                             <p class="product-description">{!! $product->description !!}</p>
                             <p class="product-price">${{ $product->getMinPrice() }} - ${{ $product->getMaxPrice() }}</p>
-
                             @php
                                 // Group variants by attribute name
+                                $counter = 1;
+                                $storedData = ['attribute_id' => null]; // Array use kiya reference maintain karne ke liye
+
                                 $groupedVariants = $product->variants
-                                    ->flatMap(function ($variant) {
-                                        return $variant->attributeValues->map(function ($attributeValue) use (
-                                            $variant,
-                                        ) {
+                                    ->flatMap(function ($variant) use (&$counter, &$storedData) {
+                                        return $variant->attributeValues->map(function ($attributeValue) use (&$counter, &$storedData) {
+                                            if($counter == 1){
+                                                $storedData['attribute_id'] = $attributeValue->attribute_id; // Properly store attribute_id
+                                            }
+
+                                            $counter++; // Counter increment karna
                                             return [
                                                 'attribute_name' => $attributeValue->attribute->name,
                                                 'attribute_value' => $attributeValue->value,
@@ -120,14 +125,49 @@
                                         });
                                     })
                                     ->groupBy('attribute_name');
-                                    // dd($groupedVariants);
+
+                                // $groupedAttributes = [];
+
+                                // // Iterate through each variant
+                                // foreach ($product->variants as $variant) {
+                                //     foreach ($variant->attributes as $attribute) {
+                                //         // Ensure attribute name exists in the groupedAttributes array
+                                //         $attributeName = $attribute->name;
+
+                                //         if (!isset($groupedAttributes[$attributeName])) {
+                                //             $groupedAttributes[$attributeName] = [];
+                                //         }
+
+                                //         // Add unique values for each attribute
+                                //         foreach ($attribute->values as $value) {
+                                //             if (!in_array($value->value, $groupedAttributes[$attributeName])) {
+                                //                 $groupedAttributes[$attributeName][] = $value->value;
+                                //             }
+                                //         }
+                                //     }
+                                // }
+                                // dd($groupedAttributes);
+
                             @endphp
                             <form id="variantForm">
                                 @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}" id="">
+                                {{-- @foreach ($groupedAttributes as $attributeName => $values)
+                                    <input type="hidden" name="attributes[]" value="{{ $attributeName }}" id="">
+                                    <p class="product-price">{{ $attributeName }}</p>
+                                    <div class="storage-btn-area">
+                                        @foreach ($values as $value)
+                                            @php
+                                                $radioId = $attributeName . '-' . $value;
+                                            @endphp
+                                            <input type="radio" type="hidden" id="{{ $radioId }}"
+                                                class="custom-radios" name="attributes[{{ strtolower($attributeName) }}]"
+                                                value="{{ $value }}">
+                                            <label for="{{ $radioId }}">{{ $value }}</label>
+                                        @endforeach
+                                    </div>
+                                @endforeach --}}
                                 @foreach ($groupedVariants as $attributeName => $attributeValues)
-                                    {{-- @php
-                                        $iteration = $loop->iteration;
-                                    @endphp --}}
                                     <input type="hidden" name="attributes[]" value="{{ $attributeName }}" id="">
                                     <p class="product-price">{{ $attributeName }}</p>
                                     <div class="storage-btn-area">
@@ -136,7 +176,7 @@
                                                 $radioId = $attributeName . '-' . $value['attribute_value_id'];
                                             @endphp
                                             <input type="radio" id="{{ $radioId }}" class="custom-radios"
-                                                name="attribute_values[]-{{ $attributeName }}" 
+                                                name="attribute_values[]-{{ $attributeName }}"
                                                 value="{{ $value['attribute_value_id'] }}">
                                             <label for="{{ $radioId }}">{{ $value['attribute_value'] }}</label>
                                         @endforeach
@@ -343,23 +383,44 @@
         })
     </script>
     <script>
+        var storedAttributeID = @json($storedData['attribute_id']);
         document.querySelectorAll('#variantForm .custom-radios').forEach(select => {
             select.addEventListener('change', () => {
 
                 const form = document.getElementById('variantForm');
                 const formData = new FormData(form);
-                console.log(select.value);
+                formData.append('storedAttributeID', storedAttributeID);
                 let value = select.value;
-                fetch('/get-variant-price/'+value, {
+                fetch('/get-variant-price/' + value, {
                         method: 'POST',
                         body: formData
                     })
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
+                        if (data.success && data.combination) {
+                            let validAttributeId = parseInt(data.attribute_id); // Response se valid attribute_id
+                            let validVariantIds = data.combination.map(item => item.id); // Combination array se valid variant IDs
+
+                            console.log("Valid Attribute ID:", validAttributeId);
+                            console.log("Valid Variant IDs:", validVariantIds);
+
+                            // Disable all radio buttons except valid ones
+                            document.querySelectorAll('#variantForm .custom-radios').forEach(radio => {
+                                let radioValue = parseInt(radio.value); // Get radio button's variant ID
+                                let radioAttributeId = parseInt(radio.getAttribute("name").split("-")[1]); // Extract attribute_id
+
+                                if (validVariantIds.includes(radioValue) || radioAttributeId == validAttributeId) {
+                                    radio.disabled = false; // ✅ Enable if it's in combination OR matches attribute_id
+                                } else {
+                                    radio.disabled = true; // ❌ Disable if neither condition is met
+                                }
+                            });
+                        }
                         document.getElementById('priceDisplay').textContent = "Price: " + (data.price ||
                             'N/A');
                     })
-                    .catch(error => console.error('Error:', error));
+                    .catch(error => console.log('Error:', error));
             });
         });
     </script>

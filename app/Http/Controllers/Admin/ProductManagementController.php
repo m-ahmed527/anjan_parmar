@@ -45,49 +45,28 @@ class ProductManagementController extends Controller
 
             DB::beginTransaction();
             $data = $request->all();
-
+            // dd($data);
             $product = Product::create($request->sanitized());
             $product->addMedia($request->featured_image, 'featured_image');
             if ($request->has('images')) {
                 $product->addMultipleMedia($request->images, 'multiple_images');
             }
-
-
-            // $product->variants()->create(['sku' => $product->slug . '-', 'price' => $product->price, 'quantity' => $product->quantity]);
-            // $variant1 = Variant::create(['product_id' => $product->id, 'sku' => 'TSHIRT-S-RED', 'price' => 500.00, 'quantity' => 10]);
-            // $variant1->attributeValues()->attach([$sizeS->id, $colorRed->id]);
-
-            if (isset($data["attributes"])) {
-                $variants = $this->prepareVariants($data, $product);
-                // foreach ($variants as $variant) {
-                //     $var = $product->variants()->create($variant);
-                //     $var->attributeValues()->attach($var->id);
-                // }
-            }
-
-            // if (!empty($data["attributes"])) {
-            //     $filteredAttributes = array_filter($data["attributes"], function ($attrValues) {
-            //         return !empty(array_filter($attrValues)); // Remove null values
-            //     });
-            // }
-
-            // $filteredPrices = array_filter($data["variant_price"], function ($price) {
-            //     return !is_null($price);
-            // });
-
-            // $filteredQuantities = array_filter($data["quantity"], function ($qty) {
-            //     return !is_null($qty);
-            // });
-
-
-            // // If all attributes, prices, and quantities are empty, do not process variants
-            // if (!empty($filteredAttributes) || !empty($filteredPrices) || !empty($filteredQuantities)) {
-            //     $variants = $this->prepareVariants($data);
-            //     foreach ($variants as $variant) {
-            //         $product->variants()->create($variant);
+            // $variants = json_decode($request->variants, true);
+            // foreach ($variants as $variantData) {
+            //     $variant = $product->variants()->create([
+            //         'price' => $variantData['price'],
+            //         'quantity' => $variantData['quantity'],
+            //     ]);
+            //     foreach ($variantData['attributes'] as $attributeSlug => $attributeValueId) {
+            //         $attribute = Attribute::where('slug', $attributeSlug)->first();
+            //         if ($attribute) {
+            //             $variant->attributes()->attach($attribute->id, ['attribute_value_id' => $attributeValueId]);
+            //         }
             //     }
             // }
-            // dd($data, $filteredAttributes, $filteredPrices, $filteredQuantities);
+            if (isset($data["attributes"])) {
+                $variants = $this->prepareVariants($data, $product);
+            }
             DB::commit();
             return response([
                 "success" => true,
@@ -153,7 +132,6 @@ class ProductManagementController extends Controller
     public function show(Product $product): View
     {
 
-
         return view('screens.admin.product-management.details', get_defined_vars());
     }
 
@@ -173,7 +151,7 @@ class ProductManagementController extends Controller
 
             DB::beginTransaction();
             $data = $request->all();
-
+            // dd($data);
             $product->update($request->sanitized());
             // $product->addMedia($request->featured_image, 'featured_image');
             if ($request->has('featured_image')) {
@@ -182,16 +160,44 @@ class ProductManagementController extends Controller
             if ($request->has('images')) {
                 $product->updateMediaMultiple($request->images, 'multiple_images');
             }
+            // $variants = json_decode($request->variants, true);
+            // $variantIds = []; // Track updated & new variant IDs
 
+            // foreach ($variants as $variantData) {
+            //     if (isset($variantData['id']) && $variantData['id'] != null) {
+            //         // ✅ Update existing variant
+            //         $variant = $product->variants()->where('id', $variantData['id'])->first();
+            //         if ($variant) {
+            //             $variant->update([
+            //                 'price' => $variantData['price'],
+            //                 'quantity' => $variantData['quantity'],
+            //             ]);
+            //         }
+            //     } else {
+            //         // ✅ Create new variant if ID is null
+            //         $variant = $product->variants()->create([
+            //             'price' => $variantData['price'],
+            //             'quantity' => $variantData['quantity'],
+            //         ]);
+            //     }
+
+            //     // ✅ Handle attributes (existing + new variants)
+            //     $variantIds[] = $variant->id; // Store variant ID for cleanup
+            //     foreach ($variantData['attributes'] as $attributeSlug => $attributeValueId) {
+            //         $attribute = Attribute::where('slug', $attributeSlug)->first();
+            //         if ($attribute) {
+            //             $variant->attributes()->syncWithoutDetaching([
+            //                 $attribute->id => ['attribute_value_id' => $attributeValueId]
+            //             ]);
+            //         }
+            //     }
+            // }
+
+            // // ✅ Delete removed variants (only keep the updated/new ones)
+            // $product->variants()->whereNotIn('id', $variantIds)->delete();
 
             if (isset($data["attributes"])) {
                 $variants = $this->prepareVariants($data, $product);
-                // foreach ($product->variants as $variant) {
-                //     $product->variants()->delete();
-                // }
-                // foreach ($variants as $variant) {
-                //     $product->variants()->create($variant);
-                // }
             }
             // dd($variants, $request->sanitized());
             DB::commit();
@@ -201,6 +207,7 @@ class ProductManagementController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             return response([
                 "success" => false,
                 "message" => "Failed to update product. Please try again.",

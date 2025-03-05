@@ -19,6 +19,28 @@
             e.preventDefault();
             let form = $('#update-form');
             let formData = new FormData(form[0]);
+            let variants = [];
+            $(".attribute-variants").each(function() {
+                let variantData = {
+                    price: $(this).find(".variant_price").val(),
+                    quantity: $(this).find(".quantity").val(),
+                    attributes: {}
+                };
+
+                // Get selected attributes
+                $(this).find(".variant-dropdown").each(function() {
+                    let attrName = $(this).attr("data-attribute");
+                    let attrValue = $(this).val();
+                    if (attrValue) {
+                        variantData.attributes[attrName] = attrValue;
+                    }
+                });
+                console.log();
+
+                variants.push(variantData);
+            });
+            // Convert variants array to JSON and append it to FormData
+            formData.append("variants", JSON.stringify(variants));
             formData.append('deleted_values', JSON.stringify(deletedValues));
             $.LoadingOverlay("show");
             $.ajax({

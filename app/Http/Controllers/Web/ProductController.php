@@ -49,6 +49,7 @@ class ProductController extends Controller
     public function show($product)
     {
         $product = Product::with(['variants.attributeValues.attribute'])->where('slug', $product)->first();
+        // $product = Product::with(['variants.attributes'])->where('slug', $product)->first();
         // dd($product->getValidCombinations());
         return view('screens.web.products.show', compact('product'));
     }
@@ -64,34 +65,39 @@ class ProductController extends Controller
     // }
 
 
-    public function getVariantPrice(Request $request)
-    {
-        // dd($request->all());
-        $attributeValueIds = $request->input('attribute_values', []);
-
-        if (!is_array($attributeValueIds) || empty($attributeValueIds)) {
-            return response()->json(['price' => null, 'error' => 'No attribute values provided.']);
-        }
-        $variant = Variant::whereHas('attributeValues', function ($query) use ($attributeValueIds) {
-            $query->whereIn('attribute_value_id', $attributeValueIds);
-        }, '=', count($attributeValueIds))->first();
-        dd($variant->attributeValues);
-        return response()->json(['price' => $variant ? $variant->price : null]);
-    }
-
-    // public function getVariantPrice(Request $request, AttributeValue $attributeValue)
+    // public function getVariantPrice(Request $request)
     // {
-    //     $attributeValues = [];
-    //     foreach($attributeValue->variants as $attrValue){
-    //         foreach($attrValue->attributeValues as $attVal){
-    //             if($attributeValue->id != $attVal->id){
-    //                 $attributeValues[] = $attVal->id;
-    //             }
-    //         }
+    //     // dd($request->all());
+    //     $attributeValueIds = $request->input('attribute_values', []);
+    //     dd($attributeValueIds);
+    //     if (!is_array($attributeValueIds) || empty($attributeValueIds)) {
+    //         return response()->json(['price' => null, 'error' => 'No attribute values provided.']);
     //     }
-    //     dd($attributeValues);
-
+    //     $variant = Variant::whereHas('attributeValues', function ($query) use ($attributeValueIds) {
+    //         $query->whereIn('attribute_value_id', $attributeValueIds);
+    //     }, '=', count($attributeValueIds))->first();
+    //     // dd($variant->attributeValues);
+    //     return response()->json(['price' => $variant ? $variant->price : null]);
     // }
+
+    public function getVariantPrice(Request $request, AttributeValue $attributeValue)
+    {
+
+        $combination =  $attributeValue->variants()->where('product_id', $request->product_id)->first()->attributeValues;
+        $attribute_id = $request->storedAttributeID;
+        return response()->json(['success' => true, 'attribute_id' => $attribute_id, 'combination' => $combination]);
+        // $attributeValues = [];
+        // foreach($attributeValue->variants as $attrValue){
+        //     dd($attributeValue->variants);
+        //     foreach($attrValue->attributeValues as $attVal){
+        //         if($attributeValue->id != $attVal->id){
+        //             $attributeValues[] = $attVal->id;
+        //         }
+        //     }
+        // }
+        // dd($attributeValues);
+
+    }
 
     // public function getVariantCombinations()
     // {

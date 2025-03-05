@@ -14,7 +14,11 @@
     <link rel="stylesheet" href="{{ asset('assets/web/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/web/css/responsive.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
 
+    
+
 </head>
+
 <body class="body">

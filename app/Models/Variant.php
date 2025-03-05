@@ -33,4 +33,12 @@ class Variant extends Model
     {
         return $this->belongsToMany(AttributeValue::class, 'variant_attribute_values')->withTimestamps();
     }
+
+    // public function attributes()
+    // {
+    //     return $this->belongsToMany(Attribute::class, 'variant_attribute_values')
+    //         ->withPivot('attribute_value_id')->withTimestamps();
+    // }
+
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Web\ContactUsController;
 use App\Http\Controllers\Web\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,7 @@ Route::view('/blogs', 'screens.web.blogs.index')->name('blogs');
 Route::view('/best-camera', 'screens.web.blogs.show')->name('best-camera');
 Route::view('/shipping', 'screens.web.shipping-policy.index')->name('shipping');
 Route::view('/terms-condition', 'screens.web.terms-conditions.index')->name('terms-condition');
-Route::view('/contacts', 'screens.web.contact-us.index')->name('contacts');
+// Route::view('/contacts', 'screens.web.contact-us.index')->name('contacts');
 Route::view('/wishlist', 'screens.web.wishlists.index')->name('wishlist');
 Route::view('/categories-store', 'screens.web.stores.index')->name('categories-store');
 // Route::view('/categories-store', 'screens.web.categories-store')->name('categories-store');
@@ -48,6 +49,10 @@ Route::controller(AuthController::class)->group(function () {
         Route::get('/product/{product}', 'show')->name('product.show');
         Route::post('/get-variant-price/{attributeValue}', 'getVariantPrice')->name('get-variant-price');
         Route::get('/get-variant-combinations', 'getVariantCombinations');
+    });
+    Route::name('contacts.')->controller(ContactUsController::class)->group(function () {
+        Route::get('/contact-us', 'index')->name('index');
+        Route::post('/contact-us/store', 'store')->name('store');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');

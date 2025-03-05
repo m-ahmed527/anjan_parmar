@@ -85,7 +85,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('contacts') }}" class="footer-link text-decoration-none">
+                            <a href="{{ route('contacts.index') }}" class="footer-link text-decoration-none">
                                 Contact Us
                             </a>
                         </li>
@@ -240,12 +240,13 @@
 
 </footer>
 
+{{-- <script src="{{ asset('assets/web/js/jquery.min.js') }}"></script> --}}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="{{ asset('assets/web/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('assets/web/js/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/web/js/slick.min.js') }}"></script>
 <script src="{{ asset('assets/web/js/script.js') }}"></script>
 
-{{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> --}}
+@stack('scripts')
 @include('includes.logout-script', ['redirectUrl' => route('index')])
 </body>
 
