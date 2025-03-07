@@ -89,7 +89,9 @@
                             <div class="right-col-row">
                                 <div>
                                     <button class="btn-open-sidebar mb-2"><i class="fa-solid fa-arrow-right"></i></button>
-                                    <h5 class="mb-3 showing-res">Showing 1–50 of 40 Results</h5>
+                                    <h5 class="mb-3 showing-res" id="showing-results-container">
+                                        {{-- Ye AJAX se update hoga --}}
+                                    </h5>
                                 </div>
                                 <div class="button-pr-group mb-3">
                                     <button class="btns-filter-open grid-active">
@@ -103,61 +105,10 @@
                                 </div>
                             </div>
                         </div>
-                        @forelse ($products as $product)
-                            <div class="col-xxl-4  col-md-6 col-sm-6 col-12 mb-3 column-grid-change">
-                                <div class="product-card sh-prod-card">
-                                    <div class="products-img sh-prod">
-                                        <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <p class="top-img">{{ $product->category->name }}</p>
-                                            <button class="btn heart-save-btn p-0">
-                                                <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
-                                            </button>
-                                        </div>
-                                        <img src="{{ $product->getFirstMediaUrl('featured_image') }}" class="img-fluid"
-                                            alt="">
-                                    </div>
-                                    <div class="product-content">
-                                        <h2 class="card-main-heading mb-4">{{ $product->name }}</h2>
-                                        <div>
-                                            <div class="rating-stars mb-3">
-                                                @for ($i = 0; $i < 5; $i++)
-                                                    @if ($product['id'] > $i)
-                                                        <img src="{{ asset('assets/web/images/gold-star.png') }}"
-                                                            alt="Gold Star">
-                                                    @else
-                                                        <img src="{{ asset('assets/web/images/silver-star.png') }}"
-                                                            alt="Silver Star">
-                                                    @endif
-                                                @endfor
-                                            </div>
-                                            <div class="bottom-price-area mb-3">
-                                                <p class="price-products">${{ $product->getMinPrice() }} -
-                                                    ${{ $product->getMaxPrice() }}
-                                                </p>
-                                                <a href="{{ route('product.show', $product->slug) }}"
-                                                    class="bid-btn text-decoration-none">Buy Now</a>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="col-12">
-                                <div class="no-products">
-                                    <h2 class="no-products-heading">No Products Found</h2>
-                                    <p class="no-products-para">No products were found matching your selection.</p>
-                                </div>
-                            </div>
-                        @endforelse
-
-                        <div class="col-12 mt-5">
-                            <div class="pagination-btns">
-                                <button class="pag-btn pagination-active">1</button>
-                                <button class="pag-btn">2</button>
-                                <button class="pag-btn">3</button>
-                            </div>
+                        <div class="row" id="product-container">
+                            @include('screens.web.products.list')
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -235,3 +186,6 @@
         });
     </script>
 @endsection
+@push('scripts')
+    @include('includes.web.products.products-list-script')
+@endpush

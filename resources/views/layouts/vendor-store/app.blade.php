@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin | @yield('title')</title>
+    <title>Vendor | @yield('title')</title>
     <link rel="shortcut icon" href="{{ asset('assets/web/images/logo-headers.png') }}" type="image/x-icon" />
 
     <!-- Google Font: Source Sans Pro -->
@@ -83,7 +83,7 @@
                             class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('admin.index') }}" class="nav-link">Home</a>
+                    <a href="{{ route('vendor.dashboard.index') }}" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="{{ route('index') }}" class="nav-link">Visit
@@ -161,10 +161,10 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <form action="{{ route('web.logout') }}" method="POST" id="logout-form">
+                    {{-- <form action="{{ route('logout') }}" method="POST" id="logout-form">
                         @csrf
                         <button type="button" class="btn btn-primary" id="logout-btn">Logout</button>
-                    </form>
+                    </form> --}}
                 </li>
             </ul>
         </nav>
@@ -185,11 +185,12 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
                     <div class="image">
-                        {{-- <img src="{{ auth()->user()->getFirstMediaUrl('avatar') }}" class="img-circle elevation-2"
-                            alt="User Image"> --}}
+                        <img src="{{ auth()?->user()?->getFirstMediaUrl('avatar') }}" class="img-circle elevation-2"
+                            alt="User Image">
                     </div>
+
                     <div class="info">
-                        <a href="#" class="d-block">{{ auth()?->user()?->name }}</a>
+                        <a href="#" class="d-block">{{ auth()?->user()?->first_name }}</a>
                     </div>
                 </div>
                 <!-- Sidebar Menu -->
@@ -198,102 +199,12 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                         <li class="nav-item mb-3">
-                            <a href="{{ route('admin.index') }}" class="nav-link active">
+                            <a href="{{ route('vendor.dashboard.index') }}" class="nav-link active">
                                 <p> Dashboard</p>
                             </a>
                         </li>
-                        {{-- <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Brand Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.brand.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Brands</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.brand.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add Brand</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> --}}
-                        {{-- <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Category Type Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.category.type.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Category Types</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.category.type.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Category Type</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> --}}
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
-                                <p>
-                                    Attribute Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.attribute.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Attributes</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.attribute.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Attributes</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
-                                <p>
-                                    Category Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.category.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Categories</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.category.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Categories</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+
+
 
 
                         <li class="nav-item mb-3">
@@ -307,19 +218,14 @@
                             <ul class="nav nav-treeview">
 
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.product.index') }}" class="nav-link active">
+                                    <a href="#" class="nav-link active">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>All Products</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.product.premium.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Premium</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.product.create') }}" class="nav-link">
+                                    <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Create Product</p>
                                     </a>
@@ -345,159 +251,17 @@
                             </ul>
                         </li>
                         <li class="nav-item mb-3">
-                            <a href="{{ route('admin.profile.index') }}" class="nav-link active">
-                                <p> Profile Management</p>
+                            <a href="{{ route('vendor.account.index') }}" class="nav-link active">
+                                <p> Account Management</p>
                             </a>
 
                         </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.vendors.index') }}" class="nav-link active">
-                                <p> Vendors Management</p>
-                            </a>
 
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.users.index') }}" class="nav-link active">
-                                <p>User Management</p>
-                            </a>
-                        </li>
                         <li class="nav-item mb-3">
                             <a href="{{ route('index') }}" class="nav-link active">
                                 <p>Back to Website</p>
                             </a>
                         </li>
-                        {{-- <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    BlogCategory Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.blog.category.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Blog Categories </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.blog.category.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add Blog Category</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Blogs Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.blog.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Blogs</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.blog.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add Blog</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Testimonials Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.testimonial.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Testimonials</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.testimonial.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add Testimonial</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> --}}
-                        {{-- <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Slider Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.slider.management.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Sliders</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.slider.management.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create New Slider</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    HomePage Categegories-Section Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.home.page.category.section.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>View</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.home.page.category.section.edit') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Update</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Shipping Charges Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.shipping.charges.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>View</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> --}}
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

@@ -2285,20 +2285,44 @@ a {
     gap: 10px;
 }
 .pagination-btns {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
 }
-.pagination-btns button {
+.pagination-area{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+
+}
+.pagination-btns button,.pagination-btns li {
     border: 1px solid #d1d1d1;
     background: transparent;
-    padding: 15px 26px;
+    padding: 15px 20px;
     border-radius: 8px;
     font-family: var(--secondary-font);
     font-size: 25px;
     font-weight: 700;
 }
+.pagination-btns li span,.pagination-btns li a{
+    border: none !important;
+    background: transparent !important;
+
+}
+.pagination-btns li.active span{
+    color: #fff !important;
+}
+.pagination-btns li.active{
+    background: #4f7eff !important;
+}
+
+.pagination-btns li.disabled{
+    background: #c1c1c185 !important;
+}
+
+
 .pagination-active {
     background: #4f7eff !important;
     color: #fff;

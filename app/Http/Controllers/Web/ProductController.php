@@ -13,12 +13,23 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        // dd($products[0]->category);
+        $products = Product::paginate(2);
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('screens.web.products.list', get_defined_vars())->render()
+            ]);
+        }
         return view('screens.web.products.index', get_defined_vars());
     }
+
+    public function fetchProducts(Request $request)
+    {
+        $products = Product::paginate(2);
+        return view('screens.web.products.list', compact('products'))->render();
+    }
+
 
     /**
      * Display the specified resource.
@@ -83,9 +94,22 @@ class ProductController extends Controller
     public function getVariantPrice(Request $request, AttributeValue $attributeValue)
     {
 
-        $combination =  $attributeValue->variants()->where('product_id', $request->product_id)->first()->attributeValues;
         $attribute_id = $request->storedAttributeID;
-        return response()->json(['success' => true, 'attribute_id' => $attribute_id, 'combination' => $combination]);
+        // $combination =  $attributeValue->variants()->where('product_id', $request->product_id)->first()->attributeValues;
+        $combination =  $attributeValue->variants()->where('product_id', $request->product_id)->get();
+        // dd($combination );
+        $combinations = [];
+        foreach ($combination as $value) {
+            foreach ($value->attributeValues as $attribute) {
+
+                if ($attribute->attribute_id != $attribute_id) {
+                    $combinations[] = $attribute->id;
+                }
+            }
+        }
+        // dd($combinations);
+
+        return response()->json(['success' => true, 'attribute_id' => $attribute_id, 'combinations' => $combinations]);
         // $attributeValues = [];
         // foreach($attributeValue->variants as $attrValue){
         //     dd($attributeValue->variants);

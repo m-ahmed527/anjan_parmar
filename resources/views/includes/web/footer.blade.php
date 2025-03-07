@@ -85,7 +85,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('contacts.index') }}" class="footer-link text-decoration-none">
+                            <a href="{{ route('web.contacts.index') }}" class="footer-link text-decoration-none">
                                 Contact Us
                             </a>
                         </li>
@@ -245,7 +245,9 @@
 <script src="{{ asset('assets/web/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/web/js/slick.min.js') }}"></script>
 <script src="{{ asset('assets/web/js/script.js') }}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @stack('scripts')
 @include('includes.logout-script', ['redirectUrl' => route('index')])
 </body>

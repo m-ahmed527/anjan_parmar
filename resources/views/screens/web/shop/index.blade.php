@@ -125,8 +125,8 @@
                                                 <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
                                             </button>
                                         </div>
-                                        <img src="{{ asset('assets/web/images' . $productItem['img']) }}"
-                                            class="img-fluid" alt="">
+                                        <img src="{{ asset('assets/web/images' . $productItem['img']) }}" class="img-fluid"
+                                            alt="">
                                     </div>
                                     <div class="product-content">
                                         <h2 class="card-main-heading mb-4">{{ $productItem['name'] }}</h2>
@@ -146,7 +146,7 @@
                                                 <p class="price-products">${{ $productItem['price'] }} -
                                                     ${{ $productItem['finalPrice'] }}
                                                 </p>
-                                                <a href="{{ route('products.show', ['id' => $productItem['id']]) }}"
+                                                <a href="#"
                                                     class="bid-btn text-decoration-none">Buy Now</a>
                                             </div>
                                         </div>

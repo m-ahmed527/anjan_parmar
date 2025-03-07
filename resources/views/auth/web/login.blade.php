@@ -7,7 +7,7 @@
         </a>
         <div class="card password-reset-card">
             <h2 class="text-center mb-4">Login</h2>
-            <form method="POST" action="{{ route('login') }}" id="login-form">
+            <form method="POST" action="{{ route('web.login') }}" id="login-form">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
@@ -27,9 +27,9 @@
                 </div>
                 <div class="d-flex flex-column my-4">
                     <button type="button" class="btn btn-primary w-100 mb-3" id="login-btn">Login</button>
-                    <a href="{{ route('register') }}" id="showLogin" class="text-center mb-3">Don't have an account?
+                    <a href="{{ route('web.register') }}" id="showLogin" class="text-center mb-3">Don't have an account?
                         Signup</a>
-                    <a href="{{ route('forgot.password') }}" id="showLogin" class="text-center">Forgot password?</a>
+                    <a href="{{ route('web.forgot.password') }}" id="showLogin" class="text-center">Forgot password?</a>
                 </div>
             </form>
         </div>

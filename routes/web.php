@@ -24,7 +24,7 @@ Route::view('/testimonials', 'screens.web.testimonials.index')->name('testimonia
 
 
 // Auth
-Route::controller(AuthController::class)->group(function () {
+Route::name('web.')->controller(AuthController::class)->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/login', 'loginView')->name('login');
         Route::post('/login', 'login');
@@ -44,9 +44,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/logout', 'logout')->name('logout');
     });
-    Route::controller(ProductController::class)->group(function () {
-        Route::get('/products', 'index')->name('products');
-        Route::get('/product/{product}', 'show')->name('product.show');
+    Route::name('products.')->controller(ProductController::class)->group(function () {
+        Route::get('/products', 'index')->name('index');
+        Route::get('/product/{product}', 'show')->name('show');
         Route::post('/get-variant-price/{attributeValue}', 'getVariantPrice')->name('get-variant-price');
         Route::get('/get-variant-combinations', 'getVariantCombinations');
     });

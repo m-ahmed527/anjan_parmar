@@ -89,7 +89,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     Route::get('/order-status/change/{order}', [OrderManagementController::class, 'changeStatus'])->name('order.change.status');
     Route::get('/order/variant/details/{order}', [OrderManagementController::class, 'orderVariantDetails'])->name('order.variant.detail');
 
-
+    // profile
     Route::get('/profile', [ProfileManagementController::class, 'index'])->name('profile.index');
     Route::post('/profile/update', [ProfileManagementController::class, 'update'])->name('profile.update');
     Route::post('/profile/update-password', [ProfileManagementController::class, 'updatePassword'])->name('profile.update.password');

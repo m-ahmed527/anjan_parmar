@@ -143,7 +143,7 @@
                                             @foreach ($variants as $variant)
                                                 {{-- @dd($variant->attributeValues) --}}
                                                 <div class="row attribute-variants">
-                                                    @foreach ($variant->attributeValues as $attribute)
+                                                    {{-- @foreach ($variant->attributeValues as $attribute)
 
                                                         <div class="form-group col-md-4">
                                                             <label>{{ $attribute->attribute->name }}</label>
@@ -160,9 +160,9 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                    @endforeach
-                                                    {{-- @foreach ($variant->attributes as $attribute)
-                                                        Attribute Dropdown
+                                                    @endforeach --}}
+                                                    @foreach ($variant->attributes as $attribute)
+                                                        {{-- Attribute Dropdown --}}
                                                         <div class="form-group col-md-4">
                                                             <label>{{ $attribute->name }}</label>
                                                             <select name="attributes[{{ $attribute->slug }}][]"
@@ -180,7 +180,7 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                    @endforeach --}}
+                                                    @endforeach
                                                     {{-- Price Field --}}
                                                     <div class="form-group col-md-4">
                                                         <label>Price</label>

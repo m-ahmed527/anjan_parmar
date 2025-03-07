@@ -7,7 +7,7 @@
         </a>
         <div class="card password-reset-card vendor-card">
             <h2 class="text-center mb-4">Vendor Registration</h2>
-            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data" id="vendor-register-form">
+            <form action="{{ route('web.register') }}" method="POST" enctype="multipart/form-data" id="vendor-register-form">
                 @csrf
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -91,12 +91,13 @@
 
                 <div class="d-flex flex-column my-4">
                     <button type="submit" class="btn btn-primary w-100 mb-3" id="vendor-register-btn">Register</button>
-                    <a href="{{ route('login') }}" id="showLogin" class="text-center">Already have an account? Login</a>
+                    <a href="{{ route('web.login') }}" id="showLogin" class="text-center">Already have an account?
+                        Login</a>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <script src="{{ asset('assets/web/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/web/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/web/js/slick.min.js') }}"></script>
@@ -135,8 +136,8 @@
                         types: ['geocode']
                     });
                     autocomplete.setFields(['address_component']);
-                    autocomplete.addListener('place_changed', fillIn);
-                    initialaddress();
+                    // autocomplete.addListener('place_changed', fillIn);
+                    // initialaddress();
                 });
         } else {
             var input = document.getElementById('autocompleteSearch');
@@ -144,7 +145,7 @@
                 types: ['geocode']
             });
             autocomplete.setFields(['address_component']);
-            autocomplete.addListener('place_changed', fillIn);
+            // autocomplete.addListener('place_changed', fillIn);
         }
 
         // function fillIn() {

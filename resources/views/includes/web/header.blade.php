@@ -5,7 +5,7 @@
             <button class="btn-style small-btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i class="fa fa-search"></i>
             </button>
-            <a href="{{ route('vendor.register.view') }}" class="vendors-btn vendor-outline">
+            <a href="{{ route('web.vendor.register.view') }}" class="vendors-btn vendor-outline">
                 Signup as vendors
             </a>
         </div>
@@ -51,7 +51,7 @@
             </li>
             <li>
                 @auth
-                    <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                    <form action="{{ route('web.logout') }}" method="POST" id="logout-form">
                         @csrf
                         <button type="button" class="btn btn-style user-btn" id="logout-btn">
                             <i class="fa-solid fa-right-from-bracket"></i>
@@ -89,7 +89,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('products') }}" class="nav-link">
+                <a href="{{ route('web.products.index') }}" class="nav-link">
                     Products
                 </a>
             </li>
@@ -105,7 +105,7 @@
             </li>
         </ul>
         @guest
-            <a href="{{ route('vendor.register.view') }}" class="vendors-btn">
+            <a href="{{ route('web.vendor.register.view') }}" class="vendors-btn">
                 Signup as vendors
             </a>
         @endguest
@@ -115,7 +115,7 @@
             </a>
         @endrole
         @role('Vendor')
-            <a href="#" class="vendors-btn">
+            <a href="{{ route('vendor.dashboard.index') }}" class="vendors-btn">
                 Vendor Dashboard
             </a>
         @endrole
@@ -145,7 +145,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('products') }}" class="nav-link">
+                    <a href="{{ route('web.products.index') }}" class="nav-link">
                         Products
                     </a>
                 </li>
@@ -208,10 +208,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="auth-buttons">
-                        <a href="{{ route('register') }}" class="btn  w-100 mb-3">
+                        <a href="{{ route('web.register') }}" class="btn  w-100 mb-3">
                             Sign up
                         </a>
-                        <a href="{{ route('login') }}" class="btn w-100">
+                        <a href="{{ route('web.login') }}" class="btn w-100">
                             Login
                         </a>
                     </div>

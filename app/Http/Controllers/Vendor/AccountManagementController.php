@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\UpdateProfileRequest;
+use App\Http\Requests\Vendor\UpdateProfileRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class ProfileManagementController extends Controller
+class AccountManagementController extends Controller
 {
     public function index()
     {
-        return view('screens.admin.profile.index');
+        return view('screens.vendor-store.account-management.index');
     }
 
     public function update(UpdateProfileRequest $request)

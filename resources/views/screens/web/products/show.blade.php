@@ -1,5 +1,5 @@
 @extends('layouts.web.app')
-@php
+{{-- @php
     $productCard = [
         [
             'category' => 'Skin Care',
@@ -44,7 +44,7 @@
             'rating' => 3,
         ],
     ];
-@endphp
+@endphp --}}
 @section('content')
     <style>
         .product-description {
@@ -62,7 +62,7 @@
                     <div>
                         <h1 class="sh-head">Products</h1>
                         <p class="sh-para"><a href="{{ route('index') }}" class="text-decoration-none">Home</a> / <a
-                                href="{{ route('products') }}" class="text-decoration-none">Products</a>
+                                href="{{ route('web.products.index') }}" class="text-decoration-none">Products</a>
                             / {{ $product->name }}</p>
                     </div>
                 </div>
@@ -74,12 +74,16 @@
                 <div class="row row-gap-3">
                     <div class="col-xl-2 col-12 p-0">
                         <div class="side-images-wrap">
+                            <div class="side-image" style="border:2px solid #4f7eff">
+                                <img src="{{ $product->getFirstMediaUrl('featured_image') }}" alt="Product Image"
+                                    class="gallery-img-item">
+                            </div>
                             @forelse ($product->getMediaCollectionUrl('multiple_images') as $image)
                                 <div class="side-image" style="border:2px solid #4f7eff">
                                     <img src="{{ $image }}" alt="Product Image" class="gallery-img-item">
                                 </div>
                             @empty
-                                No Image Found
+
                             @endforelse
                             {{-- <div class="side-image">
                                 <img src="{{ asset('assets/web/images/laptop-2.png') }}" alt="Product Image"
@@ -111,8 +115,11 @@
 
                                 $groupedVariants = $product->variants
                                     ->flatMap(function ($variant) use (&$counter, &$storedData) {
-                                        return $variant->attributeValues->map(function ($attributeValue) use (&$counter, &$storedData) {
-                                            if($counter == 1){
+                                        return $variant->attributeValues->map(function ($attributeValue) use (
+                                            &$counter,
+                                            &$storedData,
+                                        ) {
+                                            if ($counter == 1) {
                                                 $storedData['attribute_id'] = $attributeValue->attribute_id; // Properly store attribute_id
                                             }
 
@@ -398,22 +405,30 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        if (data.success && data.combination) {
-                            let validAttributeId = parseInt(data.attribute_id); // Response se valid attribute_id
-                            let validVariantIds = data.combination.map(item => item.id); // Combination array se valid variant IDs
+                        if (data.success && data.combinations) {
+                            let validAttributeId = parseInt(data
+                                .attribute_id); // Response se valid attribute_id
+                                // let validVariantIds = data.combinations.map(item => item
+                                //     .id); // Combination array se valid variant IDs
+                                let validVariantIds = data.combinations
 
-                            console.log("Valid Attribute ID:", validAttributeId);
-                            console.log("Valid Variant IDs:", validVariantIds);
+                                console.log("Valid Attribute ID:", validAttributeId);
+                                console.log("Valid Variant IDs:", validVariantIds);
 
                             // Disable all radio buttons except valid ones
                             document.querySelectorAll('#variantForm .custom-radios').forEach(radio => {
-                                let radioValue = parseInt(radio.value); // Get radio button's variant ID
-                                let radioAttributeId = parseInt(radio.getAttribute("name").split("-")[1]); // Extract attribute_id
+                                let radioValue = parseInt(radio
+                                    .value); // Get radio button's variant ID
+                                let radioAttributeId = parseInt(radio.getAttribute("name")
+                                    .split("-")[1]); // Extract attribute_id
 
-                                if (validVariantIds.includes(radioValue) || radioAttributeId == validAttributeId) {
-                                    radio.disabled = false; // ✅ Enable if it's in combination OR matches attribute_id
+                                if (validVariantIds.includes(radioValue) || radioAttributeId ==
+                                    validAttributeId) {
+                                    radio.disabled =
+                                        false; // ✅ Enable if it's in combination OR matches attribute_id
                                 } else {
-                                    radio.disabled = true; // ❌ Disable if neither condition is met
+                                    radio.disabled =
+                                        true; // ❌ Disable if neither condition is met
                                 }
                             });
                         }

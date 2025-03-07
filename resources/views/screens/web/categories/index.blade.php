@@ -32,8 +32,9 @@
                     <div>
                         <h1 class="sh-head">Categories</h1>
                         <p class="sh-para">
-                            <a href="{{route("index")}}" class="text-decoration-none">Home</a>
-                            / Categories</p>
+                            <a href="{{ route('index') }}" class="text-decoration-none">Home</a>
+                            / Categories
+                        </p>
                     </div>
                 </div>
             </div>
@@ -46,7 +47,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="filter-category">
-                            <div class="dropdown" id="dropdown">
+                            {{-- <div class="dropdown" id="dropdown">
                                 <h2 class=" cat-filter-btn" aria-expanded="false">
                                     Filter
                                 </h2>
@@ -58,12 +59,12 @@
                                         <option value="">By Category</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="col-12">
                             <div class="class-row">
                                 @foreach ($categories as $index => $categoryItem)
-                                    <a href="{{ route('products') }}" class="text-decoration-none">
+                                    <a href="{{ route('web.products.index') }}" class="text-decoration-none">
                                         <div class="cat-card-wrper">
                                             <div class="card-categories back-category-{{ $index + 1 }}">
                                                 <img src="{{ asset($categoryItem['img']) }}" class="img-fluid"
