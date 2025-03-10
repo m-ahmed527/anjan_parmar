@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.vendor-store.app')
 @push('styles')
 @endpush
 
@@ -21,26 +21,13 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-md-11">
                             <div class="card card-primary">
-                                <form action="{{ route('admin.product.store') }}" method="POST"
+                                <form action="{{ route('vendor.products.store') }}" method="POST"
                                     enctype="multipart/form-data" id="create-form">
                                     @csrf
                                     <div class="card-body">
                                         <br>
                                         <div class="row">
-                                            {{-- <div class="form-group col-md-4">
-                                                <label for="">Select Brand (Optional) </label>
-                                                <select name="brand[]" class="form-control" id="">
-                                                    <option value="" class="form-control" selected disabled>Select
-                                                        brand</option>
-                                                    @foreach ($brands as $brand)
-                                                        <option value="{{ $brand->id }}" class="form-control">
-                                                            {{ $brand->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('brand*')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div> --}}
+
                                             <div class="form-group col-md-4">
                                                 <label for="">Select Categories *</label>
                                                 <select name="category" class="form-control category" id="">
@@ -111,7 +98,8 @@
                                                 <div class="input-group featured-image-ka-div">
                                                     <div class="custom-file">
                                                         <input type="file" name="featured_image"
-                                                            class="custom-file-input" id="exampleInputFile" accept="image/*">
+                                                            class="custom-file-input" id="exampleInputFile"
+                                                            accept="image/*">
                                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                                             file</label>
                                                     </div>
@@ -153,7 +141,7 @@
                                     <div class="card-footer d-flex gap-20">
                                         {{-- <a href="javascript:void(0)" class="btn btn-success btn-md add-more-products"><i
                                                 class="fas fa-plus"></i></a> --}}
-                                        <a href="{{ route('admin.product.index') }}" class="btn btn-secondary">Back</a>
+                                        <a href="{{ route('vendor.products.index') }}" class="btn btn-secondary">Back</a>
                                         <button type="button" class="btn btn-primary" id="create-btn">Submit</button>
                                     </div>
 
@@ -168,7 +156,9 @@
 @section('scripts')
     <script src="{{ asset('assets/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
     <script src="{{ asset('assets/admin/plugins/select2/js/select2.full.min.js') }}"></script>
-    @include('includes.admin.scripts.create-script', ['redirectUrl' => route('admin.product.index')])
+    @include('includes.vendor-store.scripts.create-script', [
+        'redirectUrl' => route('vendor.dashboard.index'),
+    ])
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const priceInputs = document.querySelectorAll('.priceInput\\[\\]');
@@ -207,7 +197,7 @@
                         '<div class="row attribute-variants"></div>'); // Add it back
 
                     $.ajax({
-                        url: "{{ route('admin.get.attributes', '') }}/" + categorySlug,
+                        url: "{{ route('vendor.products.get.attributes', '') }}/" + categorySlug,
                         type: "GET",
 
                         success: function(response) {

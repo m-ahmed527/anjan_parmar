@@ -75,6 +75,7 @@ class StoreProductRequest extends FormRequest
         // dd($category->id);
         return [
             'category_id' => $category->id,
+            // 'user_id' => auth()->user()->id,
             'slug' => Str::slug($this->name),
             'name' => $this->name,
             'search_keywords' => $this->search_keyword ?? null,

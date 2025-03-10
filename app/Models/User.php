@@ -9,6 +9,7 @@ use App\Services\MediaService\HasMedia;
 use App\Traits\HasRolesAndPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -46,6 +47,13 @@ class User extends Authenticatable implements InteractsWithMedia
             'password' => 'hashed',
         ];
     }
+
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
 
     public function registerMediaCollection(): void
     {

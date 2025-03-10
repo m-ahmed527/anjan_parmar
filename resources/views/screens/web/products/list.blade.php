@@ -49,6 +49,8 @@
 
 <div class="col-12 mt-5">
     <div class="pagination-btns">
-        {{ $products->links('pagination::bootstrap-5') }}
+        {{-- {{ $products->links('pagination::bootstrap-5') }} --}}
+        {{-- @dd($products->appends(request()->query())) --}}
+        {{ $products->appends(request()->query())->links('pagination::bootstrap-5') }}
     </div>
 </div>

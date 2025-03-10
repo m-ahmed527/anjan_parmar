@@ -7,14 +7,24 @@
             <div class="container-fluid px-4">
                 <div class="shop-banner">
                     <div>
-                        <h1 class="sh-head">Products</h1>
-                        <p class="sh-para"><a href="{{ route('index') }}" class="text-decoration-none">Home</a> / Products</p>
+                        @if (request()->has('store'))
+                            <h1 class="sh-head">{{ $store->business_name }} Store</h1>
+                            <p class="sh-para"><a href="{{ route('index') }}" class="text-decoration-none">Home</a>
+                                / <a href="{{ route('web.stores.index') }}" class="text-decoration-none">Stores</a>
+                                /{{ $store->business_name }}
+                            </p>
+                        @else
+                            <h1 class="sh-head">Products</h1>
+                            <p class="sh-para"><a href="{{ route('index') }}" class="text-decoration-none">Home</a> /
+                                Products
+                        @endif
+                        </p>
                     </div>
                 </div>
             </div>
 
         </div>
-
+        {{-- @dd(request()->has('store')) --}}
 
         <div class="container-fluid my-5 sh-space">
             <div class="row g-4">

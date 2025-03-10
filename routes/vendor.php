@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Vendor\AccountManagementController;
+use App\Http\Controllers\Vendor\ProductManagementController;
 use App\Http\Controllers\Vendor\VendorDashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +19,15 @@ Route::middleware('auth', 'role_or_permission:Vendor')->group(function () {
         Route::post('/account-update', 'update')->name('update');
         Route::post('/account-image-update', 'updateImage')->name('update.image');
         Route::post('/account-password-update', 'updatePassword')->name('update.password');
+    });
+    Route::name('products.')->controller(ProductManagementController::class)->group(function () {
+        Route::get('/products', 'index')->name('index');
+        Route::get('/product/create', 'create')->name('create');
+        Route::get('/product/get-attribues/{category}', 'getAttribute')->name('get.attributes');
+        Route::post('/product/store', 'store')->name('store');
+        Route::get('/product/details/{product}', 'show')->name('details');
+        Route::get('/product/edit/{product}', 'edit')->name('edit');
+        Route::post('/product/update/{product}', 'update')->name('update');
+        Route::post('/product/delete/{product}', 'destroy')->name('delete');
     });
 });

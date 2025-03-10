@@ -30,6 +30,9 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('assets/admin/plugins/summernote/summernote-bs4.min.css') }}">
     {{-- <link rel="stylesheet" href="~/adminlte/dist/css/skins/skin-yellow.min.css"> --}}
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
+
     <style>
         .user-panel img {
             width: 50px !important;
@@ -218,14 +221,14 @@
                             <ul class="nav nav-treeview">
 
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link active">
+                                    <a href="{{ route('vendor.products.index') }}" class="nav-link active">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>All Products</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('vendor.products.create') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Create Product</p>
                                     </a>
@@ -315,6 +318,8 @@
     {{-- <script src="{{ asset('assets/admin/dist/js/demo.js') }}"></script> --}}
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ asset('assets/admin/dist/js/pages/dashboard.js') }}"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

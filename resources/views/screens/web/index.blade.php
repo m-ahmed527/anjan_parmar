@@ -427,7 +427,7 @@
                                 </h3>
                                 <p class="para">Ullamcorper sit amet risus nullam eget felis eget nunc. Sed lectus <br />
                                     vestibulum mattis ullamcorper velit sed ullamcorper morbi.</p>
-                                <a href="{{ route('categories-store') }}" class="anchor-btn">View All Stores</a>
+                                <a href="{{ route('web.stores.index') }}" class="anchor-btn">View All Stores</a>
                             </div>
                         </div>
                         <div class="multi-area multi-area-2">
@@ -442,7 +442,7 @@
                                 <h3 class="sys-hd-2">Seasonal Specials</h3>
                                 <p class="para">Ullamcorper sit amet risus nullam eget felis eget nunc. Sed lectus <br />
                                     vestibulum mattis ullamcorper velit sed ullamcorper morbi.</p>
-                                <a href="{{ route('categories-store') }}" class="anchor-btn">View All Stores</a>
+                                <a href="{{ route('web.stores.index') }}" class="anchor-btn">View All Stores</a>
                             </div>
                         </div>
 
@@ -803,7 +803,5 @@
 
         countdownTimer();
     </script>
-    <script>
-
-    </script>
+    <script></script>
 @endsection

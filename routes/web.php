@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\StoreController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,7 +19,7 @@ Route::view('/shipping', 'screens.web.shipping-policy.index')->name('shipping');
 Route::view('/terms-condition', 'screens.web.terms-conditions.index')->name('terms-condition');
 // Route::view('/contacts', 'screens.web.contact-us.index')->name('contacts');
 Route::view('/wishlist', 'screens.web.wishlists.index')->name('wishlist');
-Route::view('/categories-store', 'screens.web.stores.index')->name('categories-store');
+// Route::view('/categories-store', 'screens.web.stores.index')->name('categories-store');
 // Route::view('/categories-store', 'screens.web.categories-store')->name('categories-store');
 Route::view('/testimonials', 'screens.web.testimonials.index')->name('testimonials');
 
@@ -53,6 +54,10 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
     Route::name('contacts.')->controller(ContactUsController::class)->group(function () {
         Route::get('/contact-us', 'index')->name('index');
         Route::post('/contact-us/store', 'store')->name('store');
+    });
+    Route::name('stores.')->controller(StoreController::class)->group(function () {
+        Route::get('/stores', 'index')->name('index');
+        // Route::get('/category/{category}', 'show')->name('show');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');

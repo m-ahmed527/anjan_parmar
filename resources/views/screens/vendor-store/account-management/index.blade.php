@@ -174,6 +174,34 @@
                                                         <div
                                                             class="d-flex justify-content-start mb-lg-0 mb-md-3 mb-3 justify-content-md-start gap-4 justify-content-lg-between align-items-center">
                                                             <label class="profile-label d-block" for="">
+                                                                Category<span>*</span>
+                                                            </label>
+                                                            <span class="profile-label">:</span>
+                                                        </div>
+                                                    </div>
+                                                    {{-- @dd(auth()->user()->categories()->first()->id) --}}
+                                                    <div class="col-12 col-lg-9 col-xl-8">
+                                                        <select name="category" class="form-control category"
+                                                            id="">
+                                                            <option value="" class="form-control" selected disabled>
+                                                                Select
+                                                            </option>
+                                                            @foreach ($categories as $key => $category)
+                                                                <option value="{{ $category->slug }}"
+                                                                    {{ auth()->user()->categories()->first()->id == $category->id ? 'selected': ''}}
+                                                                    class="form-control">
+                                                                    {{ $category->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="profile-field-area">
+                                                <div class="row justify-content-between align-items-center">
+                                                    <div class="col-12 col-lg-3">
+                                                        <div
+                                                            class="d-flex justify-content-start mb-lg-0 mb-md-3 mb-3 justify-content-md-start gap-4 justify-content-lg-between align-items-center">
+                                                            <label class="profile-label d-block" for="">
                                                                 Owner's Name<span>*</span>
                                                             </label>
                                                             <span class="profile-label">:</span>
@@ -282,8 +310,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-9 col-xl-8">
-                                                        <input class="profile-fields" value="{{ auth()?->user()?->city }}"
-                                                            type="text" name="city" id="city" placeholder="City">
+                                                        <input class="profile-fields"
+                                                            value="{{ auth()?->user()?->city }}" type="text"
+                                                            name="city" id="city" placeholder="City">
                                                         @error('city')
                                                             <span class="text-danger">{{ $message }}</span>
                                                         @enderror

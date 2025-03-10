@@ -11,8 +11,7 @@ class VendorDashboardController extends Controller
 {
     public function index()
     {
-        return view('screens.vendor-store.index');
+        $allProductsCount = auth()->user()->products->count();
+        return view('screens.vendor-store.index', get_defined_vars());
     }
-
-
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\MediaService\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -14,6 +15,11 @@ class Product extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function category()

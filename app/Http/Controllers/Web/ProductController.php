@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\AttributeValue;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,18 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::paginate(2);
+        // dd($request->store);
+        // $products = Product::paginate(2);
+        if ($request->has('store')) {
+            $store = User::where('slug', $request->store)->first();
+            $products = $store->products()->paginate(2)->appends(['store' => $request->store]);
+        } else {
+            $products = Product::whereHas('user', function ($query) {
+                $query->where('status', 'approved');
+            })->paginate(2);
+        }
+
+        // dd($products);
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('screens.web.products.list', get_defined_vars())->render()
@@ -23,6 +35,28 @@ class ProductController extends Controller
         }
         return view('screens.web.products.index', get_defined_vars());
     }
+
+    // public function index(Request $request)
+    // {
+    //     // dd($request->all());
+    //     if ($request->has('store')) {
+    //         $store = User::where('slug', $request->store)->first();
+    //         $products = $store->products()->paginate(2)->appends(['store' => $request->store]); // Retains store filter
+    //     } else {
+    //         $products = Product::whereHas('user', function ($query) {
+    //             $query->where('status', 'approved');
+    //         })->paginate(2);
+    //     }
+
+    //     if ($request->ajax()) {
+    //         return response()->json([
+    //             'html' => view('screens.web.products.list', get_defined_vars())->render()
+    //         ]);
+    //     }
+
+    //     return view('screens.web.products.index', get_defined_vars());
+    // }
+
 
     public function fetchProducts(Request $request)
     {

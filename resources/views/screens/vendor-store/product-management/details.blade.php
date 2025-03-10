@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.vendor-store.app')
 @push('styles')
     @include('includes.admin.data-table-css')
 @endpush
@@ -25,7 +25,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class=" d-flex justify-content-end">
-                                    <a href="{{ route('admin.product.index') }}" class="btn btn-primary">Back</a>
+                                    <a href="{{ route('vendor.products.index') }}" class="btn btn-primary">Back</a>
                                 </div>
                             </div>
 
@@ -126,7 +126,7 @@
                                             </td>
 
                                             <td>
-                                                <a href="{{ route('admin.product.edit', $product->slug) }}"
+                                                <a href="{{ route('vendor.products.edit', $product->slug) }}"
                                                     class="btn btn-primary">Edit</a>
                                                 {{-- <a href="#" data-id="{{ $product->slug }}"
                                                     class="delete btn btn-danger ">Delete</a> --}}

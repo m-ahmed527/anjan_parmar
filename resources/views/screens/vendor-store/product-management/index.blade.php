@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.vendor-store.app')
 @push('styles')
     @include('includes.admin.data-table-css')
     <style>
@@ -33,8 +33,7 @@
                             <div class="card-header">
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
                                 <div class=" d-flex justify-content-end">
-                                    <a class="btn btn-primary move-btn mr-2" href="#">Make Selected</a>
-                                    <a href="{{ route('admin.product.create') }}" class="btn btn-primary">Create New
+                                    <a href="{{ route('vendor.products.create') }}" class="btn btn-primary">Create New
                                         Product</a>
                                 </div>
                             </div>
@@ -44,12 +43,7 @@
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending">
-                                                <input type="checkbox" name="premium_all" id=""
-                                                    class="premium-all"> MAKE PREMIUM
-                                            </th>
+
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -95,10 +89,7 @@
                                     <tbody>
                                         @foreach ($products as $product)
                                             <tr class="odd">
-                                                <td class="dtr-control sorting_1" tabindex="0">
-                                                    <input type="checkbox" name="premium" id=""
-                                                        class="premium-single" value="{{ $product->slug }}">
-                                                </td>
+
                                                 <td>
                                                     @if ($product->getFirstMediaUrl('featured_image'))
                                                         <img src="{{ $product->getFirstMediaUrl('featured_image') }}"
@@ -119,15 +110,15 @@
                                                         data-status="{{ $product->is_active }}">{{ $product->is_active == 1 ? 'Active' : 'Inactive' }}</a>
                                                 </td> --}}
                                                 <td class="d-flex gap-20">
-                                                    <a href="{{ route('admin.product.edit', $product->slug) }}"
+                                                    <a href="{{ route('vendor.products.edit', $product->slug) }}"
                                                         class="btn btn-primary">Edit</a>
-                                                    <form action="{{ route('admin.product.delete', $product->slug) }}"
+                                                    <form action="{{ route('vendor.products.delete', $product->slug) }}"
                                                         id="delete-form" method="POST">
                                                         @csrf
                                                         <button data-id="{{ $product->slug }}"
                                                             class="delete btn btn-danger" id="delete-btn">Delete</button>
                                                     </form>
-                                                    <a href="{{ route('admin.product.details', $product->slug) }}"
+                                                    <a href="{{ route('vendor.products.details', $product->slug) }}"
                                                         class="btn btn-info">Details</a>
                                                 </td>
                                             </tr>
@@ -146,6 +137,7 @@
 @endsection
 @section('scripts')
     @include('includes.admin.data-table-scripts')
+
     @include('includes.admin.scripts.delete-script')
     <script>
         $(document).ready(function() {
@@ -174,74 +166,5 @@
 
 
         });
-
-
-
-        $(document).on('click', 'input[name="premium_all"]', function() {
-            let isChecked = $(this).is(':checked');
-            $('input[type="checkbox"][name="premium"]').prop('checked', isChecked);
-        });
-        $(document).on('click', 'input[name="premium"]', function() {
-            let allChecked = $('input[name="premium"]:not(:checked)').length === 0;
-            $('input[name="premium_all"]').prop('checked', allChecked);
-        });
-
-        $(document).on('click', '.move-btn', function(e) {
-            e.preventDefault();
-            let slugs = [];
-            $('input[name="premium"]:checked').each(function() {
-                slugs.push($(this).val());
-            });
-            console.log(slugs);
-            if (slugs.length > 0) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, make it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "{{ route('admin.product.make.premium') }}",
-                            method: 'GET',
-                            data: {
-                                slugs: slugs,
-                            },
-                            success: function(response) {
-                                Swal.fire({
-                                    position: "center",
-                                    icon: "success",
-                                    title: response.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
-                                window.location.reload();
-                            },
-                            error: function(error) {
-                                Swal.fire({
-                                    position: "center",
-                                    icon: "error",
-                                    title: "Failed to move product!",
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
-                            }
-                        })
-                    }
-                })
-            } else {
-                Swal.fire({
-                    position: "center",
-                    icon: "warning",
-                    title: "No Rows Selected",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
-
-        })
     </script>
 @endsection

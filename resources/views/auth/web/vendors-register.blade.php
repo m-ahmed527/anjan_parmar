@@ -60,7 +60,7 @@
                     <div class="col-md-12 mb-3">
                         <div class="sd-multiSelect form-group">
                             <label for="category" class="form-label">Business Category</label>
-                            <select multiple id="current-job-role" name="category[]" class="sd-CustomSelect">
+                            <select id="current-job-role" name="category[]" class="sd-CustomSelect form-control">
                                 <option selected disabled>Select</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -148,40 +148,7 @@
             // autocomplete.addListener('place_changed', fillIn);
         }
 
-        // function fillIn() {
 
-        //     var adddesss = document.getElementById('autocompleteSearch').value;
-
-        //     var place = autocomplete.getPlace();
-        //     let city = '';
-        //     let state = '';
-        //     let zipcode = '';
-        //     let country = '';
-        //     for (const component of place.address_components) {
-        //         if (component.types.includes('locality')) {
-        //             city = component.long_name;
-        //         }
-        //         if (component.types.includes('administrative_area_level_1')) {
-        //             state = component.short_name;
-        //         }
-        //         if (component.types.includes('postal_code')) {
-        //             zipcode = component.long_name;
-        //         }
-        //         if (component.types.includes('country')) {
-        //             country = component.long_name;
-        //         }
-        //     }
-        //     // console.log(city, state, zipcode, country);
-        //     // Update input values
-        //     address = document.getElementById('autocompleteSearch').value;
-        //     document.getElementById('citySearch').value = city;
-        //     document.getElementById('stateSearch').value = state;
-        //     document.getElementById('zipcodeSearch').value = zipcode;
-        //     document.getElementById('countrySearch').value = country;
-        //     // document.getElementById('address').value = address
-
-
-        // }
 
 
 
@@ -204,19 +171,17 @@
             inpFile.value = ""
         })
 
-        $(document).ready(function() {
-            $(".sd-CustomSelect").multipleSelect({
+        // $(document).ready(function() {
+        //     $(".sd-CustomSelect").multipleSelect({
+        //         selectAll: false,
+        //         onOptgroupClick: function(view) {
+        //             $(view).parents("label").addClass("selected-optgroup");
+        //         }
+        //     });
+        //     // $(".ms-choice").text("Select business category");
+        //     $(".ms-choice").addClass("select-btn-vendor");
 
-
-                selectAll: false,
-                onOptgroupClick: function(view) {
-                    $(view).parents("label").addClass("selected-optgroup");
-                }
-            });
-            // $(".ms-choice").text("Select business category");
-            $(".ms-choice").addClass("select-btn-vendor");
-
-        });
+        // });
 
         $(document).ready(function() {
             $(document).on('click', '#vendor-register-btn', function(e) {

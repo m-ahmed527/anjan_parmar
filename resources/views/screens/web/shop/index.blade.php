@@ -9,7 +9,7 @@
                     <div>
                         <h1 class="sh-head">Abc Store</h1>
                         <p class="sh-para"><a href="{{ route('index') }}" class="text-decoration-none">Home</a>
-                            / <a href="{{ route('categories-store') }}" class="text-decoration-none">Stores</a> / Abc Store
+                            / <a href="{{ route('web.stores.index') }}" class="text-decoration-none">Stores</a> / Abc Store
                         </p>
                     </div>
                 </div>
@@ -146,8 +146,7 @@
                                                 <p class="price-products">${{ $productItem['price'] }} -
                                                     ${{ $productItem['finalPrice'] }}
                                                 </p>
-                                                <a href="#"
-                                                    class="bid-btn text-decoration-none">Buy Now</a>
+                                                <a href="#" class="bid-btn text-decoration-none">Buy Now</a>
                                             </div>
                                         </div>
                                     </div>

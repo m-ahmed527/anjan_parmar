@@ -23,7 +23,7 @@ class AdminMiddleware
             if (str_contains($request->url(), 'admin')) {
                 return redirect()->route('admin.login');
             }
-            return redirect()->route('login'); // Default user login
+            return redirect()->route('web.login'); // Default user login
         }
     }
 }

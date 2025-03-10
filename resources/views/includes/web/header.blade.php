@@ -94,7 +94,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('categories-store') }}" class="nav-link">
+                <a href="{{ route('web.stores.index') }}" class="nav-link">
                     Shop by store
                 </a>
             </li>

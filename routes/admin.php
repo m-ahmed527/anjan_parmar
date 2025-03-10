@@ -38,8 +38,8 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     Route::get('/all/products', [ProductManagementController::class, 'index'])->name('product.index');
     Route::get('/all/products/premium', [ProductManagementController::class, 'premiumIndex'])->name('product.premium.index');
     Route::get('/product/create', [ProductManagementController::class, 'create'])->name('product.create');
-    Route::get('/get-variants/{attribute}', [ProductManagementController::class, 'getVariants'])->name('get.variant');
-    Route::get('/get-selected-variants/{attribute}', [ProductManagementController::class, 'selectedVariants'])->name('get.selected.variant');
+    // Route::get('/get-variants/{attribute}', [ProductManagementController::class, 'getVariants'])->name('get.variant');
+    // Route::get('/get-selected-variants/{attribute}', [ProductManagementController::class, 'selectedVariants'])->name('get.selected.variant');
     Route::post('/product/store', [ProductManagementController::class, 'store'])->name('product.store');
     Route::post('/product/delete/{product}', [ProductManagementController::class, 'delete'])->name('product.delete');
     Route::get('/product/edit/{product}', [ProductManagementController::class, 'edit'])->name('product.edit');

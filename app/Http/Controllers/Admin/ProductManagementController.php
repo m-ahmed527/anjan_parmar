@@ -46,7 +46,8 @@ class ProductManagementController extends Controller
             DB::beginTransaction();
             $data = $request->all();
             // dd($data);
-            $product = Product::create($request->sanitized());
+            // $product = Product::create($request->sanitized());
+            $product = auth()->user()->products()->create($request->sanitized());
             $product->addMedia($request->featured_image, 'featured_image');
             if ($request->has('images')) {
                 $product->addMultipleMedia($request->images, 'multiple_images');
@@ -74,7 +75,6 @@ class ProductManagementController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
             return response([
                 "success" => false,
                 "message" => "Failed to create product. Please try again.",
@@ -160,41 +160,7 @@ class ProductManagementController extends Controller
             if ($request->has('images')) {
                 $product->updateMediaMultiple($request->images, 'multiple_images');
             }
-            // $variants = json_decode($request->variants, true);
-            // $variantIds = []; // Track updated & new variant IDs
 
-            // foreach ($variants as $variantData) {
-            //     if (isset($variantData['id']) && $variantData['id'] != null) {
-            //         // ✅ Update existing variant
-            //         $variant = $product->variants()->where('id', $variantData['id'])->first();
-            //         if ($variant) {
-            //             $variant->update([
-            //                 'price' => $variantData['price'],
-            //                 'quantity' => $variantData['quantity'],
-            //             ]);
-            //         }
-            //     } else {
-            //         // ✅ Create new variant if ID is null
-            //         $variant = $product->variants()->create([
-            //             'price' => $variantData['price'],
-            //             'quantity' => $variantData['quantity'],
-            //         ]);
-            //     }
-
-            //     // ✅ Handle attributes (existing + new variants)
-            //     $variantIds[] = $variant->id; // Store variant ID for cleanup
-            //     foreach ($variantData['attributes'] as $attributeSlug => $attributeValueId) {
-            //         $attribute = Attribute::where('slug', $attributeSlug)->first();
-            //         if ($attribute) {
-            //             $variant->attributes()->syncWithoutDetaching([
-            //                 $attribute->id => ['attribute_value_id' => $attributeValueId]
-            //             ]);
-            //         }
-            //     }
-            // }
-
-            // // ✅ Delete removed variants (only keep the updated/new ones)
-            // $product->variants()->whereNotIn('id', $variantIds)->delete();
 
             if (isset($data["attributes"])) {
                 $variants = $this->prepareVariants($data, $product);
@@ -248,9 +214,12 @@ class ProductManagementController extends Controller
     {
         try {
             DB::beginTransaction();
-            // $product->clearMediaCollection('featured_image');
-            // $product->clearMediaCollection('multiple_images');
-            $product->delete();
+            $delete = $product->delete();
+            // dd($delete);
+            if ($delete) {
+                $product->clearMediaCollection('featured_image');
+                $product->clearMediaCollection('multiple_images');
+            }
             DB::commit();
             return response()->json([
                 "message" => "Product deleted successfully.",

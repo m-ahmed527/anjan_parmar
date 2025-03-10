@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Vendor\UpdateProfileRequest;
+use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,21 +16,27 @@ class AccountManagementController extends Controller
 {
     public function index()
     {
-        return view('screens.vendor-store.account-management.index');
+        $categories = Category::all();
+        return view('screens.vendor-store.account-management.index', get_defined_vars());
     }
 
     public function update(UpdateProfileRequest $request)
     {
-        // dd($request->sanitized());
+        // dd($request->sanitized(), $request->all());
         try {
             DB::beginTransaction();
             auth()->user()->update($request->sanitized());
+            $category = Category::where('slug', $request->category)->first();
+            if ($category) {
+                auth()->user()->categories()->sync([$category->id]);
+            }
             DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => 'Profile updated successfully',
             ]);
         } catch (Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return response()->json([
                 'success' => false,

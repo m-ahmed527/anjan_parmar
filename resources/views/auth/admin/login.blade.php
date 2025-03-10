@@ -46,7 +46,7 @@
         <h2>SEAL THE DEAL</h2>
         <h3>Admin</h3>
         <p class="mb-4">Sign in </p>
-        <form method="POST" action="{{ route('login') }}" id="login-form">
+        <form method="POST" action="{{ route('web.login') }}" id="login-form">
             @csrf
             <div class="mb-3">
                 <input type="email" class="form-control" name="email" placeholder="Email" required>
