@@ -5,7 +5,8 @@
 
         <div class="shop-banner-section">
             <div class="container-fluid px-4">
-                <div class="shop-banner">
+                <div class="shop-banner"
+                    @if (request()->has('store')) style="background-image: url('{{ $store->getFirstMediaUrl('avatar') }}');" @endif>
                     <div>
                         @if (request()->has('store'))
                             <h1 class="sh-head">{{ $store->business_name }} Store</h1>

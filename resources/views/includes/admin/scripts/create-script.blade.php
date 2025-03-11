@@ -1,8 +1,14 @@
 <script>
     var redirectUrl = @json($redirectUrl);
-    console.log(@json(request()->url()));
+    // console.log(@json(request()->url()));
+    console.log(redirectUrl);
 
     $(document).ready(function() {
+        $('#create-form').on('keypress', function(e) {
+            if (e.which === 13) { // 13 is the Enter key
+                e.preventDefault();
+            }
+        });
         $(document).on('click', '#create-btn', function(e) {
             e.preventDefault();
             let form = $('#create-form');
@@ -24,11 +30,9 @@
                         variantData.attributes[attrName] = attrValue;
                     }
                 });
-                console.log();
 
                 variants.push(variantData);
             });
-            console.log(variants);
 
             // Convert variants array to JSON and append it to FormData
             formData.append("variants", JSON.stringify(variants));
@@ -42,7 +46,6 @@
                 contentType: false,
                 success: function(response) {
                     $.LoadingOverlay("hide");
-                    console.log(response);
                     if (response.success) {
                         Swal.fire({
                             position: "center",
@@ -51,7 +54,8 @@
                             showConfirmButton: false,
                             timer: 1500
                         });
-                        if (@json(request()->url()).includes('contact-us')) {
+                        if (@json(request()->url()).includes('contact-us') ||
+                            @json(request()->url()).includes('vendor-requests')) {
                             form[0].reset();
                         } else {
                             setTimeout(function() {
@@ -71,8 +75,8 @@
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: error.message,
-                            showConfirmButton: true,
+                            title: error.responseJSON.message,
+                            showConfirmButton: false,
                             timer: 2000
                         })
                     }
@@ -135,6 +139,14 @@
                     inputField.after(errorMessage);
                 }
             } else if (@json(request()->url()).includes('contact-us')) {
+                let inputField = $(
+                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                );
+                let errorMessage = $(
+                    `<span class='error-message text-danger'>${value}</span>`
+                );
+                inputField.after(errorMessage);
+            } else if (@json(request()->url()).includes('vendor-requests')) {
                 let inputField = $(
                     `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
                 );

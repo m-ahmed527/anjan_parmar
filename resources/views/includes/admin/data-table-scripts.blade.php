@@ -1,6 +1,6 @@
 <script>
     let request = "{{ request()->url() }}";
-    console.log(request);
+    // console.log(request);
 
     if (request.includes("details")) {
         $(function() {

@@ -48,7 +48,8 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
     Route::name('products.')->controller(ProductController::class)->group(function () {
         Route::get('/products', 'index')->name('index');
         Route::get('/product/{product}', 'show')->name('show');
-        Route::post('/get-variant-price/{attributeValue}', 'getVariantPrice')->name('get-variant-price');
+        // Route::post('/get-variant-price/{attributeValue}', 'getVariantPrice')->name('get-variant-price');
+        Route::post('/get-variant-price', 'getVariantPrice')->name('get-variant-price');
         Route::get('/get-variant-combinations', 'getVariantCombinations');
     });
     Route::name('contacts.')->controller(ContactUsController::class)->group(function () {

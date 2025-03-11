@@ -20,11 +20,11 @@ class ProductController extends Controller
         // $products = Product::paginate(2);
         if ($request->has('store')) {
             $store = User::where('slug', $request->store)->first();
-            $products = $store->products()->paginate(2)->appends(['store' => $request->store]);
+            $products = $store->products()->paginate(3)->appends(['store' => $request->store]);
         } else {
             $products = Product::whereHas('user', function ($query) {
                 $query->where('status', 'approved');
-            })->paginate(2);
+            })->paginate(3);
         }
 
         // dd($products);
@@ -36,26 +36,7 @@ class ProductController extends Controller
         return view('screens.web.products.index', get_defined_vars());
     }
 
-    // public function index(Request $request)
-    // {
-    //     // dd($request->all());
-    //     if ($request->has('store')) {
-    //         $store = User::where('slug', $request->store)->first();
-    //         $products = $store->products()->paginate(2)->appends(['store' => $request->store]); // Retains store filter
-    //     } else {
-    //         $products = Product::whereHas('user', function ($query) {
-    //             $query->where('status', 'approved');
-    //         })->paginate(2);
-    //     }
 
-    //     if ($request->ajax()) {
-    //         return response()->json([
-    //             'html' => view('screens.web.products.list', get_defined_vars())->render()
-    //         ]);
-    //     }
-
-    //     return view('screens.web.products.index', get_defined_vars());
-    // }
 
 
     public function fetchProducts(Request $request)
@@ -65,30 +46,7 @@ class ProductController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(Product $product)
-    // {
-    //     $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->take(4)->get();
-    //     // Extract unique attribute keys dynamically
-    //     $attributeKeys = collect();
-    //     $variants = $product->variants->map(function ($variant) use ($attributeKeys) {
-    //         $decodedAttributes = json_decode($variant->attributes, true);
-    //         $attributeKeys->push(array_keys($decodedAttributes)); // Collect all attribute keys
 
-    //         return [
-    //             'id' => $variant->id,
-    //             'attributes' => $decodedAttributes,
-    //             'price' => $variant->variant_price,
-    //         ];
-    //     });
-
-    //     // Remove duplicate attribute keys
-    //     $attributeKeys = $attributeKeys->flatten()->unique()->values();
-    //     // dd($attributeKeys, $variants);
-    //     return view('screens.web.products.show', get_defined_vars());
-    // }
 
 
     public function show($product)
@@ -110,52 +68,54 @@ class ProductController extends Controller
     // }
 
 
-    // public function getVariantPrice(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $attributeValueIds = $request->input('attribute_values', []);
-    //     dd($attributeValueIds);
-    //     if (!is_array($attributeValueIds) || empty($attributeValueIds)) {
-    //         return response()->json(['price' => null, 'error' => 'No attribute values provided.']);
-    //     }
-    //     $variant = Variant::whereHas('attributeValues', function ($query) use ($attributeValueIds) {
-    //         $query->whereIn('attribute_value_id', $attributeValueIds);
-    //     }, '=', count($attributeValueIds))->first();
-    //     // dd($variant->attributeValues);
-    //     return response()->json(['price' => $variant ? $variant->price : null]);
-    // }
-
-    public function getVariantPrice(Request $request, AttributeValue $attributeValue)
+    public function getVariantPrice(Request $request)
     {
+        // dd($request->all());
+        $attributeValueIds = $request->input('attribute_values', []);
+        // dd($attributeValueIds);
 
-        $attribute_id = $request->storedAttributeID;
-        // $combination =  $attributeValue->variants()->where('product_id', $request->product_id)->first()->attributeValues;
-        $combination =  $attributeValue->variants()->where('product_id', $request->product_id)->get();
-        // dd($combination );
-        $combinations = [];
-        foreach ($combination as $value) {
-            foreach ($value->attributeValues as $attribute) {
-
-                if ($attribute->attribute_id != $attribute_id) {
-                    $combinations[] = $attribute->id;
-                }
-            }
+        if (!is_array($attributeValueIds) || empty($attributeValueIds)) {
+            return response()->json(['price' => null, 'error' => 'No attribute values provided.']);
         }
-        // dd($combinations);
-
-        return response()->json(['success' => true, 'attribute_id' => $attribute_id, 'combinations' => $combinations]);
-        // $attributeValues = [];
-        // foreach($attributeValue->variants as $attrValue){
-        //     dd($attributeValue->variants);
-        //     foreach($attrValue->attributeValues as $attVal){
-        //         if($attributeValue->id != $attVal->id){
-        //             $attributeValues[] = $attVal->id;
-        //         }
-        //     }
-        // }
-        // dd($attributeValues);
-
+        $variant = Variant::where('product_id', $request->product_id)->whereHas('attributeValues', function ($query) use ($attributeValueIds) {
+            $query->whereIn('attribute_value_id', $attributeValueIds);
+        }, '=', count($attributeValueIds))->first();
+        // dd($variant);
+        $quantity = $variant ? $variant->quantity : null;
+        return response()->json(['price' => $variant ? $variant->price : null, 'quantity' => $quantity]);
     }
+
+    // public function getVariantPrice(Request $request, AttributeValue $attributeValue)
+    // {
+
+    //     $attribute_id = $request->storedAttributeID;
+    //     // $combination =  $attributeValue->variants()->where('product_id', $request->product_id)->first()->attributeValues;
+    //     $combination =  $attributeValue->variants()->where('product_id', $request->product_id)->get();
+    //     // dd($combination );
+    //     $combinations = [];
+    //     foreach ($combination as $value) {
+    //         foreach ($value->attributeValues as $attribute) {
+
+    //             if ($attribute->attribute_id != $attribute_id) {
+    //                 $combinations[] = $attribute->id;
+    //             }
+    //         }
+    //     }
+    //     // dd($combinations);
+
+    //     return response()->json(['success' => true, 'attribute_id' => $attribute_id, 'combinations' => $combinations]);
+    //     // $attributeValues = [];
+    //     // foreach($attributeValue->variants as $attrValue){
+    //     //     dd($attributeValue->variants);
+    //     //     foreach($attrValue->attributeValues as $attVal){
+    //     //         if($attributeValue->id != $attVal->id){
+    //     //             $attributeValues[] = $attVal->id;
+    //     //         }
+    //     //     }
+    //     // }
+    //     // dd($attributeValues);
+
+    // }
 
     // public function getVariantCombinations()
     // {

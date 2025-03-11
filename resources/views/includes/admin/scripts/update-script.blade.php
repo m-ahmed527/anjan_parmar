@@ -15,6 +15,11 @@
     });
 
     $(document).ready(function() {
+        $('#update-form').on('keypress', function(e) {
+            if (e.which === 13) { // 13 is the Enter key
+                e.preventDefault();
+            }
+        });
         $(document).on('click', '#update-btn', function(e) {
             e.preventDefault();
             let form = $('#update-form');

@@ -83,7 +83,6 @@
                                     <img src="{{ $image }}" alt="Product Image" class="gallery-img-item">
                                 </div>
                             @empty
-
                             @endforelse
                             {{-- <div class="side-image">
                                 <img src="{{ asset('assets/web/images/laptop-2.png') }}" alt="Product Image"
@@ -107,7 +106,7 @@
                         <div class="product-details">
                             <h1 class="product-title mb-3">{{ $product->name }}</h1>
                             <p class="product-description">{!! $product->description !!}</p>
-                            <p class="product-price">${{ $product->getMinPrice() }} - ${{ $product->getMaxPrice() }}</p>
+                            <p class="product-price" id="base-price">${{ $product->price }}</p>
                             @php
                                 // Group variants by attribute name
                                 $counter = 1;
@@ -132,28 +131,6 @@
                                         });
                                     })
                                     ->groupBy('attribute_name');
-
-                                // $groupedAttributes = [];
-
-                                // // Iterate through each variant
-                                // foreach ($product->variants as $variant) {
-                                //     foreach ($variant->attributes as $attribute) {
-                                //         // Ensure attribute name exists in the groupedAttributes array
-                                //         $attributeName = $attribute->name;
-
-                                //         if (!isset($groupedAttributes[$attributeName])) {
-                                //             $groupedAttributes[$attributeName] = [];
-                                //         }
-
-                                //         // Add unique values for each attribute
-                                //         foreach ($attribute->values as $value) {
-                                //             if (!in_array($value->value, $groupedAttributes[$attributeName])) {
-                                //                 $groupedAttributes[$attributeName][] = $value->value;
-                                //             }
-                                //         }
-                                //     }
-                                // }
-                                // dd($groupedAttributes);
 
                             @endphp
                             <form id="variantForm">
@@ -192,7 +169,7 @@
                             </form>
 
 
-                            <p>Selected Price: <span id="priceDisplay"></span></p>
+                            <p><span id="priceDisplay" class="text-danger"></span></p>
                             <div class="buttons-group">
                                 <div class="quantity-selection counter-area">
                                     <button class="btn  decrement">-</button>
@@ -389,7 +366,54 @@
             tabMethod(e, btnsTab[0])
         })
     </script>
+
     <script>
+        document.querySelectorAll('#variantForm .custom-radios').forEach(select => {
+            select.addEventListener('change', () => {
+
+                const form = document.getElementById('variantForm');
+                const formData = new FormData(form);
+                var basePriceDiv = document.getElementById('base-price');
+                fetch('/get-variant-price', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+
+                        // document.getElementById('priceDisplay').textContent = "Price: " + (data.price ||
+                        //     'N/A');
+                        if (data.price == null) {
+                            document.getElementById('priceDisplay').textContent =
+                                "Selected Combination is not available";
+                            basePriceDiv.textContent = "$" + @json($product->price);
+                        } else if (data.quantity == 0) {
+                            document.getElementById('priceDisplay').textContent =
+                                "Selected Combination is out of stock"
+                        } else {
+                            let priceDisplay = parseFloat(@json($product->price)) + parseFloat(
+                                data.price);
+                            document.getElementById('priceDisplay').textContent = "";
+                            basePriceDiv.textContent = "";
+                            basePriceDiv.textContent = "$" + priceDisplay;
+
+                        }
+                    })
+                    .catch(error => console.log('Error:', error));
+            });
+        });
+    </script>
+
+
+
+
+
+
+    {{-- <script>
         var storedAttributeID = @json($storedData['attribute_id']);
         document.querySelectorAll('#variantForm .custom-radios').forEach(select => {
             select.addEventListener('change', () => {
@@ -408,12 +432,12 @@
                         if (data.success && data.combinations) {
                             let validAttributeId = parseInt(data
                                 .attribute_id); // Response se valid attribute_id
-                                // let validVariantIds = data.combinations.map(item => item
-                                //     .id); // Combination array se valid variant IDs
-                                let validVariantIds = data.combinations
+                            // let validVariantIds = data.combinations.map(item => item
+                            //     .id); // Combination array se valid variant IDs
+                            let validVariantIds = data.combinations
 
-                                console.log("Valid Attribute ID:", validAttributeId);
-                                console.log("Valid Variant IDs:", validVariantIds);
+                            console.log("Valid Attribute ID:", validAttributeId);
+                            console.log("Valid Variant IDs:", validVariantIds);
 
                             // Disable all radio buttons except valid ones
                             document.querySelectorAll('#variantForm .custom-radios').forEach(radio => {
@@ -438,7 +462,10 @@
                     .catch(error => console.log('Error:', error));
             });
         });
-    </script>
+    </script> --}}
+
+
+
     {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             let variantCombinations = []; // Backend se valid combinations yahan load honge
@@ -472,9 +499,9 @@
                     });
 
                     // Sirf disable karo agar ye valid nahi hai, lekin agar ye already selected hai to enable rehne do
-                    if (!input.checked) {
-                        input.disabled = !isValid;
-                    }
+                    // if (!input.checked) {
+                    //     input.disabled = !isValid;
+                    // }
                 });
             }
 

@@ -3,6 +3,11 @@
     console.log(@json(request()->url()));
 
     $(document).ready(function() {
+        $('#create-form').on('keypress', function(e) {
+            if (e.which === 13) { // 13 is the Enter key
+                e.preventDefault();
+            }
+        });
         $(document).on('click', '#create-btn', function(e) {
             e.preventDefault();
             let form = $('#create-form');
@@ -71,7 +76,7 @@
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: error.message,
+                            title: error.responseJSON.message,
                             showConfirmButton: true,
                             timer: 2000
                         })
@@ -135,6 +140,15 @@
                     inputField.after(errorMessage);
                 }
             } else if (@json(request()->url()).includes('contact-us')) {
+                let inputField = $(
+                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                );
+                let errorMessage = $(
+                    `<span class='error-message text-danger'>${value}</span>`
+                );
+                inputField.after(errorMessage);
+            }
+             else if (@json(request()->url()).includes('request')) {
                 let inputField = $(
                     `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
                 );

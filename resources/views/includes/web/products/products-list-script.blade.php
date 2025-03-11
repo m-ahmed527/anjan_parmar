@@ -70,7 +70,7 @@
                 },
                 error: function() {
                     $('#product-container').LoadingOverlay("hide"); // Hide loader
-                    alert('Something went wrong!');
+                    console.log('Something went wrong!');
                 }
             });
         }

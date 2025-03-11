@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\TestimonialsManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\ShippingChargesManagementController;
 use App\Http\Controllers\Admin\VendorManagementController;
+use App\Http\Controllers\Admin\VendorRequestMangementController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -89,6 +90,14 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     Route::get('/order-status/change/{order}', [OrderManagementController::class, 'changeStatus'])->name('order.change.status');
     Route::get('/order/variant/details/{order}', [OrderManagementController::class, 'orderVariantDetails'])->name('order.variant.detail');
 
+    // vendor requests
+    Route::get('/all-vendor-requests', [VendorRequestMangementController::class, 'index'])->name('vendor.requests');
+    Route::get('/vendor-requests/details/{vendorRequest}', [VendorRequestMangementController::class, 'show'])->name('vendor.requests.detail');
+    Route::post('/vendor-requests/reply/{vendorRequest}', [VendorRequestMangementController::class, 'reply'])->name('vendor.requests.reply');
+    Route::get('/vendor-requests/all-replies/{vendorRequest}', [VendorRequestMangementController::class, 'allReplies'])->name('vendor.requests.all.replies');
+
+
+
     // profile
     Route::get('/profile', [ProfileManagementController::class, 'index'])->name('profile.index');
     Route::post('/profile/update', [ProfileManagementController::class, 'update'])->name('profile.update');
@@ -115,59 +124,59 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     //blogs categories
 
-    Route::get('/all-blog-categories', [BlogCategoryManagementController::class, 'index'])->name('blog.category.index');
-    Route::get('/create/blog-category', [BlogCategoryManagementController::class, 'create'])->name('blog.category.create');
-    Route::get('/detail/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'show'])->name('blog.category.show');
-    Route::get('/edit/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'edit'])->name('blog.category.edit');
-    Route::post('/store/blog-category', [BlogCategoryManagementController::class, 'store'])->name('blog.category.store');
-    Route::post('/update/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'update'])->name('blog.category.update');
-    Route::post('/delete/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'destroy'])->name('blog.category.delete');
+    // Route::get('/all-blog-categories', [BlogCategoryManagementController::class, 'index'])->name('blog.category.index');
+    // Route::get('/create/blog-category', [BlogCategoryManagementController::class, 'create'])->name('blog.category.create');
+    // Route::get('/detail/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'show'])->name('blog.category.show');
+    // Route::get('/edit/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'edit'])->name('blog.category.edit');
+    // Route::post('/store/blog-category', [BlogCategoryManagementController::class, 'store'])->name('blog.category.store');
+    // Route::post('/update/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'update'])->name('blog.category.update');
+    // Route::post('/delete/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'destroy'])->name('blog.category.delete');
 
     //blogs
-    Route::get('/all-blogs', [BlogManagementController::class, 'index'])->name('blog.index');
-    Route::get('/create/new-blog', [BlogManagementController::class, 'create'])->name('blog.create');
-    Route::post('/store', [BlogManagementController::class, 'store'])->name('blog.store');
-    Route::post('/upload-content-image', [BlogManagementController::class, 'uploadContentImage'])->name('blog.store.content.image');
+    // Route::get('/all-blogs', [BlogManagementController::class, 'index'])->name('blog.index');
+    // Route::get('/create/new-blog', [BlogManagementController::class, 'create'])->name('blog.create');
+    // Route::post('/store', [BlogManagementController::class, 'store'])->name('blog.store');
+    // Route::post('/upload-content-image', [BlogManagementController::class, 'uploadContentImage'])->name('blog.store.content.image');
 
-    Route::get('/edit/blog/{blog}', [BlogManagementController::class, 'edit'])->name('blog.edit');
-    Route::post('/update/blog/{blog}', [BlogManagementController::class, 'update'])->name('blog.update');
-    Route::get('/details/blog/{blog}', [BlogManagementController::class, 'show'])->name('blog.show');
-    Route::post('/delete/blog/{blog}', [BlogManagementController::class, 'destroy'])->name('blog.delete');
+    // Route::get('/edit/blog/{blog}', [BlogManagementController::class, 'edit'])->name('blog.edit');
+    // Route::post('/update/blog/{blog}', [BlogManagementController::class, 'update'])->name('blog.update');
+    // Route::get('/details/blog/{blog}', [BlogManagementController::class, 'show'])->name('blog.show');
+    // Route::post('/delete/blog/{blog}', [BlogManagementController::class, 'destroy'])->name('blog.delete');
 
 
-    // Notificaitons
+    // // Notificaitons
 
-    Route::get('/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notificaitons.mark.all.read');
-    Route::get('/mark-read/{id}', [NotificationController::class, 'markRead'])->name('notificaiton.mark.read');
+    // Route::get('/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notificaitons.mark.all.read');
+    // Route::get('/mark-read/{id}', [NotificationController::class, 'markRead'])->name('notificaiton.mark.read');
 
     // Testimonials
 
-    Route::get('/all-testimonials', [TestimonialsManagementController::class, 'index'])->name('testimonial.index');
-    Route::get('/create/new-testimonial', [TestimonialsManagementController::class, 'create'])->name('testimonial.create');
-    Route::post('/store/new-testimonial', [TestimonialsManagementController::class, 'store'])->name('testimonial.store');
-    Route::get('/edit/testimonial/{testimonial}', [TestimonialsManagementController::class, 'edit'])->name('testimonial.edit');
-    Route::post('/update/testimonial/{testimonial}', [TestimonialsManagementController::class, 'update'])->name('testimonial.update');
-    Route::post('/delete/testimonial/{testimonial}', [TestimonialsManagementController::class, 'delete'])->name('testimonial.delete');
+    // Route::get('/all-testimonials', [TestimonialsManagementController::class, 'index'])->name('testimonial.index');
+    // Route::get('/create/new-testimonial', [TestimonialsManagementController::class, 'create'])->name('testimonial.create');
+    // Route::post('/store/new-testimonial', [TestimonialsManagementController::class, 'store'])->name('testimonial.store');
+    // Route::get('/edit/testimonial/{testimonial}', [TestimonialsManagementController::class, 'edit'])->name('testimonial.edit');
+    // Route::post('/update/testimonial/{testimonial}', [TestimonialsManagementController::class, 'update'])->name('testimonial.update');
+    // Route::post('/delete/testimonial/{testimonial}', [TestimonialsManagementController::class, 'delete'])->name('testimonial.delete');
 
 
     //home page management
 
-    Route::get('/sliders', [PageManagementController::class, 'index'])->name('slider.management.index');
-    Route::get('/create-slider', [PageManagementController::class, 'create'])->name('slider.management.create');
-    Route::post('/create-slider', [PageManagementController::class, 'store'])->name('slider.management.store');
-    Route::get('/edit-slider/{slider}', [PageManagementController::class, 'edit'])->name('slider.management.edit');
-    Route::post('/delete-slider/{slider}', [PageManagementController::class, 'delete'])->name('slider.management.delete');
-    Route::post('/update-slider/{slider}', [PageManagementController::class, 'update'])->name('slider.management.update');
+    // Route::get('/sliders', [PageManagementController::class, 'index'])->name('slider.management.index');
+    // Route::get('/create-slider', [PageManagementController::class, 'create'])->name('slider.management.create');
+    // Route::post('/create-slider', [PageManagementController::class, 'store'])->name('slider.management.store');
+    // Route::get('/edit-slider/{slider}', [PageManagementController::class, 'edit'])->name('slider.management.edit');
+    // Route::post('/delete-slider/{slider}', [PageManagementController::class, 'delete'])->name('slider.management.delete');
+    // Route::post('/update-slider/{slider}', [PageManagementController::class, 'update'])->name('slider.management.update');
 
-    //homepage category-section management
+    // //homepage category-section management
 
-    Route::get('/homePage-category-section', [PageManagementController::class, 'viewCategorySection'])->name('home.page.category.section.index');
-    Route::get('/create-homePage-category-section/{categorySection}', [PageManagementController::class, 'editCategorySection'])->name('home.page.category.section.edit');
-    Route::post('/create-homePage-category-section/{categorySection}', [PageManagementController::class, 'updateCategorySection'])->name('home.page.category.section.update');
+    // Route::get('/homePage-category-section', [PageManagementController::class, 'viewCategorySection'])->name('home.page.category.section.index');
+    // Route::get('/create-homePage-category-section/{categorySection}', [PageManagementController::class, 'editCategorySection'])->name('home.page.category.section.edit');
+    // Route::post('/create-homePage-category-section/{categorySection}', [PageManagementController::class, 'updateCategorySection'])->name('home.page.category.section.update');
 
-    //shipping-charges-management
+    // //shipping-charges-management
 
-    Route::get('/shipping-charges', [ShippingChargesManagementController::class, 'index'])->name('shipping.charges.index');
-    Route::get('/edit-shipping-charges/{shippingCharge}', [ShippingChargesManagementController::class, 'edit'])->name('shipping.charges.edit');
-    Route::post('/edit-shipping-charges/{shippingCharge}', [ShippingChargesManagementController::class, 'update'])->name('shipping.charges.update');
+    // Route::get('/shipping-charges', [ShippingChargesManagementController::class, 'index'])->name('shipping.charges.index');
+    // Route::get('/edit-shipping-charges/{shippingCharge}', [ShippingChargesManagementController::class, 'edit'])->name('shipping.charges.edit');
+    // Route::post('/edit-shipping-charges/{shippingCharge}', [ShippingChargesManagementController::class, 'update'])->name('shipping.charges.update');
 });

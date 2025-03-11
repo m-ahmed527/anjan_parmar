@@ -49,10 +49,7 @@ class User extends Authenticatable implements InteractsWithMedia
     }
 
 
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class);
-    }
+
 
 
     public function registerMediaCollection(): void
@@ -63,5 +60,15 @@ class User extends Authenticatable implements InteractsWithMedia
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class)->withTimestamps();
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function vendorRequests(): HasMany
+    {
+        return $this->hasMany(VendorRequest::class, 'vendor_id');
     }
 }

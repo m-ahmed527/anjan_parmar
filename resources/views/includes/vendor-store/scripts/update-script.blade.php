@@ -15,7 +15,13 @@
     });
 
     $(document).ready(function() {
+        $('#update-form').on('keypress', function(e) {
+            if (e.which === 13) { // 13 is the Enter key
+                e.preventDefault();
+            }
+        });
         $(document).on('click', '#update-btn', function(e) {
+
             e.preventDefault();
             let form = $('#update-form');
             let formData = new FormData(form[0]);
@@ -146,6 +152,14 @@
                     );
                     inputField.after(errorMessage);
                 }
+            } else if (@json(request()->url()).includes('request')) {
+                let inputField = $(
+                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                );
+                let errorMessage = $(
+                    `<span class='error-message text-danger'>${value}</span>`
+                );
+                inputField.after(errorMessage);
             }
         });
     }

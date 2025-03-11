@@ -164,10 +164,10 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    {{-- <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                    <form action="{{ route('web.logout') }}" method="POST" id="logout-form">
                         @csrf
                         <button type="button" class="btn btn-primary" id="logout-btn">Logout</button>
-                    </form> --}}
+                    </form>
                 </li>
             </ul>
         </nav>
@@ -231,6 +231,31 @@
                                     <a href="{{ route('vendor.products.create') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Create Product</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="#" class="nav-link active">
+                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <p>
+                                    Requests to Admin
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="{{ route('vendor.requests.index') }}" class="nav-link active">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>All Requests</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{ route('vendor.requests.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Create Request</p>
                                     </a>
                                 </li>
                             </ul>
@@ -324,7 +349,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('scripts')
-    @include('includes.logout-script', ['redirectUrl' => route('admin.login')])
+    @include('includes.logout-script', ['redirectUrl' => route('index')])
 
 </body>
 
