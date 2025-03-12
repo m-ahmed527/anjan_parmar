@@ -2,7 +2,7 @@
 @push('styles')
     @include('includes.admin.data-table-css')
 @endpush
-@section('title', 'Categories')
+@section('title', 'Replies on a Request')
 
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>All Replies of Request ID :#{{ $vendorRequest->request_id }} </h1>
+                        <h1>All Replies of Request ID : #{{ $vendorRequest->request_id }} </h1>
                     </div>
 
 
@@ -25,10 +25,11 @@
                         <div class="card">
                             <div class="card-header">
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
-                                {{-- <div class="col-sm-12 d-flex justify-content-end">
-                                    <a href="{{ route('admin.category.create') }}" class="btn btn-primary">Create
-                                        Category</a>
-                                </div> --}}
+                                <div class="d-flex justify-content-end">
+                                    <a href="{{ route('admin.vendor.requests.detail', $vendorRequest->request_id) }}"
+                                        class="btn btn-primary mx-2">Submit a Reply</a>
+                                    <a href="{{ route('admin.vendor.requests') }}" class="btn btn-primary mx-2">Back</a>
+                                </div>
                             </div>
 
                             <div class="card-body">
@@ -44,8 +45,10 @@
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 REPLY</th>
-
-
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                STATUS</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -54,31 +57,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach ($requests as $request)
+                                        @foreach ($replies as $reply)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
-                                                    {{ $request->request_id }}</td>
+                                                    #{{ $reply->response_id }}</td>
 
                                                 <td class="dtr-control sorting_1" tabindex="1">
-                                                    {{ $request->vendor->first_name }}</td>
-
-
-                                                <td class="dtr-control sorting_1" tabindex="1">
-
-                                                    {{ $request->vendor->business_name }}<br>
-
+                                                    {{-- {{ Str::limit($reply->reply, 25, '...') }} --}}
+                                                    {{ $reply->reply }}
                                                 </td>
                                                 <td class="dtr-control sorting_1" tabindex="1">
-
-                                                    {{ $request->subject }}<br>
-
+                                                    <span
+                                                        class="badge {{ $reply->status == 'sent' ? 'badge-warning' : 'badge-success' }} p-2">
+                                                        {{ ucfirst($reply->status) }}
+                                                    </span>
                                                 </td>
                                                 <td class="d-flex gap-20">
-                                                    <a href="{{ route('admin.vendor.requests.detail', $request->request_id) }}"
+                                                    {{-- <a href="{{ route('admin.vendor.requests.detail', $request->request_id) }}"
                                                         class="btn btn-info">Details & Reply</a>
                                                     <a href="{{ route('admin.vendor.requests.detail', $request->request_id) }}"
-                                                        class="btn btn-primary">Replies</a>
-                                                    <form action="#" method="POST" id="delete-form">
+                                                        class="btn btn-primary">Replies</a> --}}
+                                                    <form
+                                                        action="{{ route('admin.vendor.requests.reply.delete', $reply->response_id) }}"
+                                                        method="POST" id="delete-form">
                                                         @csrf
                                                         <button type="button" class="btn btn-danger"
                                                             id="delete-btn">Delete</button>
@@ -86,7 +87,7 @@
 
                                                 </td>
                                             </tr>
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

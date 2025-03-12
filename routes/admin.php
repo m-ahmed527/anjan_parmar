@@ -95,6 +95,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     Route::get('/vendor-requests/details/{vendorRequest}', [VendorRequestMangementController::class, 'show'])->name('vendor.requests.detail');
     Route::post('/vendor-requests/reply/{vendorRequest}', [VendorRequestMangementController::class, 'reply'])->name('vendor.requests.reply');
     Route::get('/vendor-requests/all-replies/{vendorRequest}', [VendorRequestMangementController::class, 'allReplies'])->name('vendor.requests.all.replies');
+    Route::post('/vendor-requests/reply/delete/{vendorRequestReply}', [VendorRequestMangementController::class, 'deleteReply'])->name('vendor.requests.reply.delete');
 
 
 
@@ -146,7 +147,22 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     // // Notificaitons
 
-    // Route::get('/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notificaitons.mark.all.read');
+    Route::get('/mark-all-read', function () {
+        try {
+
+            auth()->user()->unreadNotifications->markAsRead();
+            return response()->json([
+                'success' => true,
+                'notificationCount' => count(auth()->user()->fresh()->unreadNotifications),
+                'message' => 'All notifications marked as read.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while marking all notifications as read.'
+            ], 400);
+        }
+    })->name('notificaitons.mark.all.read');
     // Route::get('/mark-read/{id}', [NotificationController::class, 'markRead'])->name('notificaiton.mark.read');
 
     // Testimonials

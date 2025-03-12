@@ -1,7 +1,7 @@
 @extends('layouts.vendor-store.app')
 @push('styles')
 @endpush
-@section('title', 'Edit Product')
+@section('title', 'Edit Request')
 
 @section('content')
     <div class="content-wrapper" style="">

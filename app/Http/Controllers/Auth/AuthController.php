@@ -50,7 +50,7 @@ class AuthController extends Controller
         $decoded = json_decode($response->getContent(), true);
         $success = $decoded['success'];
         $message = $decoded['message'];
-
+        // dd($message);
         return response()->json([
             'success' => $success,
             'message' => $message,

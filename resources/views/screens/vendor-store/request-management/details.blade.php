@@ -3,7 +3,7 @@
     @include('includes.admin.data-table-css')
 @endpush
 
-@section('title', 'Product Details')
+@section('title', 'Request Details')
 
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
@@ -108,35 +108,84 @@
                 </div>
             </div>
         </section>
-        {{-- <section class="content">
+        <section class="content">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <div class=" d-flex justify-content-start">
-                                    <h4>All Images</h4>
+                                    <h3>Replies on Request ID: #{{ $vendorRequest->request_id }}</h3>
                                 </div>
-
+                                <div class=" d-flex justify-content-end">
+                                    {{-- <a href="{{ route('vendor.requests.index') }}" class="btn btn-primary">Back</a> --}}
+                                </div>
                             </div>
+
                             <div class="card-body">
-                                <div class="imgs-multiple">
-                                    @forelse ($product->getMediaCollectionUrl('multiple_images') as $image)
-                                        <img src="{{ $image }}" alt=""
-                                            style="max-width: 150px; max-height: 150px;">
-                                    @empty
-                                        No Image Found
-                                    @endforelse
-                                </div>
+                                <table id="reply-table" class="table table-bordered table-striped dataTable dtr-inline mt-2"
+                                    aria-describedby="reply-table_info">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="reply-table"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                REPLY ID
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="reply-table"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                REPLY
+                                            </th>
+                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="reply-table"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                ACTIONS
+                                            </th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($vendorRequest->responses as $reply)
+                                            <tr class="odd">
+
+                                                <td>#{{ $reply->response_id }}</td>
+                                                <td>
+
+                                                    {{ $reply->reply }}
+                                                </td>
+
+
+                                                {{-- <td>{{ ucfirst($vendorRequest->status) }} </td>
+
+
+                                            <td><a href="{{ route('vendor.requests.edit', $vendorRequest->request_id) }}"
+                                                    class="btn btn-primary">Edit</a></td> --}}
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <form action="" id="delete-form" method="POST">
+                                    @csrf
+                                    @method('delete')
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section> --}}
+        </section>
     </div>
 @endsection
 @section('scripts')
     @include('includes.admin.data-table-scripts')
-
+    <script>
+        $(document).ready(function() {
+            // Ensure DataTable is properly initialized
+            var table = $("#reply-table").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false
+            });
+        });
+    </script>
 @endsection

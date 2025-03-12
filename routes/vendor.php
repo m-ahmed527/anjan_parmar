@@ -35,9 +35,28 @@ Route::middleware('auth', 'role_or_permission:Vendor')->group(function () {
         Route::get('/requests', 'index')->name('index');
         Route::get('/request/create', 'create')->name('create');
         Route::post('/request/store', 'store')->name('store');
-        Route::get('/request/show/{vendorRequest}', 'show')->name('show');
+        Route::get('/request/details/{vendorRequest}', 'show')->name('show');
         Route::get('/request/edit/{vendorRequest}', 'edit')->name('edit');
         Route::post('/request/update/{vendorRequest}', 'update')->name('update');
         Route::post('/request/delete/{vendorRequest}', 'destroy')->name('delete');
     });
+
+    // Notifications
+    Route::get('/mark-all-read', function () {
+        try {
+
+            auth()->user()->unreadNotifications->markAsRead();
+            // dd(auth()->user()->unreadNotifications->fresh());
+            return response()->json([
+                'success' => true,
+                'notificationCount' => count(auth()->user()->fresh()->unreadNotifications),
+                'message' => 'All notifications marked as read.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while marking all notifications as read.'
+            ], 400);
+        }
+    })->name('notificaitons.mark.all.read');
 });

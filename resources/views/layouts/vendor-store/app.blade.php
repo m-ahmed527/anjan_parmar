@@ -100,65 +100,30 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link notification-dropdown" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
-                        {{-- <span class="badge badge-warning navbar-badge">{{ count(auth()->user()->unreadNotifications) }}</span> --}}
+                        <span
+                            class="badge badge-warning navbar-badge notification-count">{{ count(auth()->user()->unreadNotifications) }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        {{-- <span class="dropdown-item dropdown-header">{{ count(auth()->user()->unreadNotifications) }}
-                            Unread Notifications</span> --}}
-                        {{-- @if (count(auth()->user()->unreadNotifications) > 0)
-                            <a href="{{ route('admin.notificaitons.mark.all.read') }}"
-                                class="dropdown-item dropdown-header">Mark As all read</a>
-                        @endif --}}
+                        <span class="dropdown-item dropdown-header">
+
+                        </span>
+
 
                         <div class="dropdown-divider"></div>
-                        {{-- @forelse (auth()->user()->unreadNotifications as $notification)
-                            @if ($notification['type'] == 'App\Notifications\SendNewSubscriptionCreated')
-                                <a href="{{ route('admin.notificaiton.mark.read', $notification['id']) }}"
-                                    class="dropdown-item">
-                                    <i class="fas fa-envelope mr-2"></i>
-                                    {{ $notification['data']['newsletter']['email'] }}
-                                    <p class="txt">has subscribed</p>
+                        @forelse (auth()->user()->notifications as $notification)
+                            <a href="{{ $notification['data']['url'] }}" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i>
+                                {{ $notification['data']['title'] }}
+                                <p class="txt"> {{ $notification['data']['message'] }}</p>
 
-                                    <div class="row d-flex align-items-center" style="justify-content: space-between">
-                                        <span class="text-muted">mark as read</span>
-                                        <span
-                                            class="text-muted text-sm">{{ \Carbon\Carbon::parse($notification['data']['newsletter']['created_at'])->diffForHumans() }}</span>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                            @elseif ($notification['type'] == 'App\Notifications\SendNewOrderCreatedNotification')
-                                <a href="{{ route('admin.notificaiton.mark.read', $notification['id']) }}"
-                                    class="dropdown-item">
-                                    <i class="fas fa-file mr-2"></i> {{ $notification['data']['order']['name'] }}
-                                    <p class="txt">has Ordered</p>
-
-                                    <div class="row d-flex align-items-center" style="justify-content: space-between">
-                                        <span class="text-muted">mark as read</span>
-                                        <span
-                                            class="text-muted text-sm">{{ \Carbon\Carbon::parse($notification['data']['order']['created_at'])->diffForHumans() }}</span>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                            @else
-                                <a href="{{ route('admin.notificaiton.mark.read', $notification['id']) }}"
-                                    class="dropdown-item">
-                                    <i class="fas fa-users mr-2"></i> {{ $notification['data']['user']['name'] }}
-                                    <p class="txt">has registered</p>
-
-                                    <div class="row d-flex align-items-center" style="justify-content: space-between">
-                                        <span class="text-muted">mark as read</span>
-                                        <span
-                                            class="text-muted text-sm">{{ \Carbon\Carbon::parse($notification['data']['user']['created_at'])->diffForHumans() }}</span>
-                                    </div>
-                                </a>
-                            @endif
-                        @empty
-                            <a href="#" class="dropdown-item">
-                                <p class="txt">No Unread Notificaions Found</p>
-
-
+                                <div class="row d-flex align-items-center" style="justify-content: end">
+                                    <span
+                                        class="text-muted text-sm">{{ $notification['created_at']->diffForHumans() }}</span>
+                                </div>
                             </a>
-                        @endforelse --}}
+                            <div class="dropdown-divider"></div>
+                        @empty
+                        @endforelse
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
@@ -350,7 +315,32 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('scripts')
     @include('includes.logout-script', ['redirectUrl' => route('index')])
+    <script>
+        $(document).ready(function() {
+            $('.notification-dropdown').on('click', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{{ route('vendor.notificaitons.mark.all.read') }}",
+                    type: 'GET',
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log("{{ count(auth()->user()->unreadNotifications) }}");
+                        console.log(response);
+                        if (response.success) {
+                            $('.notification-count').text(response.notificationCount);
+                        }
 
+                    },
+                    error: function(error) {
+                        console.log(error);
+
+
+                    }
+                })
+            })
+        })
+    </script>
 </body>
 
 </html>

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\AuthRepositoryInterface;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\NewRegistrationNotification;
 use App\Services\OtpService;
 use App\Traits\HasAuth;
 use Exception;
@@ -18,6 +19,8 @@ class AuthRepository implements AuthRepositoryInterface
         // dd(request()->has('avatar'));
         try {
             $user = User::create($data);
+            $admin = User::role('Admin')->first();
+
             if ($user) {
                 if (request()->has('avatar')) {
                     $user->addMedia(request()->avatar, 'avatar');
@@ -31,10 +34,20 @@ class AuthRepository implements AuthRepositoryInterface
                     $role = Role::where('name', 'Vendor')->first();
                     $user->roles()->sync($role->id);
                     $user->update(['status' => 'pending']);
+                    $admin->notify(new NewRegistrationNotification(
+                        "New Vendor Registered",
+                        "Vendor's Name: {$user->first_name} and Store Name: {$user->business_name}",
+                        route('admin.vendors.index'),
+                    ));
                 } else {
                     $role = Role::where('name', 'User')->first();
                     $user->roles()->sync($role->id);
                     $user->update(['status' => 'approved']);
+                    $admin->notify(new NewRegistrationNotification(
+                        "New User Registered",
+                        "User's Full Name: {$user->first_name} {$user->last_name}",
+                        route('admin.users.index'),
+                    ));
                 }
                 if (!empty($data['category'])) {
                     auth()->user()->categories()->sync($data['category']);
@@ -46,6 +59,7 @@ class AuthRepository implements AuthRepositoryInterface
                 'user' => $user,
             ]);
         } catch (Exception $e) {
+
             return response([
                 'success' => false,
                 'message' => $e->getMessage(),

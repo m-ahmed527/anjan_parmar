@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', 'Category Details')
+@section('title', 'Request Details')
 
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
@@ -49,6 +49,10 @@
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 SUBJECT</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                ACTIONS</th>
 
                                         </tr>
                                     </thead>
@@ -71,7 +75,10 @@
                                                 {{ $vendorRequest->subject }}<br>
 
                                             </td>
-
+                                            <td class="d-flex gap-20">
+                                                <a href="{{ route('admin.vendor.requests.all.replies', $vendorRequest->request_id) }}"
+                                                    class="btn btn-primary">Replies</a>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

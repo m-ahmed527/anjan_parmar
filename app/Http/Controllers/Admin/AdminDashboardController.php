@@ -7,6 +7,7 @@ use App\Models\Newsletter;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\VendorRequest;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ class AdminDashboardController extends Controller
         $allRejectedVendorsCount = User::where('status', 'rejected')->role('Vendor')->count();
         $allPendingVendorsCount = User::where('status', 'pending')->role('Vendor')->count();
         $allUsersCount = User::role('User')->count();
+        $allVendorRequestsCount = VendorRequest::count();
         // dd($allProductsCount, $premiumProductsCount, $allVendorsCount, $allApprovedVendorsCount, $allRejectedVendorsCount, $allPendingVendorsCount, $allUsersCount);
         return view('screens.admin.index', get_defined_vars());
     }

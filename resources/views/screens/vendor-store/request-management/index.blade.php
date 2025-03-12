@@ -9,7 +9,7 @@
         }
     </style>
 @endpush
-@section('title', 'Products')
+@section('title', 'Requests')
 
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
@@ -18,7 +18,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>All Products</h1>
+                        <h1>All Request</h1>
                     </div>
 
                 </div>
@@ -34,7 +34,7 @@
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
                                 <div class=" d-flex justify-content-end">
                                     <a href="{{ route('vendor.requests.create') }}" class="btn btn-primary">Create New
-                                        Product</a>
+                                        Request</a>
                                 </div>
                             </div>
 
@@ -79,7 +79,11 @@
                                                 <td>#{{ $request->request_id }}</td>
                                                 <td>{{ $request->subject }}</td>
                                                 <td>{{ Str::limit($request->message, 50, '...') }}</td>
-                                                <td>{{ ucfirst($request->status) }}</td>
+                                                <td>
+                                                    <span class="badge {{$request->status == "requested" ? "badge-warning" : "badge-success"}} p-2">
+                                                        {{ ucfirst($request->status) }}
+                                                    </span>
+                                                </td>
 
                                                 <td class="d-flex gap-20">
                                                     <a href="{{ route('vendor.requests.edit', $request->request_id) }}"
@@ -92,7 +96,7 @@
                                                             id="delete-btn">Delete</button>
                                                     </form>
                                                     <a href="{{ route('vendor.requests.show', $request->request_id) }}"
-                                                        class="btn btn-info">Details</a>
+                                                        class="btn btn-info">Details and Replies</a>
                                                 </td>
                                             </tr>
                                         @endforeach

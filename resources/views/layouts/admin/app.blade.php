@@ -3,7 +3,11 @@
 
 <head>
     <meta charset="utf-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
     <title>Admin | @yield('title')</title>
     <link rel="shortcut icon" href="{{ asset('assets/web/images/logo-headers.png') }}" type="image/x-icon" />
 
@@ -97,14 +101,16 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link notification-dropdown" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
-                        {{-- <span class="badge badge-warning navbar-badge">{{ count(auth()->user()->unreadNotifications) }}</span> --}}
+                        <span
+                            class="badge badge-warning navbar-badge notification-count">{{ count(auth()->user()->unreadNotifications) }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        {{-- <span class="dropdown-item dropdown-header">{{ count(auth()->user()->unreadNotifications) }}
-                            Unread Notifications</span> --}}
+                        <span class="dropdown-item dropdown-header">
+                            {{-- {{ count(auth()->user()->unreadNotifications) }}
+                            Unread Notifications --}}
+                        </span>
                         {{-- @if (count(auth()->user()->unreadNotifications) > 0)
-                            <a href="{{ route('admin.notificaitons.mark.all.read') }}"
-                                class="dropdown-item dropdown-header">Mark As all read</a>
+                            <a href="#" class="dropdown-item dropdown-header">Mark As all read</a>
                         @endif --}}
 
                         <div class="dropdown-divider"></div>
@@ -156,10 +162,25 @@
 
                             </a>
                         @endforelse --}}
+                        @forelse (auth()->user()->notifications as $notification)
+                            <a href="{{ $notification['data']['url'] }}" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i>
+                                {{ $notification['data']['title'] }}
+                                <p class="txt"> {{ $notification['data']['message'] }}</p>
+
+                                <div class="row d-flex align-items-center" style="justify-content: end">
+                                    <span
+                                        class="text-muted text-sm">{{ $notification['created_at']->diffForHumans() }}</span>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                        @empty
+                        @endforelse
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
                 </li>
+                {{-- @dd(auth()->user()->unreadNotifications[0]['data']['url']) --}}
                 <li class="nav-item dropdown">
                     <form action="{{ route('web.logout') }}" method="POST" id="logout-form">
                         @csrf
@@ -562,7 +583,32 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('scripts')
     @include('includes.logout-script', ['redirectUrl' => route('admin.login')])
+    <script>
+        $(document).ready(function() {
+            $('.notification-dropdown').on('click', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{{ route('admin.notificaitons.mark.all.read') }}",
+                    type: 'GET',
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log("{{ count(auth()->user()->unreadNotifications) }}");
+                        console.log(response);
+                        if (response.success) {
+                            $('.notification-count').text(response.notificationCount);
+                        }
 
+                    },
+                    error: function(error) {
+                        console.log(error);
+
+
+                    }
+                })
+            })
+        })
+    </script>
 </body>
 
 </html>

@@ -9,6 +9,10 @@ class VendorResponse extends Model
 {
     protected $guarded = ['id'];
 
+    public function getRouteKeyName()
+    {
+        return 'response_id';
+    }
     public function vendorRequest(): BelongsTo
     {
         return $this->belongsTo(VendorRequest::class, 'vendor_request_id');

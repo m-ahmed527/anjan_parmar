@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Vendor\RequestStoreRequest;
 use App\Http\Requests\Vendor\RequestUpdateRequest;
+use App\Models\User;
 use App\Models\VendorRequest;
+use App\Notifications\VendorRequestNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +20,7 @@ class RequestManagementController extends Controller
     public function index()
     {
         $requests = auth()->user()->vendorRequests;
-        // dd($requests);
+        // dd(User::role("Admin")->first());
         return view('screens.vendor-store.request-management.index', get_defined_vars());
     }
 
@@ -39,12 +41,19 @@ class RequestManagementController extends Controller
         try {
             DB::beginTransaction();
             $vendorRequest = auth()->user()->vendorRequests()->create($request->sanitized());
+            $admin = User::role("Admin")->first();
+            $admin->notify(new VendorRequestNotification(
+                "New Vendor Request",
+                "Request ID: #{$vendorRequest->request_id} is received",
+                route('admin.vendor.requests.detail', $vendorRequest->request_id)
+            ));
             DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => 'Request submitted successfully.'
             ], 200);
         } catch (Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return response()->json([
                 'success' => false,
@@ -58,6 +67,12 @@ class RequestManagementController extends Controller
      */
     public function show(VendorRequest $vendorRequest)
     {
+        // dd($vendorRequest->responses);
+        foreach ($vendorRequest->responses as $response) {
+            $response->update([
+                'status' => 'received',
+            ]);
+        }
         return view('screens.vendor-store.request-management.details', get_defined_vars());
     }
 
