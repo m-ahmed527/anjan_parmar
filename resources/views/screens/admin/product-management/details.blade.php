@@ -12,12 +12,14 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>{{ $product->name }} Details</h1>
+                        <h1>{{ $product->name }} Details
+                            {{ $product->user->hasRole('Vendor') ? ',Product of ' . $product->user->first_name : '' }}
+                        </h1>
                     </div>
                 </div>
             </div>
         </section>
-
+        {{-- @dd($product->user->hasRole('Admin')) --}}
         <section class="content">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
@@ -25,7 +27,15 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class=" d-flex justify-content-end">
-                                    <a href="{{ route('admin.product.index') }}" class="btn btn-primary">Back</a>
+                                    @if ($product->user->hasRole('Admin') && $product->is_premium == 0)
+                                        <a href="{{ route('admin.product.index') }}" class="btn btn-primary">Back</a>
+                                    @elseif ($product->is_premium == 1)
+                                        <a href="{{ route('admin.product.premium.index') }}"
+                                            class="btn btn-primary">Back</a>
+                                    @else
+                                        <a href="{{ route('admin.vendor-products.index') }}"
+                                            class="btn btn-primary">Back</a>
+                                    @endif
                                 </div>
                             </div>
 
@@ -66,11 +76,13 @@
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 Quantity
                                             </th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending">
-                                                ACTIONS
-                                            </th>
+                                            @if ($product->user->hasRole('Admin'))
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Rendering engine: activate to sort column descending">
+                                                    ACTIONS
+                                                </th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -124,13 +136,14 @@
                                                     No Quantity Found
                                                 @endforelse
                                             </td>
-
-                                            <td>
-                                                <a href="{{ route('admin.product.edit', $product->slug) }}"
-                                                    class="btn btn-primary">Edit</a>
-                                                {{-- <a href="#" data-id="{{ $product->slug }}"
+                                            @if ($product->user->hasRole('Admin'))
+                                                <td>
+                                                    <a href="{{ route('admin.product.edit', $product->slug) }}"
+                                                        class="btn btn-primary">Edit</a>
+                                                    {{-- <a href="#" data-id="{{ $product->slug }}"
                                                     class="delete btn btn-danger ">Delete</a> --}}
-                                            </td>
+                                                </td>
+                                            @endif
                                         </tr>
                                     </tbody>
                                 </table>

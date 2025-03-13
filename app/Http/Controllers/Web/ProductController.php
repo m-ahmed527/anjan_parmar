@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\StoreOfferRequest;
 use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Variant;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -85,7 +89,36 @@ class ProductController extends Controller
         return response()->json(['price' => $variant ? $variant->price : null, 'quantity' => $quantity]);
     }
 
-    // public function getVariantPrice(Request $request, AttributeValue $attributeValue)
+
+    public function makeOffer(StoreOfferRequest $request, Product $product)
+    {
+        try {
+            DB::beginTransaction();
+            $product->offers()->create($request->sanitized());
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Offer sent successfully.'
+            ]);
+        } catch (Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while sending the offer.'
+            ]);
+        }
+    }
+}
+
+
+
+
+
+
+
+// public function getVariantPrice(Request $request, AttributeValue $attributeValue)
     // {
 
     //     $attribute_id = $request->storedAttributeID;
@@ -128,4 +161,3 @@ class ProductController extends Controller
 
     //     return response()->json($combinations);
     // }
-}

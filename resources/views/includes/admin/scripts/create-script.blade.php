@@ -38,6 +38,7 @@
             formData.append("variants", JSON.stringify(variants));
 
             $.LoadingOverlay("show");
+            console.log(123);
             $.ajax({
                 url: form.attr('action'),
                 type: form.attr('method'),
@@ -45,6 +46,8 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
+
+
                     $.LoadingOverlay("hide");
                     if (response.success) {
                         Swal.fire({
@@ -55,7 +58,8 @@
                             timer: 1500
                         });
                         if (@json(request()->url()).includes('contact-us') ||
-                            @json(request()->url()).includes('vendor-requests')) {
+                            @json(request()->url()).includes('vendor-requests') ||
+                            @json(request()->url()).includes('product')) {
                             form[0].reset();
                         } else {
                             setTimeout(function() {

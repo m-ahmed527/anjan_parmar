@@ -22,16 +22,28 @@ class ProductManagementController extends Controller
 {
     public function index(): View
     {
-        $products = Product::where('is_premium', 0)->get();
+        $products = Product::where('is_premium', 0)
+            ->whereHas('user', function ($query) {
+                $query->role('Admin');
+            })
+            ->get();
         return view('screens.admin.product-management.index', get_defined_vars());
     }
     public function premiumIndex(): View
     {
-        $products = Product::where('is_premium', 1)->get();
+        $products = Product::where('is_premium', 1)->whereHas('user', function ($query) {
+            $query->role('Admin');
+        })->get();
         return view('screens.admin.product-management.premium', get_defined_vars());
     }
 
-
+    public function vednorProducts(): View
+    {
+        $products = Product::whereHas('user', function ($query) {
+            $query->role('Vendor');
+        })->get();
+        return view('screens.admin.product-management.vendor-products', get_defined_vars());
+    }
 
     public function create(): View
     {

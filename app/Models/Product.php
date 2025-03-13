@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Services\MediaService\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
     use HasMedia;
-    protected $guarded = ['íd'];
+    protected $guarded = ['id'];
 
     public function getRouteKeyName()
     {
@@ -40,6 +41,11 @@ class Product extends Model
     public function getMaxPrice()
     {
         return $this->variants()->max('price') + $this->price ?? $this->price;
+    }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(Offer::class);
     }
 
     // public function getValidCombinations()

@@ -172,16 +172,20 @@
                             <p><span id="priceDisplay" class="text-danger"></span></p>
                             <div class="buttons-group">
                                 <div class="quantity-selection counter-area">
-                                    <button class="btn  decrement">-</button>
+                                    <button class="btn  decrement decrement-2">-</button>
                                     <input type="text" readonly value="1" class="qtyValue">
-                                    <button class="btn  increment">+</button>
+                                    <button class="btn  increment increment-2">+</button>
                                 </div>
-                                <a href="{{ route('cart-page') }}" class="add-to-cart-btn text-decoration-none">Add To
-                                    Cart</a>
+                                <button href="{{ route('cart-page') }}" class="add-to-cart-btn text-decoration-none"
+                                    id="add-to-cart">Add To
+                                    Cart</button>
                             </div>
                             <div class="add-to-cart d-flex flex-column justify-content-center  gap-3 mt-3">
-                                <button class="add-cart-btn offer-btn">Make an offer</button>
-                                <a href="{{ route('checkout') }}" class="add-cart-btn buy-outline">Buy Now</a>
+                                @if ($product->is_premium)
+                                    <button class="add-cart-btn offer-btn">Make an offer</button>
+                                @endif
+                                <button href="{{ route('checkout') }}" class="add-cart-btn buy-outline" id="buy-now">Buy
+                                    Now</button>
                             </div>
                         </div>
                     </div>
@@ -321,19 +325,19 @@
             </section>
         </div>
         <x-slide-blog />
-        <x-offer-modal />
+        <x-offer-modal :$product/>
     </main>
     <script>
-        let incBtns2 = document.querySelector('.increment');
-        let decBtns2 = document.querySelector('.decrement');
+        let incBtns2 = document.querySelector('.increment-2');
+        let decBtns2 = document.querySelector('.decrement-2');
 
         incBtns2.addEventListener('click', () => {
-            let inputs = incBtns.closest('.counter-area').querySelector('input');
+            let inputs = document.querySelector('.counter-area').querySelector('input');
             inputs.value++;
         })
 
         decBtns2.addEventListener('click', () => {
-            let inputs = incBtns.closest('.counter-area').querySelector('input');
+            let inputs = document.querySelector('.counter-area').querySelector('input');
             if (inputs.value > 1) {
                 inputs.value--;
             }
@@ -370,10 +374,14 @@
     <script>
         document.querySelectorAll('#variantForm .custom-radios').forEach(select => {
             select.addEventListener('change', () => {
-
                 const form = document.getElementById('variantForm');
                 const formData = new FormData(form);
+
                 var basePriceDiv = document.getElementById('base-price');
+                var addToCartBtn = document.getElementById('add-to-cart');
+                var buyNowBtn = document.getElementById('buy-now');
+                var priceDisplayDiv = document.getElementById('priceDisplay');
+
                 fetch('/get-variant-price', {
                         method: 'POST',
                         headers: {
@@ -385,35 +393,51 @@
                     .then(data => {
                         console.log(data);
 
-                        // document.getElementById('priceDisplay').textContent = "Price: " + (data.price ||
-                        //     'N/A');
-                        if (data.price == null) {
-                            document.getElementById('priceDisplay').textContent =
-                                "Selected Combination is not available";
-                            basePriceDiv.textContent = "$" + @json($product->price);
-                        } else if (data.quantity == 0) {
-                            document.getElementById('priceDisplay').textContent =
-                                "Selected Combination is out of stock"
-                        } else {
-                            let priceDisplay = parseFloat(@json($product->price)) + parseFloat(
-                                data.price);
-                            document.getElementById('priceDisplay').textContent = "";
-                            basePriceDiv.textContent = "";
-                            basePriceDiv.textContent = "$" + priceDisplay;
+                        let basePrice = parseFloat(
+                            @json($product->price)
+                        ); // Laravel se price fetch karna sahi position pe
+                        let newPrice = data.price ? parseFloat(data.price) : 0;
 
+                        if (data.price === null) {
+                            priceDisplayDiv.textContent = "Selected Combination is not available";
+                            addToCartBtn.disabled = true;
+                            buyNowBtn.disabled = true;
+                            basePriceDiv.textContent = "$" + basePrice; // Default price dikhayein
+                        } else if (data.quantity === 0) {
+                            priceDisplayDiv.textContent = "Selected Combination is out of stock";
+                            addToCartBtn.disabled = true;
+                            buyNowBtn.disabled = true;
+                        } else {
+                            let finalPrice = basePrice + newPrice; // Naya price calculate karein
+                            priceDisplayDiv.textContent = ""; // Extra text clear karein
+                            basePriceDiv.textContent = "$" + finalPrice.toFixed(
+                                2); // Price ko 2 decimal points tak rakhein
+                            addToCartBtn.disabled = false;
+                            buyNowBtn.disabled = false;
                         }
                     })
                     .catch(error => console.log('Error:', error));
             });
         });
     </script>
+@endsection
 
 
 
 
 
 
-    {{-- <script>
+{{-- <select name="attribute_values[]" class="form-control">
+                                        @foreach ($attributeValues->unique('attribute_value') as $value)
+                                            <option value="{{ $value['attribute_value_id'] }}">
+                                                {{ $value['attribute_value'] }}
+                                            </option>
+                                        @endforeach
+                                    </select> --}}
+
+
+
+{{-- <script>
         var storedAttributeID = @json($storedData['attribute_id']);
         document.querySelectorAll('#variantForm .custom-radios').forEach(select => {
             select.addEventListener('change', () => {
@@ -466,7 +490,7 @@
 
 
 
-    {{-- <script>
+{{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             let variantCombinations = []; // Backend se valid combinations yahan load honge
 
@@ -532,7 +556,7 @@
 
 
 
-    {{-- <script>
+{{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             let priceDisplay = document.getElementById("variant-price");
 
@@ -572,11 +596,3 @@
             });
         });
     </script> --}}
-@endsection
-{{-- <select name="attribute_values[]" class="form-control">
-                                        @foreach ($attributeValues->unique('attribute_value') as $value)
-                                            <option value="{{ $value['attribute_value_id'] }}">
-                                                {{ $value['attribute_value'] }}
-                                            </option>
-                                        @endforeach
-                                    </select> --}}

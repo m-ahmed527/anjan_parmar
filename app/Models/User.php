@@ -71,4 +71,9 @@ class User extends Authenticatable implements InteractsWithMedia
     {
         return $this->hasMany(VendorRequest::class, 'vendor_id');
     }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(Offer::class);
+    }
 }

@@ -37,6 +37,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     // Products
     Route::get('/all/products', [ProductManagementController::class, 'index'])->name('product.index');
+    Route::get('/all/vendor-products', [ProductManagementController::class, 'vednorProducts'])->name('vendor-products.index');
     Route::get('/all/products/premium', [ProductManagementController::class, 'premiumIndex'])->name('product.premium.index');
     Route::get('/product/create', [ProductManagementController::class, 'create'])->name('product.create');
     // Route::get('/get-variants/{attribute}', [ProductManagementController::class, 'getVariants'])->name('get.variant');
