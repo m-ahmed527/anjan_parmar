@@ -39,51 +39,45 @@
                                 <h2 class="filter-heading">Categories</h2>
                             </div>
                             <div class="radio-list">
-                                <label for="radio_1">
-                                    <input id="radio_1" name="filter" type="radio">
-                                    <span>Luxury Products</span>
-                                </label>
-                                <label for="radio_2">
-                                    <input id="radio_2" name="filter" type="radio">
-                                    <span>Gaming Accessories</span>
-                                </label>
-                                <label for="radio_3">
-                                    <input id="radio_3" name="filter" type="radio">
-                                    <span>Smart Phones</span>
-                                </label>
-                                <label for="radio_4">
-                                    <input id="radio_4" name="filter" type="radio">
-                                    <span>Laptops & Headsets</span>
-                                </label>
-                                <label for="radio_5">
-                                    <input id="radio_5" name="filter" type="radio">
-                                    <span>Smart Watches</span>
-                                </label>
+                                @forelse ($categories as $key=> $category)
+                                    <label for="radio_{{ $key }}">
+                                        <input id="radio_{{ $key }}" name="category" type="radio"
+                                            value="{{ $category->slug }}">
+                                        <span>{{ $category->name }}</span>
+                                    </label>
+                                @empty
+                                    No categories found!
+                                @endforelse
                             </div>
                         </div>
-
+                        @php
+                            $minPrice = \App\Models\Product::min('price') ?? 0; // Agar null ho to 0
+                            $maxPrice = \App\Models\Product::max('price') ?? 100; // Agar null ho to default 100
+                            // dd($minPrice, $maxPrice);
+                        @endphp
                         <div class="filter-product-1 mb-4">
                             <div class="filter-header-1">
                                 <h2 class="filter-heading">Prices</h2>
                             </div>
                             <div class="range-area">
                                 <div class="slider-container">
-                                    <input type="range" min="0" max="100" value="20" id="minRange"
-                                        class="slider min-slider">
-                                    <input type="range" min="0" max="100" value="80" id="maxRange"
-                                        class="slider max-slider">
+                                    <input type="range" min="{{ $minPrice }}" max="{{ $maxPrice }}"
+                                        value="{{ $minPrice }}" id="minRange" class="slider min-slider">
+                                    <input type="range" min="{{ $minPrice }}" max="{{ $maxPrice }}"
+                                        value="{{ $maxPrice }}" id="maxRange" class="slider max-slider">
                                 </div>
                                 <div class="range-values">
                                     <div class="style-amount">
-                                        $<span id="minValue">20</span>
+                                        $<span id="minValue">{{ $minPrice }}</span>
                                     </div>
                                     <div class="style-amount">
-                                        $<span id="maxValue">80</span>
+                                        $<span id="maxValue">{{ $maxPrice }}</span>
                                     </div>
                                 </div>
-                                <button class="filter-button">Filter</button>
+                                {{-- <button class="filter-button" id="applyFilter">Filter</button> --}}
                             </div>
                         </div>
+
                         <div class="mb-4">
                             <div class="range-area position-relative p-0 flex-row">
                                 <img src="{{ asset('assets/web/images/sale-img.png') }}" class="img-fluid sale-img-product"
@@ -199,4 +193,59 @@
 @endsection
 @push('scripts')
     @include('includes.web.products.products-list-script')
+    <script>
+        $(document).ready(function() {
+            function applyFilters() {
+                let category = $('input[name="category"]:checked').val() ?? null; // ✅ Selected category
+                let minPrice = $('#minRange').val(); // ✅ Selected Min Price
+                let maxPrice = $('#maxRange').val(); // ✅ Selected Max Price
+                let store = "{{ request('store') }}" ?? null; // ✅ Get store from request
+
+                console.log("Category:", category, "Min:", minPrice, "Max:", maxPrice);
+
+                $.ajax({
+                    url: "{{ route('web.products.index') }}",
+                    type: 'GET',
+                    data: {
+                        store: store, // ✅ Include store parameter in AJAX request
+                        category: category,
+                        min_price: minPrice,
+                        max_price: maxPrice
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        $('#product-container').html(response.html);
+                        var showingResults = $('#showing-results').html();
+                        $('#showing-results-container').html(showingResults);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // ✅ Debounce function to reduce multiple AJAX calls
+
+            function debounce(func, delay) {
+                let timer;
+                return function() {
+                    clearTimeout(timer);
+                    timer = setTimeout(func, delay);
+                };
+            }
+
+            // ✅ Apply debounce on price range change
+            let debouncedApplyFilters = debounce(applyFilters, 500);
+
+            // ✅ Filter on Category Change (Immediate)
+            $('input[name="category"]').on('change', function() {
+                applyFilters();
+            });
+
+            // ✅ Filter on Price Slider Change (Delayed)
+            $('#minRange, #maxRange').on('input change', function() {
+                debouncedApplyFilters();
+            });
+        });
+    </script>
 @endpush

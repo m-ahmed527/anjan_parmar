@@ -269,6 +269,64 @@ $(document).ready(function () {
     });
 });
 
+function initializeSlick() {
+    if ($(window).width() < 1240) {
+        console.log("hello");
+
+        $(".side-images-wrap").slick({
+            slidesToShow: 4,
+            slidesToScroll: 3,
+            dots: false,
+            arrows: true,
+            vertical: false,
+            verticalSwiping: false,
+            infinite: true,
+            prevArrow: $(".previous-btn-2"),
+            nextArrow: $(".next-btn-2"),
+            responsive: [
+                {
+                    breakpoint: 991,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 2,
+                    },
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 500,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+            ],
+        });
+    } else {
+        $(".side-images-wrap").slick({
+            slidesToShow: 3,
+            slidesToScroll: 2,
+            dots: false,
+            arrows: true,
+            vertical: true,
+            verticalSwiping: true,
+            infinite: true,
+            prevArrow: $(".previous-btn-2"),
+            nextArrow: $(".next-btn-2"),
+        });
+    }
+}
+
+$(document).ready(function () {
+    initializeSlick();
+});
+
+
 $(document).ready(function () {
     $(".search-btn-menu").click(function () {
         const $offCanva = $(".off-canva-custom");

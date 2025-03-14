@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BrandManagementController;
 use App\Http\Controllers\Admin\CategoryManagementController;
 use App\Http\Controllers\Admin\CategoryTypeManegementController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\OfferManagementController;
 use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\PageManagementController;
 use App\Http\Controllers\Admin\ProductManagementController;
@@ -48,6 +49,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     Route::post('/product/update/{product}', [ProductManagementController::class, 'update'])->name('product.update');
     Route::get('/product/make-premium', [ProductManagementController::class, 'makePremium'])->name('product.make.premium');
     Route::get('/product/remove-premium', [ProductManagementController::class, 'removePremium'])->name('product.remove.premium');
+    Route::get('/product/premium/offers', [ProductManagementController::class, 'productOffers'])->name('product.premium.offers');
 
     Route::get('/product/details/{product}', [ProductManagementController::class, 'show'])->name('product.details');
     // change product status
@@ -90,6 +92,18 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     Route::get('/order/details/{order}', [OrderManagementController::class, 'orderDetails'])->name('order.details');
     Route::get('/order-status/change/{order}', [OrderManagementController::class, 'changeStatus'])->name('order.change.status');
     Route::get('/order/variant/details/{order}', [OrderManagementController::class, 'orderVariantDetails'])->name('order.variant.detail');
+
+    // offers
+    Route::get('/all-offers', [OfferManagementController::class, 'index'])->name('offers.index');
+    Route::get('/offer/details/{offer}', [OfferManagementController::class, 'show'])->name('offer.details');
+    // Route::get('/offer-status/change/{offer}', [OfferManagementController::class, 'changeStatus'])->name('offer.change.status');
+    // Route::get('/offer/variant/details/{offer}', [OfferManagementController::class, 'offerVariantDetails'])->name('offer.variant.detail');
+
+    // vendor requests
+    Route::get('/all-vendor-requests', [VendorRequestMangementController::class, 'index'])->name('vendor.requests');
+    Route::get('/vendor-requests/details/{vendorRequest}', [VendorRequestMangementController::class, 'show'])->name('vendor.requests.detail');
+
+
 
     // vendor requests
     Route::get('/all-vendor-requests', [VendorRequestMangementController::class, 'index'])->name('vendor.requests');

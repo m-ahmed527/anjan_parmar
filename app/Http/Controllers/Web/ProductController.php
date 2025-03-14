@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Filters\CategoryFilter;
+use App\Filters\PriceFilter;
+use App\Filters\ProductFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreOfferRequest;
 use App\Models\AttributeValue;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Variant;
@@ -20,23 +24,48 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->store);
+        // dd($request->all());
         // $products = Product::paginate(2);
-        if ($request->has('store')) {
+        $categories = Category::all();
+        // if ($request->has('store')) {
+        //     $store = User::where('slug', $request->store)->first();
+        //     $products = $store->products()->paginate(3)->appends(['store' => $request->store]);
+        // } else {
+        //     $products = Product::whereHas('user', function ($query) {
+        //         $query->where('status', 'approved');
+        //     })->filter([
+        //         CategoryFilter::class,
+        //         PriceFilter::class,
+        //     ])->paginate(3);
+        // }
+        $query = Product::whereHas('user', function ($q) {
+            $q->where('status', 'approved');
+        });
+
+        // ✅ Check if store filter is applied
+        if ($request->has('store') && $request->store) {
             $store = User::where('slug', $request->store)->first();
-            $products = $store->products()->paginate(3)->appends(['store' => $request->store]);
-        } else {
-            $products = Product::whereHas('user', function ($query) {
-                $query->where('status', 'approved');
-            })->paginate(3);
+            if ($store) {
+                $query = $store->products(); // Apply store filter
+            }
         }
 
-        // dd($products);
+        // ✅ Apply Category & Price Filters
+        $query = $query->filter([
+            CategoryFilter::class,
+            PriceFilter::class,
+        ]);
+
+        // ✅ Apply Pagination
+        $products = $query->paginate(6)->appends($request->query());
+
+        // ✅ Handle AJAX Response
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('screens.web.products.list', get_defined_vars())->render()
             ]);
         }
+
         return view('screens.web.products.index', get_defined_vars());
     }
 

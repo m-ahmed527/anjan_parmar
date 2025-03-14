@@ -80,11 +80,7 @@
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 DISCOUNT TYPE
                                             </th>
-                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending">
-                                                STATUS
-                                            </th> --}}
+
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -114,21 +110,21 @@
                                                 <td>{{ $product->discount_type == 'price' ? '$' : '' }}{{ $product->discount }}
                                                 </td>
                                                 <td>{{ $product->discount_type }}</td>
-                                                {{-- <td>
-                                                    <a href="#" data-id="{{ $product->slug }}" id="status"
-                                                        data-status="{{ $product->is_active }}">{{ $product->is_active == 1 ? 'Active' : 'Inactive' }}</a>
-                                                </td> --}}
+
                                                 <td class="d-flex gap-20">
                                                     <a href="{{ route('admin.product.edit', $product->slug) }}"
                                                         class="btn btn-primary">Edit</a>
+
+                                                    <a href="{{ route('admin.product.details', $product->slug) }}"
+                                                        class="btn btn-info">Details</a>
+                                                    <a href="{{ route('admin.product.premium.offers', ['product' => $product->slug]) }}"
+                                                        class="btn btn-success">Offers</a>
                                                     <form action="{{ route('admin.product.delete', $product->slug) }}"
                                                         id="delete-form" method="POST">
                                                         @csrf
                                                         <button data-id="{{ $product->slug }}"
                                                             class="delete btn btn-danger" id="delete-btn">Delete</button>
                                                     </form>
-                                                    <a href="{{ route('admin.product.details', $product->slug) }}"
-                                                        class="btn btn-info">Details</a>
                                                 </td>
                                             </tr>
                                         @endforeach

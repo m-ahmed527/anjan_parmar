@@ -372,6 +372,12 @@
                             </ul>
                         </li>
                         <li class="nav-item mb-3">
+                            <a href="{{ route('admin.offers.index') }}" class="nav-link active">
+                                <p> Offers Management</p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item mb-3">
                             <a href="{{ route('admin.vendor.requests') }}" class="nav-link active">
                                 <p> Vendor's Requests</p>
                             </a>

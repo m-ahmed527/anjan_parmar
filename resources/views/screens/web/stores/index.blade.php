@@ -86,7 +86,8 @@
                                     </div>
                                     <div class="store-details">
                                         <h5 class="store-title">{{ $store['store']->business_name }}</h5>
-                                        <p class="store-description">{{ $store['store']->categories()->first()->name }}</p>
+                                        <p class="store-description">
+                                            {{ $store['store']?->categories()?->first()?->name ?: 'No Category' }}</p>
                                         <a href="{{ route('web.products.index', ['store' => $store['store']->slug]) }}"
                                             class="btn visit-btn">Visit Store</a>
                                     </div>

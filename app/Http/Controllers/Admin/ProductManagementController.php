@@ -292,7 +292,12 @@ class ProductManagementController extends Controller
         }
     }
 
-
+    public function productOffers(Request $request)
+    {
+        $product = Product::whereSlug($request->product)->first();
+        $offers = $product->offers;
+        return view('screens.admin.offers-management.index', get_defined_vars());
+    }
 
 
     public function changeStatus(Product $product)

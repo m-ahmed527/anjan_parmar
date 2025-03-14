@@ -55,7 +55,6 @@
         }
     </style>
     <main class="" style="background: #fcf8ee75;">
-
         <section class="shop-banner-section">
             <div class="container-fluid px-4">
                 <div class="shop-banner">
@@ -72,7 +71,8 @@
         <div class="sh-space padd-small">
             <div class="container-fluid px-4">
                 <div class="row row-gap-3">
-                    <div class="col-xl-2 col-12 p-0">
+                    <div class="col-xl-2 col-12 p-0 column-sliders">
+
                         <div class="side-images-wrap">
                             <div class="side-image" style="border:2px solid #4f7eff">
                                 <img src="{{ $product->getFirstMediaUrl('featured_image') }}" alt="Product Image"
@@ -84,6 +84,7 @@
                                 </div>
                             @empty
                             @endforelse
+
                             {{-- <div class="side-image">
                                 <img src="{{ asset('assets/web/images/laptop-2.png') }}" alt="Product Image"
                                     class="gallery-img-item">
@@ -92,6 +93,10 @@
                                 <img src="{{ asset('assets/web/images/laptop.png') }}" alt="Product Image"
                                     class="gallery-img-item">
                             </div> --}}
+                        </div>
+                        <div class="slider-btns-2">
+                            <button class="previous-btn-2"><i class="fa-solid fa-arrow-left"></i></button>
+                            <button class="next-btn-2"><i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-6 col-12">
@@ -325,7 +330,7 @@
             </section>
         </div>
         <x-slide-blog />
-        <x-offer-modal :$product/>
+        <x-offer-modal :$product />
     </main>
     <script>
         let incBtns2 = document.querySelector('.increment-2');
@@ -347,8 +352,11 @@
         let img = document.querySelectorAll('.side-image');
         img.forEach(item => {
             item.addEventListener('click', () => {
+
                 img.forEach(img => img.style.border = "1px solid gray")
                 const imgTag = item.querySelector("img");
+                console.log(imgTag);
+
                 document.querySelector('.img-change').src = imgTag.src;
                 item.style.border = "2px solid #4f7eff";
             })
@@ -419,6 +427,22 @@
                     .catch(error => console.log('Error:', error));
             });
         });
+
+        function updateButtonIcons() {
+            let previousBtn = document.querySelector(".previous-btn-2 i");
+            let nextBtn = document.querySelector(".next-btn-2 i");
+
+            let isMobile = window.innerWidth < 1200;
+
+            previousBtn.className = `fa-solid ${isMobile ? "fa-arrow-left" : "fa-arrow-up"}`;
+            nextBtn.className = `fa-solid ${isMobile ? "fa-arrow-right" : "fa-arrow-down"}`;
+        }
+
+        // Page load pe chalayega
+        updateButtonIcons();
+
+        // Window resize hone pe bhi chalayega
+        window.addEventListener("resize", updateButtonIcons);
     </script>
 @endsection
 

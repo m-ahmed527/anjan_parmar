@@ -4,6 +4,11 @@
 @section('title', 'Edit Product')
 
 @section('content')
+    @php
+        $url = str_contains(url()->previous(), 'premium')
+            ? route('admin.product.premium.index')
+            : route('admin.product.index');
+    @endphp
     <div class="content-wrapper" style="">
 
         <section class="content-header">
@@ -144,7 +149,6 @@
                                                 {{-- @dd($variant->attributeValues) --}}
                                                 <div class="row attribute-variants">
                                                     @foreach ($variant->attributeValues as $attribute)
-
                                                         <div class="form-group col-md-4">
                                                             <label>{{ $attribute->attribute->name }}</label>
                                                             <select name="attributes[{{ $attribute->attribute->slug }}][]"
@@ -155,7 +159,7 @@
                                                                 @foreach ($attribute->attribute->values as $value)
                                                                     <option value="{{ $value->id }}"
                                                                         {{ $attribute->id == $value->id ? 'selected' : '' }}>
-                                                                        {{$value->value }}
+                                                                        {{ $value->value }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -184,15 +188,15 @@
                                                     {{-- Price Field --}}
                                                     <div class="form-group col-md-4">
                                                         <label>Price</label>
-                                                        <input type="number" class="form-control variant_price" name="variant_price[]"
-                                                            value="{{ $variant->price }}">
+                                                        <input type="number" class="form-control variant_price"
+                                                            name="variant_price[]" value="{{ $variant->price }}">
                                                     </div>
 
                                                     {{-- Quantity Field --}}
                                                     <div class="form-group col-md-4">
                                                         <label>Quantity</label>
-                                                        <input type="number" class="form-control quantity" name="quantity[]"
-                                                            value="{{ $variant->quantity }}">
+                                                        <input type="number" class="form-control quantity"
+                                                            name="quantity[]" value="{{ $variant->quantity }}">
                                                     </div>
 
                                                     {{-- Remove Button --}}
@@ -220,7 +224,7 @@
 
                                     </div>
                                     <div class="card-footer d-flex gap-20">
-                                        <a href="{{ route('admin.product.index') }}" class="btn btn-secondary">Back</a>
+                                        <a href="{{ $url }}" class="btn btn-secondary">Back</a>
                                         <button type="button" class="btn btn-primary" id="update-btn">Submit</button>
                                     </div>
 
@@ -231,11 +235,12 @@
             </section>
         </section>
     </div>
+
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
     <script src="{{ asset('assets/admin/plugins/select2/js/select2.full.min.js') }}"></script>
-    @include('includes.admin.scripts.update-script', ['redirectUrl' => route('admin.product.index')])
+    @include('includes.admin.scripts.update-script', ['redirectUrl' => $url])
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const priceInputs = document.querySelectorAll('.priceInput\\[\\]');

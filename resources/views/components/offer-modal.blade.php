@@ -1,6 +1,6 @@
 @props(['product'])
 {{-- @dd($product) --}}
-<div class="offer-modal-area">
+{{-- <div class="offer-modal-area">
     <div class="custom-offer-modal">
         <div class="modal-offer-header">
             <h3>Make an Offer</h3>
@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js">
@@ -69,35 +69,40 @@
     let offerInput = document.querySelector('#offer-value');
     let offerQuantity = document.querySelector('#offer-quantity');
 
-    counterInput.readOnly = true;
-    incBtns.addEventListener('click', () => {
-        let inputs = incBtns.closest('.counter-area-2').querySelector('input');
-        inputs.value++;
-        let value = offerInput.value;
-        let quantity = offerQuantity.value;
 
-        calculateTotal(value, quantity)
-    })
+    if (counterInput) {
+        counterInput.readOnly = true;
 
-    decBtns.addEventListener('click', () => {
-        let inputs = incBtns.closest('.counter-area-2').querySelector('input');
-        if (inputs.value > 1) {
-            inputs.value--;
+        incBtns.addEventListener('click', () => {
+            let inputs = incBtns.closest('.counter-area-2').querySelector('input');
+            inputs.value++;
             let value = offerInput.value;
             let quantity = offerQuantity.value;
 
             calculateTotal(value, quantity)
-        }
-    })
-    offerInput.addEventListener('input', function() {
-        // Validate input to ensure it's a number with no decimals
-        let value = this.value;
-        let quantity = offerQuantity.value;
-        console.log(value, quantity);
+        })
 
-        calculateTotal(value, quantity)
+        decBtns.addEventListener('click', () => {
+            let inputs = incBtns.closest('.counter-area-2').querySelector('input');
+            if (inputs.value > 1) {
+                inputs.value--;
+                let value = offerInput.value;
+                let quantity = offerQuantity.value;
 
-    })
+                calculateTotal(value, quantity)
+            }
+        })
+        offerInput.addEventListener('input', function() {
+            // Validate input to ensure it's a number with no decimals
+            let value = this.value;
+            let quantity = offerQuantity.value;
+            console.log(value, quantity);
+
+            calculateTotal(value, quantity)
+
+        })
+    }
+
 
 
     // Calculate total price based on offer value and quantity
@@ -136,7 +141,7 @@
                             timer: 1500
                         });
                         form[0].reset();
-                        $(".close-offer-modal").trigger("click"); 
+                        $(".close-offer-modal").trigger("click");
                     }
                 },
                 error: function(error) {
