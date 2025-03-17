@@ -86,7 +86,7 @@
                 </div>
                 <div class="col-lg-5 px-5 justify-content-center form-area-block">
                     <div>
-                        <form action="{{ route('contacts.store') }}" method="POST" class="form-block" id="create-form">
+                        <form action="{{ route('web.contacts.store') }}" method="POST" class="form-block" id="create-form">
                             @csrf
                             <input type="text" name="name" placeholder="Name">
                             <input type="email" name="email" placeholder="Email Address">
@@ -101,7 +101,7 @@
     </main>
 @endsection
 @push('scripts')
-    @include('includes.admin.scripts.create-script', ['redirectUrl' => route('contacts.index')])
+    @include('includes.admin.scripts.create-script', ['redirectUrl' => route('web.contacts.index')])
     <script>
         var phoneInput = document.getElementById('phone');
 

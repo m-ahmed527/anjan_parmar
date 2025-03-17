@@ -250,6 +250,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @stack('scripts')
 @include('includes.logout-script', ['redirectUrl' => route('index')])
+@include('includes.web.products.add-to-wishilist-script')
 </body>
 
 </html>

@@ -76,4 +76,20 @@ class User extends Authenticatable implements InteractsWithMedia
     {
         return $this->hasMany(Offer::class);
     }
+
+
+    public function wishlist()
+    {
+        return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
+    }
+
+    public function hasWishlisted($productId)
+    {
+        return $this->wishlist()->where('product_id', $productId)->exists();
+    }
+
+    public function wishlistCount()
+    {
+        return $this->wishlist()->count();
+    }
 }

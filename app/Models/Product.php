@@ -79,6 +79,12 @@ class Product extends Model
             return ($this->price - $this->discount);
         }
     }
+
+
+    public function wishlistedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'wishlists')->withTimestamps();
+    }
     public function registerMediaCollection(): void
     {
         $this->addMediaCollection('featured_image')->single();

@@ -7,7 +7,7 @@
         </a>
         <div class="card password-reset-card">
             <h2 class="text-center mb-4">Reset Password</h2>
-            <form method="POST" action="{{ route('password.update') }}" id="password-reset-form">
+            <form method="POST" action="{{ route('web.password.update') }}" id="password-reset-form">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
                 <div class="mb-3">
@@ -28,7 +28,7 @@
                 <button type="button" class="btn btn-primary w-100" id="reset-password-btn">Reset Password</button>
             </form>
             <p class="mt-3 text-center">
-                <a href="{{ route('login') }}" id="backToLogin" class="back-to-login">Back to Login</a>
+                <a href="{{ route('web.login') }}" id="backToLogin" class="back-to-login">Back to Login</a>
             </p>
         </div>
     </div>
@@ -62,7 +62,7 @@
                             timer: 1500
                         });
                         setTimeout(function() {
-                            window.location.href = "{{ route('login') }}";
+                            window.location.href = "{{ route('web.login') }}";
                         }, 1000)
                     } else {
                         Swal.fire({

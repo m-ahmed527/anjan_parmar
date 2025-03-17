@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreContactRequest;
 use App\Models\ContactUs;
+use App\Models\User;
+use App\Notifications\NewContactNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +22,13 @@ class ContactUsController extends Controller
     {
         try {
             DB::beginTransaction();
-
+            $admin = User::role('Admin')->first();
             $contact = ContactUs::create($request->sanitized());
+            $admin->notify(new NewContactNotification(
+                'New Contact Recieved',
+                "{$contact->name} wants to Conatct You",
+                route('admin.contact.detail', $contact->id),
+            ));
             DB::commit();
             return response()->json([
                 'success' => true,

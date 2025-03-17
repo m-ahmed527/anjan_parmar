@@ -234,18 +234,18 @@ btns.forEach((button) => {
 // });
 
 
-const heartBtn = document.querySelectorAll(".heart-save-btn");
+// const heartBtn = document.querySelectorAll(".heart-save-btn");
 
-heartBtn.forEach(saveBtn => {
-    saveBtn.addEventListener("click", () => {
-        const icon = saveBtn.querySelector("i");
-        if (icon.classList.contains("fa-regular")) {
-            icon.classList.replace("fa-regular", "fa-solid")
-        } else {
-            icon.classList.replace("fa-solid", "fa-regular")
-        }
-    })
-});
+// heartBtn.forEach(saveBtn => {
+//     saveBtn.addEventListener("click", () => {
+//         const icon = saveBtn.querySelector("i");
+//         if (icon.classList.contains("fa-regular")) {
+//             icon.classList.replace("fa-regular", "fa-solid")
+//         } else {
+//             icon.classList.replace("fa-solid", "fa-regular")
+//         }
+//     })
+// });
 
 const offerBtn = document.querySelectorAll(".offer-btn");
 const closeBtn = document.querySelectorAll(".close-offer-modal");

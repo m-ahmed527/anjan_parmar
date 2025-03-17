@@ -36,10 +36,10 @@
 
         <ul class="nav-links-main">
             <li class="position-relative">
-                <a href="{{ route('wishlist') }}" class="btn-style heart-btn text-decoration-none">
+                <a href="{{ route('web.wishlist.index') }}" class="btn-style heart-btn text-decoration-none">
                     <i class="fa fa-heart"></i>
                 </a>
-                <span class="number-badge">0</span>
+                <span class="number-badge wishlist-count">{{ auth()?->user()?->wishlistCount() }}</span>
             </li>
             <li class="position-relative">
                 <a href="{{ route('cart-page') }}" class="cart-price-area text-decoration-none">

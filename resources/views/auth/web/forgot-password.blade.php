@@ -7,7 +7,7 @@
         </a>
         <div class="card password-reset-card">
             <h2 class="text-center mb-4">Forgot Password</h2>
-            <form method="POST" action="{{ route('password.email') }}" id="forgot-password-form">
+            <form method="POST" action="{{ route('web.password.email') }}" id="forgot-password-form">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
@@ -18,7 +18,7 @@
                     id="forgot-password-btn">Send</button>
             </form>
             <p class="mt-3 text-center">
-                <a href="{{ route('login') }}" id="backToLogin" class="back-to-login">Back to Login</a>
+                <a href="{{ route('web.login') }}" id="backToLogin" class="back-to-login">Back to Login</a>
             </p>
         </div>
     </div>

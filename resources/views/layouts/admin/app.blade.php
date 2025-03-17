@@ -162,7 +162,7 @@
 
                             </a>
                         @endforelse --}}
-                        @forelse (auth()->user()->notifications as $notification)
+                        @forelse (auth()->user()->notifications->take(5) as $notification)
                             <a href="{{ $notification['data']['url'] }}" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i>
                                 {{ $notification['data']['title'] }}
@@ -382,6 +382,11 @@
                                 <p> Vendor's Requests</p>
                             </a>
 
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.contact.index') }}" class="nav-link active">
+                                <p> Contacts Management</p>
+                            </a>
                         </li>
                         <li class="nav-item mb-3">
                             <a href="{{ route('admin.profile.index') }}" class="nav-link active">

@@ -46,9 +46,7 @@ class ApplicationBuilder
     /**
      * Create a new application builder instance.
      */
-    public function __construct(protected Application $app)
-    {
-    }
+    public function __construct(protected Application $app) {}
 
     /**
      * Register the standard kernel classes for the application.
@@ -149,7 +147,8 @@ class ApplicationBuilder
      * @param  callable|null  $then
      * @return $this
      */
-    public function withRouting(?Closure $using = null,
+    public function withRouting(
+        ?Closure $using = null,
         array|string|null $web = null,
         array|string|null $api = null,
         ?string $commands = null,
@@ -157,8 +156,8 @@ class ApplicationBuilder
         ?string $pages = null,
         ?string $health = null,
         string $apiPrefix = 'api',
-        ?callable $then = null)
-    {
+        ?callable $then = null
+    ) {
         if (is_null($using) && (is_string($web) || is_array($web) || is_string($api) || is_array($api) || is_string($pages) || is_string($health)) || is_callable($then)) {
             $using = $this->buildRoutingCallback($web, $api, $pages, $health, $apiPrefix, $then);
 
@@ -195,13 +194,14 @@ class ApplicationBuilder
      * @param  callable|null  $then
      * @return \Closure
      */
-    protected function buildRoutingCallback(array|string|null $web,
+    protected function buildRoutingCallback(
+        array|string|null $web,
         array|string|null $api,
         ?string $pages,
         ?string $health,
         string $apiPrefix,
-        ?callable $then)
-    {
+        ?callable $then
+    ) {
         return function () use ($web, $api, $pages, $health, $apiPrefix, $then) {
             if (is_string($api) || is_array($api)) {
                 if (is_array($api)) {
@@ -231,7 +231,7 @@ class ApplicationBuilder
                         $exception = $e->getMessage();
                     }
 
-                    return response(View::file(__DIR__.'/../resources/health-up.blade.php', [
+                    return response(View::file(__DIR__ . '/../resources/health-up.blade.php', [
                         'exception' => $exception,
                     ]), status: $exception ? 500 : 200);
                 });
@@ -253,9 +253,11 @@ class ApplicationBuilder
                 $callback();
             }
 
-            if (is_string($pages) &&
+            if (
+                is_string($pages) &&
                 realpath($pages) !== false &&
-                class_exists(Folio::class)) {
+                class_exists(Folio::class)
+            ) {
                 Folio::route($pages, middleware: $this->pageMiddleware);
             }
 
@@ -275,7 +277,7 @@ class ApplicationBuilder
     {
         $this->app->afterResolving(HttpKernel::class, function ($kernel) use ($callback) {
             $middleware = (new Middleware)
-                ->redirectGuestsTo(fn () => route('login'));
+                ->redirectGuestsTo(fn() => route('web.login'));
 
             if (! is_null($callback)) {
                 $callback($middleware);
@@ -319,8 +321,8 @@ class ApplicationBuilder
         }
 
         $this->app->afterResolving(ConsoleKernel::class, function ($kernel) use ($commands) {
-            [$commands, $paths] = (new Collection($commands))->partition(fn ($command) => class_exists($command));
-            [$routes, $paths] = $paths->partition(fn ($path) => is_file($path));
+            [$commands, $paths] = (new Collection($commands))->partition(fn($command) => class_exists($command));
+            [$routes, $paths] = $paths->partition(fn($path) => is_file($path));
 
             $this->app->booted(static function () use ($kernel, $commands, $paths, $routes) {
                 $kernel->addCommands($commands->all());
@@ -341,7 +343,7 @@ class ApplicationBuilder
     protected function withCommandRouting(array $paths)
     {
         $this->app->afterResolving(ConsoleKernel::class, function ($kernel) use ($paths) {
-            $this->app->booted(fn () => $kernel->addCommandRoutePaths($paths));
+            $this->app->booted(fn() => $kernel->addCommandRoutePaths($paths));
         });
 
         return $this;
@@ -355,7 +357,7 @@ class ApplicationBuilder
      */
     public function withSchedule(callable $callback)
     {
-        Artisan::starting(fn () => $callback($this->app->make(Schedule::class)));
+        Artisan::starting(fn() => $callback($this->app->make(Schedule::class)));
 
         return $this;
     }
@@ -373,11 +375,11 @@ class ApplicationBuilder
             \Illuminate\Foundation\Exceptions\Handler::class
         );
 
-        $using ??= fn () => true;
+        $using ??= fn() => true;
 
         $this->app->afterResolving(
             \Illuminate\Foundation\Exceptions\Handler::class,
-            fn ($handler) => $using(new Exceptions($handler)),
+            fn($handler) => $using(new Exceptions($handler)),
         );
 
         return $this;

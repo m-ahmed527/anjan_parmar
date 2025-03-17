@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\BlogManagementController;
 use App\Http\Controllers\Admin\BrandManagementController;
 use App\Http\Controllers\Admin\CategoryManagementController;
 use App\Http\Controllers\Admin\CategoryTypeManegementController;
+use App\Http\Controllers\Admin\ContactManagementController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\OfferManagementController;
 use App\Http\Controllers\Admin\OrderManagementController;
@@ -111,6 +112,11 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     Route::post('/vendor-requests/reply/{vendorRequest}', [VendorRequestMangementController::class, 'reply'])->name('vendor.requests.reply');
     Route::get('/vendor-requests/all-replies/{vendorRequest}', [VendorRequestMangementController::class, 'allReplies'])->name('vendor.requests.all.replies');
     Route::post('/vendor-requests/reply/delete/{vendorRequestReply}', [VendorRequestMangementController::class, 'deleteReply'])->name('vendor.requests.reply.delete');
+
+    // contact-us
+
+    Route::get('/all-contacts', [ContactManagementController::class, 'index'])->name('contact.index');
+    Route::get('/contact/details/{contact}', [ContactManagementController::class, 'show'])->name('contact.detail');
 
 
 

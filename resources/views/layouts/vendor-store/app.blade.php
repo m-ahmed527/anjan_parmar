@@ -93,7 +93,11 @@
                         {{ str_replace('_', ' ', env('APP_NAME')) }}</a>
                 </li>
             </ul>
-            {{-- @dd(auth()->user()->unreadNotifications) --}}
+            @if (auth()?->user()?->status != 'approved')
+                <div style="padding-left: 300px; color:red ">
+                    <p> Your Store is Under Review, till than You can not add any Product. </p>
+                </div>
+            @endif
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
@@ -110,7 +114,7 @@
 
 
                         <div class="dropdown-divider"></div>
-                        @forelse (auth()->user()->notifications as $notification)
+                        @forelse (auth()->user()->notifications->take(5) as $notification)
                             <a href="{{ $notification['data']['url'] }}" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i>
                                 {{ $notification['data']['title'] }}
@@ -173,33 +177,33 @@
                         </li>
 
 
+                        @if (auth()?->user()?->status == 'approved')
+                            <li class="nav-item mb-3">
+                                <a href="#" class="nav-link active">
+                                    {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                    <p>
+                                        Product Management
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
 
+                                    <li class="nav-item">
+                                        <a href="{{ route('vendor.products.index') }}" class="nav-link active">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Products</p>
+                                        </a>
+                                    </li>
 
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
-                                <p>
-                                    Product Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-                                <li class="nav-item">
-                                    <a href="{{ route('vendor.products.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Products</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="{{ route('vendor.products.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Product</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('vendor.products.create') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Create Product</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
                                 {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}

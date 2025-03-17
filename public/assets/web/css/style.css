@@ -2217,7 +2217,10 @@ a {
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
-    position: relative;
+}
+
+.padd-small-2 {
+    padding-top: 75px !important;
 }
 
 .slider-btns-2 button {
@@ -2232,7 +2235,7 @@ a {
     z-index: 999;
 }
 .previous-btn-2 {
-    top: -108%;
+    top: -60px;
 }
 .next-btn-2 {
     bottom: -20px;

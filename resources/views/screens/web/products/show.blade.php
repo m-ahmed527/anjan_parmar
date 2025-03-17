@@ -68,10 +68,10 @@
             </div>
         </section>
 
-        <div class="sh-space padd-small">
+        <div class="sh-space padd-small padd-small-2">
             <div class="container-fluid px-4">
                 <div class="row row-gap-3">
-                    <div class="col-xl-2 col-12 p-0 column-sliders">
+                    <div class="col-xl-2 col-12 p-0 column-sliders position-relative">
 
                         <div class="side-images-wrap">
                             <div class="side-image" style="border:2px solid #4f7eff">
@@ -432,7 +432,8 @@
             let previousBtn = document.querySelector(".previous-btn-2 i");
             let nextBtn = document.querySelector(".next-btn-2 i");
 
-            let isMobile = window.innerWidth < 1200;
+            let isMobile = screen.width < 1200;
+
 
             previousBtn.className = `fa-solid ${isMobile ? "fa-arrow-left" : "fa-arrow-up"}`;
             nextBtn.className = `fa-solid ${isMobile ? "fa-arrow-right" : "fa-arrow-down"}`;
