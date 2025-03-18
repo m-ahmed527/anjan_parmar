@@ -280,14 +280,17 @@
                     </div>
 
                     <div class="row">
-                        {{-- @forelse ($relatedProducts as $index => $relatedProduct)
+                        @forelse ($relatedProducts as $index => $relatedProduct)
                             <div class="col-xxl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-3">
                                 <div class="product-card sh-prod-card">
                                     <div class="products-img sh-prod">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <p class="top-img">{{ $relatedProduct->category->name }}</p>
-                                            <button class="btn heart-save-btn p-0">
-                                                <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
+                                            <button class="btn heart-save-btn p-0 wishlist-btn"
+                                                data-slug="{{ $relatedProduct->slug }}">
+                                                <i class=" {{ auth()?->user()?->hasWishlisted($relatedProduct->id) ? 'fa-solid' : 'fa-regular' }} fa-heart"
+                                                    data-slug="icon-{{ $relatedProduct->slug }}"
+                                                    style="color: rgb(255, 114, 114)"></i>
                                             </button>
                                         </div>
                                         <img src="{{ $relatedProduct->getFirstMediaUrl('featured_image') }}"
@@ -310,7 +313,7 @@
                                             <p class="price-products">${{ $relatedProduct->price }}
                                             </p>
 
-                                            <a href="{{ route('product.show', $relatedProduct->slug) }}"
+                                            <a href="{{ route('web.products.show', $relatedProduct->slug) }}"
                                                 class="bid-btn text-decoration-none">Buy
                                                 Now</a>
                                         </div>
@@ -322,7 +325,7 @@
                             <div class="col-12">
                                 <h2 class="text-center">No Related Products Found</h2>
                             </div>
-                        @endforelse --}}
+                        @endforelse
 
 
                     </div>

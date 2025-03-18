@@ -47,19 +47,19 @@
                             </td>
                             <td class="pr-title">
                                 <span>
-                                    <img src="{{ $wishlist->getFirstMediaUrl('featured_image') }}"
-                                        class="img-fluid cart-images" alt="{{ $wishlist->name }}">
+                                    <img src="{{ $wishlist?->getFirstMediaUrl('featured_image') }}"
+                                        class="img-fluid cart-images" alt="{{ $wishlist?->name }}">
                                 </span>
 
                             </td>
                             <td class="pr-title">
                                 <span>
-                                    <p>{{ $wishlist->name }}</p>
+                                    <p>{{ $wishlist?->name }}</p>
                                 </span>
 
                             </td>
 
-                            <td class="pr-title"><span>${{ $wishlist->price }}</span></td>
+                            <td class="pr-title"><span>${{ $wishlist?->price }}</span></td>
 
                             <td class="pr-title"><span><button href="{{ route('cart-page') }}"
                                         class="add-to-cart-btn text-decoration-none" id="add-to-cart">Add To
@@ -81,3 +81,6 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    
+@endpush

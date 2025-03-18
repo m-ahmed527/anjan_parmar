@@ -15,9 +15,9 @@ class CategoryFilter
     public function handle($query, Closure $next)
     {
 
-        
+
         // Apply category filter
-        if (request()->has('category') && request()->category != null) {
+        if (request()->has('category') && request()->get('category') != null) {
             $category = Category::whereSlug(request()->category)->first();
             $query->where('category_id', $category->id);
             // dd($query->get());

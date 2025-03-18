@@ -58,8 +58,7 @@
                             timer: 1500
                         });
                         if (@json(request()->url()).includes('contact-us') ||
-                            @json(request()->url()).includes('vendor-requests') ||
-                            @json(request()->url()).includes('product')) {
+                            @json(request()->url()).includes('vendor-requests')) {
                             form[0].reset();
                         } else {
                             setTimeout(function() {

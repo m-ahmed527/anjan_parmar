@@ -11,7 +11,7 @@ class WishlistController extends Controller
 {
     public function index()
     {
-        $wishlists = auth()->user()->wishlist;
+        $wishlists = auth()?->user()?->wishlist;
         // dd($wishlists);
         return view('screens.web.wishlists.index', get_defined_vars());
     }

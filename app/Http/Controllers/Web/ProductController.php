@@ -24,20 +24,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->all());
-        // $products = Product::paginate(2);
+
         $categories = Category::all();
-        // if ($request->has('store')) {
-        //     $store = User::where('slug', $request->store)->first();
-        //     $products = $store->products()->paginate(3)->appends(['store' => $request->store]);
-        // } else {
-        //     $products = Product::whereHas('user', function ($query) {
-        //         $query->where('status', 'approved');
-        //     })->filter([
-        //         CategoryFilter::class,
-        //         PriceFilter::class,
-        //     ])->paginate(3);
-        // }
+
         $query = Product::whereHas('user', function ($q) {
             $q->where('status', 'approved');
         });
@@ -69,36 +58,14 @@ class ProductController extends Controller
         return view('screens.web.products.index', get_defined_vars());
     }
 
-
-
-
-    public function fetchProducts(Request $request)
-    {
-        $products = Product::paginate(2);
-        return view('screens.web.products.list', compact('products'))->render();
-    }
-
-
-
-
+    
 
     public function show($product)
     {
         $product = Product::with(['variants.attributeValues.attribute'])->where('slug', $product)->first();
-        // $product = Product::with(['variants.attributes'])->where('slug', $product)->first();
-        // dd($product->getValidCombinations());
-        return view('screens.web.products.show', compact('product'));
+        $relatedProducts = Product::where('category_id', $product->category_id)->get();
+        return view('screens.web.products.show', get_defined_vars());
     }
-    // public function getVariantPrice(Request $request)
-    // {
-    //     $attributeValueIds = $request->input('attribute_values');
-    //     $variant = Variant::whereHas('attributeValues', function ($query) use ($attributeValueIds) {
-    //         $query->whereIn('attribute_value_id', $attributeValueIds);
-    //     }, '=', count($attributeValueIds))->first();
-    //     // dd($variant,$request->all());
-
-    //     return response()->json(['price' => $variant ? $variant->price : null]);
-    // }
 
 
     public function getVariantPrice(Request $request)
@@ -139,8 +106,33 @@ class ProductController extends Controller
             ]);
         }
     }
+
+    public function headerSearch(Request $request)
+    {
+
+        try {
+
+            $products = Product::filter([
+                CategoryFilter::class,
+                ProductFilter::class,
+            ])->get()->take(5);
+            $products->map(function ($product) {
+                $product->image = $product->getFirstMediaUrl('featured_image');
+                $product->category = $product->category;
+            });
+            return response()->json(['success' => true, 'products' => $products]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred while searching.']);
+        }
+    }
 }
 
+
+// public function fetchProducts(Request $request)
+// {
+//     $products = Product::paginate(2);
+//     return view('screens.web.products.list', compact('products'))->render();
+// }
 
 
 
@@ -189,4 +181,20 @@ class ProductController extends Controller
     //     }
 
     //     return response()->json($combinations);
+    // }
+
+
+
+
+
+
+     // public function getVariantPrice(Request $request)
+    // {
+    //     $attributeValueIds = $request->input('attribute_values');
+    //     $variant = Variant::whereHas('attributeValues', function ($query) use ($attributeValueIds) {
+    //         $query->whereIn('attribute_value_id', $attributeValueIds);
+    //     }, '=', count($attributeValueIds))->first();
+    //     // dd($variant,$request->all());
+
+    //     return response()->json(['price' => $variant ? $variant->price : null]);
     // }

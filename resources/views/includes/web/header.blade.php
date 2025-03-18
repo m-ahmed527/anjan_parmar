@@ -1,4 +1,8 @@
 <header>
+    @php
+        $cats = App\Models\Category::all();
+        // dd($categories[0]->name);
+    @endphp
     <div class="header-top">
         <p class="header-top-para">20% On All Popular Products</p>
         <div class="lang-curren">
@@ -15,31 +19,35 @@
             <img src="{{ asset('assets/web/images/grey-logo.png') }}" class="logo img-fluid" alt="">
         </a>
 
-        <div class="search-header">
-            <select name="" id="" class="btn  anchor-btn text-start">
-                <option value="Relevance">Choose Categories</option>
-                <option>Laptop</option>
-                <option>Smart Watches </option>
-                <option>Headsets </option>
-                <option>Gaming Setups
-                </option>
-                <option>Drone Cameras
-                </option>
-            </select>
-            <input type="text" placeholder="Search Your Products" class="header-search-input">
-            <li>
-                <button class="btn-style-2 search-btn-back">
-                    <i class="fa fa-search"></i>
-                </button>
-            </li>
+        <div class="position-relative">
+            <div class="search-header">
+                <select name="category" id="" class="btn  anchor-btn text-start search-select">
+                    <option value="">Choose Categories</option>
+                    @forelse ($cats as $cat)
+                        <option value={{ $cat->slug }}>{{ $cat->name }}</option>
+                    @empty
+                        <option value="">No Category Available</option>
+                    @endforelse
+
+                </select>
+                <input id="search" type="text" name="product_name" placeholder="Search Your Products"
+                    class="header-search-input search-input">
+            </div>
+
+            <div class="search-suggestions">
+                <ul class="search-suggestions--list hidden">
+                    {{-- ajax se append ho rha hai --}}
+                </ul>
+            </div>
         </div>
+
 
         <ul class="nav-links-main">
             <li class="position-relative">
                 <a href="{{ route('web.wishlist.index') }}" class="btn-style heart-btn text-decoration-none">
                     <i class="fa fa-heart"></i>
                 </a>
-                <span class="number-badge wishlist-count">{{ auth()?->user()?->wishlistCount() }}</span>
+                <span class="number-badge wishlist-count">{{ auth()?->user()?->wishlistCount() ?? 0 }}</span>
             </li>
             <li class="position-relative">
                 <a href="{{ route('cart-page') }}" class="cart-price-area text-decoration-none">
@@ -165,7 +173,8 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -174,23 +183,65 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="search-header search-header-2">
-                        <select name="" id="" class="btn  anchor-btn text-start">
-                            <option value="Relevance">Choose Categories</option>
-                            <option>Laptop</option>
-                            <option>Smart Watches </option>
-                            <option>Headsets </option>
-                            <option>Gaming Setups
-                            </option>
-                            <option>Drone Cameras
-                            </option>
-                        </select>
-                        <input type="text" placeholder="Search Your Products" class="header-search-input">
-                        <li>
-                            <button class="btn-style-2 search-btn-back">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </li>
+                    <div class="position-relative">
+                        <div class="search-header search-header-2">
+                            <select name="" id="" class="btn  anchor-btn text-start">
+                                <option value="Relevance">Choose Categories</option>
+                                <option>Laptop</option>
+                                <option>Smart Watches </option>
+                                <option>Headsets </option>
+                                <option>Gaming Setups
+                                </option>
+                                <option>Drone Cameras
+                                </option>
+                            </select>
+                            <input id="" placeholder="Search Your Products" class="header-search-input">
+                            <li>
+                                <button class="btn-style-2 search-btn-back">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </li>
+                        </div>
+                        <div class="search-suggestions">
+                            <ul class="search-suggestions--list hidden">
+                                <li> <img src="{{ asset('assets/web/images/gallery3.png') }}" alt="">
+                                    <div>
+                                        Product Name 1
+                                        <p>Category</p>
+                                    </div>
+                                </li>
+                                <li> <img src="{{ asset('assets/web/images/gallery3.png') }}" alt="">
+                                    <div>
+                                        Product Name 2
+                                        <p>Category</p>
+                                    </div>
+                                </li>
+                                <li> <img src="{{ asset('assets/web/images/gallery3.png') }}" alt="">
+                                    <div>
+                                        Product Name 3
+                                        <p>Category</p>
+                                    </div>
+                                </li>
+                                <li> <img src="{{ asset('assets/web/images/gallery3.png') }}" alt="">
+                                    <div>
+                                        Product Name 4
+                                        <p>Category</p>
+                                    </div>
+                                </li>
+                                <li> <img src="{{ asset('assets/web/images/gallery3.png') }}" alt="">
+                                    <div>
+                                        Product Name 5
+                                        <p>Category</p>
+                                    </div>
+                                </li>
+                                <li> <img src="{{ asset('assets/web/images/gallery3.png') }}" alt="">
+                                    <div>
+                                        Product Name 6
+                                        <p>Category</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -198,7 +249,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="modal fade" id="auth" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
         <div class="modal-dialog centered-modal">
             <div class="modal-content">
@@ -225,5 +276,125 @@
 
 
 
-
 </header>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        const input = $(".search-input");
+        const select = $(".search-select");
+        const results = $(".search-suggestions--list");
+
+        function detectSearch() {
+            let query = input.val().trim() ?? null;
+            let category = select.val() ?? null;
+
+
+
+            $.ajax({
+                url: "{{ route('web.products.header.search') }}",
+                type: "GET",
+                data: {
+                    product_name: query,
+                    category: category
+                },
+                success: function(response) {
+                    console.log(response);
+                    let products = response.products;
+                    results.empty();
+                    if (response.success) {
+                        if (products.length > 0) {
+
+
+                            products.forEach(function(product) {
+                                let html = `
+
+                                    <li>
+                                     <a href="{{ route('web.products.show', '') }}/${product.slug}" >
+                                       <div class="searched-content">
+                                         <img src="${product.image}" alt="">
+                                        <div>
+                                            ${product.name}
+                                            <p>${product.category.name}</p>
+                                        </div>
+                                        </div>
+                                     </a>
+                                    </li>
+
+                            `;
+                                results.append(html);
+                                results.addClass("style");
+                            });
+                        } else {
+                            let html = `
+                                <li>No products found.</li>
+                            `;
+                            results.append(html);
+                            results.removeClass("style");
+                        }
+                    }
+
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+            if (query || category) {
+                results.removeClass("hidden");
+            } else {
+                results.addClass("hidden");
+            }
+            console.log(query, category);
+        }
+        input.on("keyup change", detectSearch);
+        select.on("change", detectSearch);
+
+        let body = document.body;
+
+        $("body").on("click", () => {
+            results.addClass("hidden");
+            input.val("");
+        })
+    });
+</script>
+
+
+
+
+
+
+
+{{-- // results.on("click", "li", function() {
+    //     input.val("");
+    //     // select.val("Relevance");
+    //     results.addClass("hidden");
+    // }); --}}
+
+{{-- // const input = document.querySelectorAll('.header-search-input');
+// const results = document.querySelector('.search-suggestions--list');
+// const lists = document.querySelectorAll(".search-suggestions--list");
+
+// lists.forEach(listItem => {
+//     listItem.addEventListener("click", () => {
+//         input[0] ? input[0].value = "" : input[1].value = ""
+//         results.classList.add("hidden");
+//     })
+// });
+
+// const detectSearch = (event) => {
+//     const query = event.target.value.trim();
+//     console.log(query);
+//     if (query) {
+//         // getSearchSuggestions(query);
+//         results.classList.remove("hidden")
+//     } else {
+//         // hideSearchSuggestions();
+//         results.classList.add("hidden")
+//     }
+// };
+// console.log(input);
+// input[0].addEventListener('keyup', detectSearch);
+// input[1].addEventListener('keyup', detectSearch); --}}
