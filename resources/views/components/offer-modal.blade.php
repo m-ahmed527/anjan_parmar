@@ -142,6 +142,16 @@
                         });
                         form[0].reset();
                         $(".close-offer-modal").trigger("click");
+                    } else {
+                        Swal.fire({
+                            position: "center",
+                            icon: "warning",
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                        form[0].reset();
+                        $(".close-offer-modal").trigger("click");
                     }
                 },
                 error: function(error) {

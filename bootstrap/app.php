@@ -5,6 +5,7 @@ use App\Http\Middleware\NotAuthenticatedMiddleware;
 use App\Http\Middleware\PermissionMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\RoleOrPermissionMiddleware;
+use App\Http\Middleware\WishlistEmptyMiddleware;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -34,6 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'is_admin' => AdminMiddleware::class,
             'not_auth' => NotAuthenticatedMiddleware::class,
+            'empty_wishlist' => WishlistEmptyMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

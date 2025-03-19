@@ -251,6 +251,20 @@
 @stack('scripts')
 @include('includes.logout-script', ['redirectUrl' => route('index')])
 @include('includes.web.products.add-to-wishilist-script')
+
+
+@if (session('empty_wishlist'))
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+    <script>
+        Swal.fire({
+            title: "Such an Empty!",
+            text: "{{ session('empty_wishlist') }}",
+            icon: "info",
+            confirmButtonText: "OK"
+        });
+    </script>
+@endif
+
 </body>
 
 </html>

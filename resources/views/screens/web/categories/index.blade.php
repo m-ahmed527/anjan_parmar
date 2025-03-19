@@ -8,19 +8,19 @@
         ['btnText' => 'Appliances', 'imgUrl' => 'assets/web/images/portfolio.png'],
     ];
 
-    $categories = [
-        ['img' => 'assets/web/images/laptop.png', 'text' => 'Laptops'],
-        ['img' => 'assets/web/images/smart-watch-img.png', 'text' => 'Smart Watches'],
-        ['img' => 'assets/web/images/purse.png', 'text' => 'Branded Bags'],
-        ['img' => 'assets/web/images/choclate-spread.png', 'text' => 'Chocolate Spread'],
-        ['img' => 'assets/web/images/head-set-img.png', 'text' => 'Headsets'],
-        ['img' => 'assets/web/images/smart-phone-img.png', 'text' => 'Smart Phones'],
-        ['img' => 'assets/web/images/gaming-console.png', 'text' => 'Gaming Setups'],
-        ['img' => 'assets/web/images/branded-hoodies.png', 'text' => 'Branded Hoodies'],
-        ['img' => 'assets/web/images/air-shoes.png', 'text' => 'Air Shoes '],
-        ['img' => 'assets/web/images/drone-3.png', 'text' => 'Drone Cameras'],
-    ];
-
+    // $categories = [
+    //     ['img' => 'assets/web/images/laptop.png', 'text' => 'Laptops'],
+    //     ['img' => 'assets/web/images/smart-watch-img.png', 'text' => 'Smart Watches'],
+    //     ['img' => 'assets/web/images/purse.png', 'text' => 'Branded Bags'],
+    //     ['img' => 'assets/web/images/choclate-spread.png', 'text' => 'Chocolate Spread'],
+    //     ['img' => 'assets/web/images/head-set-img.png', 'text' => 'Headsets'],
+    //     ['img' => 'assets/web/images/smart-phone-img.png', 'text' => 'Smart Phones'],
+    //     ['img' => 'assets/web/images/gaming-console.png', 'text' => 'Gaming Setups'],
+    //     ['img' => 'assets/web/images/branded-hoodies.png', 'text' => 'Branded Hoodies'],
+    //     ['img' => 'assets/web/images/air-shoes.png', 'text' => 'Air Shoes '],
+    //     ['img' => 'assets/web/images/drone-3.png', 'text' => 'Drone Cameras'],
+    // ];
+    $categories = App\Models\Category::all();
 @endphp
 
 @section('content')
@@ -47,30 +47,19 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="filter-category">
-                            {{-- <div class="dropdown" id="dropdown">
-                                <h2 class=" cat-filter-btn" aria-expanded="false">
-                                    Filter
-                                </h2>
 
-                                <div class="filter-select">
-                                    <select name="" id="">
-                                        <option value="">By Brand</option>
-                                        <option value="">By Type </option>
-                                        <option value="">By Category</option>
-                                    </select>
-                                </div>
-                            </div> --}}
                         </div>
                         <div class="col-12">
                             <div class="class-row">
                                 @foreach ($categories as $index => $categoryItem)
-                                    <a href="{{ route('web.products.index') }}" class="text-decoration-none">
+                                    <a href="{{ route('web.products.index', ['category' => $categoryItem->slug]) }}"
+                                        class="text-decoration-none">
                                         <div class="cat-card-wrper">
                                             <div class="card-categories back-category-{{ $index + 1 }}">
-                                                <img src="{{ asset($categoryItem['img']) }}" class="img-fluid"
-                                                    alt="">
+                                                <img src="{{ $categoryItem->getFirstMediaUrl('category') }}"
+                                                    class="img-fluid" alt="">
                                             </div>
-                                            <p class="cat-text">{{ $categoryItem['text'] }}</p>
+                                            <p class="cat-text">{{ $categoryItem->name }}</p>
                                         </div>
                                     </a>
                                 @endforeach

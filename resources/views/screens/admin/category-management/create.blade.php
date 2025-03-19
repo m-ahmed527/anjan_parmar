@@ -63,7 +63,7 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <label for="exampleInputFile">Banner Image</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
@@ -77,7 +77,7 @@
                                             @error('image')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
-                                        </div>
+                                        </div> --}}
 
                                     </div>
 

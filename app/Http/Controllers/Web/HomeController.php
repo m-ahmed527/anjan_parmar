@@ -10,9 +10,9 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $products1 = Product::where('is_premium', 1)->inRandomOrder()->take(10)->get();
+        $products1 = Product::where('is_premium', 1)->inRandomOrder()->take(100)->get();
 
-        $products2 = Product::where('is_premium', 1)->inRandomOrder()->take(10)->get();
+        $products2 = Product::where('is_premium', 1)->inRandomOrder()->take(100)->get();
 
         $related1 = Product::inRandomOrder()->take(10)->get();
 

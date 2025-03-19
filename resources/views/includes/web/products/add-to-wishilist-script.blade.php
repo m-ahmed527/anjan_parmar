@@ -27,7 +27,8 @@
                         // icon.css('color', 'black'); // Optional: Reset color
                     }
                     $('.wishlist-count').text(response.wishlist_count);
-                } else {
+                }
+                else {
 
                     Swal.fire({
                         position: "center",

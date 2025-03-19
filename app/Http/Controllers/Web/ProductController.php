@@ -58,7 +58,7 @@ class ProductController extends Controller
         return view('screens.web.products.index', get_defined_vars());
     }
 
-    
+
 
     public function show($product)
     {
@@ -89,21 +89,27 @@ class ProductController extends Controller
     public function makeOffer(StoreOfferRequest $request, Product $product)
     {
         try {
-            DB::beginTransaction();
-            $product->offers()->create($request->sanitized());
-            DB::commit();
+            if (auth()->check()) {
+                DB::beginTransaction();
+                $product->offers()->create($request->sanitized());
+                DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Offer sent successfully.'
-            ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Offer sent successfully.'
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You must be logged in to make an offer.'
+                ], 200);
+            }
         } catch (Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while sending the offer.'
-            ]);
+            ], 400);
         }
     }
 

@@ -94,7 +94,8 @@
 
                                     </div>
                                     <div class="btn-products-now">
-                                        <button class="bid-btn offer-btn">Make an Offer</button>
+                                        <a href="{{ route('web.products.show', $productItem->slug) }}"
+                                            class="bid-btn offer-btn">Make an Offer</a>
                                         <a href="{{ route('web.products.show', $productItem->slug) }}"
                                             class="bid-btn bid-btn-2 text-decoration-none">Buy Now</a>
                                     </div>
@@ -172,14 +173,14 @@
                                         </p>
                                     </div>
                                     <div class="btn-products-now">
-                                        <button class="bid-btn offer-btn" data-product="{{ $productItem }}">Make an
-                                            Offer</button>
+                                        <a href="{{ route('web.products.show', $productItem->slug) }}"
+                                            class="bid-btn offer-btn" data-product="{{ $productItem }}">Make an
+                                            Offer</a>
                                         <a href="{{ route('web.products.show', $productItem->slug) }}"
                                             class="bid-btn bid-btn-2 text-decoration-none">Buy Now</a>
                                     </div>
                                 </div>
                             </div>
-
                         @endforeach
                     </div>
                 </div>
@@ -812,7 +813,7 @@
             </div>
         </section>
 
-            {{-- <x-offer-modal /> --}}
+        {{-- <x-offer-modal /> --}}
     </main>
 
 

@@ -4,20 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\FuncCall;
 
 class NotificationController extends Controller
 {
-    public function markAllRead()
+    public function index()
     {
-        auth()->user()->unreadNotifications->markAsRead();
-        toastr()->info('All notifications marked as read.');
-        return back();
-    }
-
-    public function markRead($id)
-    {
-        auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
-        toastr()->info('notification marked as read .');
-        return back();
+        $notifications = auth()->user()->notifications()->paginate(10);
+        return view('screens.admin.notifications-mangement.index', get_defined_vars());
     }
 }

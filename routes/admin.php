@@ -23,9 +23,12 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('guest')->get('/login', function () {
+    // view('screens.admin.notifications-mangement.index')
     return view('auth.admin.login');
 })->name('login');
 Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(function () {
+    Route::get('/all-notifications', [NotificationController::class, 'index'])->name('notification.index');
+
     Route::get('/', [AdminDashboardController::class, 'index'])->name('index');
 
     // Attributes

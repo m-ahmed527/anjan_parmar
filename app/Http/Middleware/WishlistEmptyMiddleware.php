@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class NotAuthenticatedMiddleware
+class WishlistEmptyMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,11 @@ class NotAuthenticatedMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check()) {
-            return redirect()->route('index')->with('not_logged_in', 'You must be logged in to view this page.');
+        if (auth()->check()) {
+            if (auth()?->user()?->wishlist->count() == 0) {
+                return redirect()->back()->with('empty_wishlist', 'Your wishlists is Empty. Add some items to start!');
+            }
+            // return redirect()->back()->with('empty_wishlist', 'Your wishlist is Empty.!');
         }
         return $next($request);
     }

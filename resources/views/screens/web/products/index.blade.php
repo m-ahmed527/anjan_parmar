@@ -25,7 +25,7 @@
             </div>
 
         </div>
-        {{-- @dd(request()->has('store')) --}}
+        {{-- @dd(request()->category) --}}
 
         <div class="container-fluid my-5 sh-space">
             <div class="row g-4">
@@ -42,7 +42,7 @@
                                 @forelse ($categories as $key=> $category)
                                     <label for="radio_{{ $key }}">
                                         <input id="radio_{{ $key }}" name="category" type="radio"
-                                            value="{{ $category->slug }}">
+                                            value="{{ $category->slug }}" {{$category->slug == request()->category ? 'checked' : ''}}>
                                         <span>{{ $category->name }}</span>
                                     </label>
                                 @empty

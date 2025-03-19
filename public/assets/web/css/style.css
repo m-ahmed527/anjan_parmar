@@ -748,6 +748,8 @@ a {
     font-family: var(--secondary-font);
     font-size: 15.4px;
     font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .product-header-area {
@@ -3803,12 +3805,13 @@ table {
     cursor: pointer;
 }
 
-.searched-content{
+.searched-content {
     display: flex;
     align-items: center;
     gap: 15px;
 
 }
+
 /* .search-suggestions--list li a{
     display: flex;
     align-items: center;
@@ -3825,4 +3828,9 @@ table {
 
 .search-suggestions--list li p {
     font-weight: 300;
+}
+
+.slick-track {
+    display: flex;
+    margin: 0;
 }

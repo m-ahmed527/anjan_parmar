@@ -68,8 +68,9 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
         // Route::get('/category/{category}', 'show')->name('show');
     });
     Route::name('wishlist.')->controller(WishlistController::class)->group(function () {
-        Route::get('/wishlist', 'index')->name('index')->middleware('not_auth');
+        Route::get('/wishlist', 'index')->name('index')->middleware(['not_auth', 'empty_wishlist']);
         Route::post('/add-to-wishlist/{product}', 'store')->name('store');
+        Route::post('/remove-wishlist/{product}', 'destroy')->name('delete');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');

@@ -37,7 +37,7 @@ $(".slider-for").slick({
 
 $(".sliders").slick({
     slidesToShow: 5,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
     dots: false,
     arrows: false,
     infinite: true,
@@ -46,19 +46,17 @@ $(".sliders").slick({
             breakpoint: 1600,
             settings: {
                 slidesToShow: 4,
+                slidesToScroll: 2,
+
             },
         },
 
-        {
-            breakpoint: 1399,
-            settings: {
-                slidesToShow: 4,
-            },
-        },
+
         {
             breakpoint: 1199,
             settings: {
                 slidesToShow: 3,
+                slidesToScroll: 1,
             },
         },
         {

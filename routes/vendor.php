@@ -42,6 +42,12 @@ Route::middleware('auth', 'role_or_permission:Vendor')->group(function () {
     });
 
     // Notifications
+
+    Route::get('/all-notifications', function () {
+        $notifications = auth()->user()->notifications()->paginate(10);
+        // dd($notifications);
+        return view('screens.vendor-store.notifications-mangement.index', get_defined_vars());
+    })->name('notification.index');
     Route::get('/mark-all-read', function () {
         try {
 

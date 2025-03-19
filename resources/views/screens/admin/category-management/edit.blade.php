@@ -78,7 +78,7 @@
                                                     width="200px">
                                             </div>
                                         @endif
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <label for="exampleInputFile">Banner Image</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
@@ -97,7 +97,7 @@
                                                 <img src="{{ $category->getFirstMediaUrl('category_banner') }}"
                                                     alt="" width="200px">
                                             </div>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                     <div class="card-footer">
                                         <a href="{{ route('admin.category.index') }}" class="btn btn-secondary">Back</a>

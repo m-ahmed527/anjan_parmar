@@ -129,7 +129,8 @@
                         @empty
                         @endforelse
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                        <a href="{{ route('vendor.notification.index') }}" class="dropdown-item dropdown-footer">See
+                            All Notifications</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
