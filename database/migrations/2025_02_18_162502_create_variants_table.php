@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             // $table->string('sku')->unique()->nullable();
-            $table->decimal('price', 10, 2)->nullable();
+            $table->float('price')->nullable();
             $table->integer('quantity')->default(0)->nullable();
             $table->softDeletes();
             $table->timestamps();

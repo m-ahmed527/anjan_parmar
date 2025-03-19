@@ -36,7 +36,8 @@ class Product extends Model
     }
     public function getMinPrice()
     {
-        return $this->variants()->min('price') + $this->price ?? $this->price;
+        return $this->variants()->min('price');
+        // + $this->price ?? $this->price;
     }
 
     public function getMaxPrice()

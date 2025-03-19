@@ -55,27 +55,30 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="row">
+            <div class="row">
                 <div class="col-12">
                     <div class="sliders">
-                        @foreach ($products as $productItem)
+                        @foreach ($products1 as $productItem)
                             <div class="product-card">
                                 <div class="products-img">
                                     <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <p class="top-img">{{ $productItem['category'] }}</p>
-                                        <button class="btn heart-save-btn p-0">
-                                            <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
+                                        <p class="top-img">{{ $productItem->category->name }}</p>
+                                        <button class="btn heart-save-btn p-0 wishlist-btn"
+                                            data-slug="{{ $productItem->slug }}">
+                                            <i class=" {{ auth()?->user()?->hasWishlisted($productItem->id) ? 'fa-solid' : 'fa-regular' }} fa-heart"
+                                                data-slug="icon-{{ $productItem->slug }}"
+                                                style="color: rgb(255, 114, 114)"></i>
                                         </button>
                                     </div>
-                                    <img src="{{ asset('assets/web/images' . $productItem['img']) }}" class="img-fluid"
+                                    <img src="{{ $productItem->getFirstMediaUrl('featured_image') }}" class="img-fluid"
                                         alt="">
                                 </div>
                                 <div class="product-content">
-                                    
-                                    <h2 class="card-main-heading mb-4">{{ $productItem['description'] }}</h2>
+
+                                    <h2 class="card-main-heading mb-4">{{ $productItem->description }}</h2>
                                     <div class="rating-stars mb-4">
                                         @for ($i = 0; $i < 5; $i++)
-                                            @if ($productItem['id'] > $i)
+                                            @if ($productItem->id > $i)
                                                 <img src="{{ asset('assets/web/images/gold-star.png') }}" alt="Gold Star">
                                             @else
                                                 <img src="{{ asset('assets/web/images/silver-star.png') }}"
@@ -84,15 +87,15 @@
                                         @endfor
                                     </div>
                                     <div class="bottom-price-area mb-3">
-                                        <p class="price-products">${{ $productItem['price'] }}
+                                        <p class="price-products">${{ $productItem->getMinPrice() }}
                                             -
-                                            ${{ $productItem['finalPrice'] }}
+                                            ${{ $productItem->getMaxPrice() }}
                                         </p>
 
                                     </div>
                                     <div class="btn-products-now">
                                         <button class="bid-btn offer-btn">Make an Offer</button>
-                                        <a href="{{ route('products.show', ['id' => $productItem['id']]) }}"
+                                        <a href="{{ route('web.products.show', $productItem->slug) }}"
                                             class="bid-btn bid-btn-2 text-decoration-none">Buy Now</a>
                                     </div>
                                 </div>
@@ -133,25 +136,29 @@
                     </div>
 
                     <div class="sliders">
-                        @foreach ($products as $productItem)
+                        @foreach ($products2 as $productItem)
                             <div class="product-card">
                                 <div class="products-img">
                                     <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <p class="top-img">{{ $productItem['category'] }}</p>
-                                        <button class="btn heart-save-btn p-0">
-                                            <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
+                                        <p class="top-img">{{ $productItem->category->name }}</p>
+                                        <button class="btn heart-save-btn p-0 wishlist-btn"
+                                            data-slug="{{ $productItem->slug }}">
+                                            <i class=" {{ auth()?->user()?->hasWishlisted($productItem->id) ? 'fa-solid' : 'fa-regular' }} fa-heart"
+                                                data-slug="icon-{{ $productItem->slug }}"
+                                                style="color: rgb(255, 114, 114)"></i>
                                         </button>
                                     </div>
-                                    <img src="{{ asset('assets/web/images' . $productItem['img']) }}" class="img-fluid"
+                                    <img src="{{ $productItem->getFirstMediaUrl('featured_image') }}" class="img-fluid"
                                         alt="">
                                 </div>
                                 <div class="product-content">
-                                    
-                                    <h2 class="card-main-heading my-4">{{ $productItem['description'] }}</h2>
+
+                                    <h2 class="card-main-heading my-4">{{ $productItem->description }}</h2>
                                     <div class="rating-stars mb-4">
                                         @for ($i = 0; $i < 5; $i++)
-                                            @if ($productItem['id'] > $i)
-                                                <img src="{{ asset('assets/web/images/gold-star.png') }}" alt="Gold Star">
+                                            @if ($productItem->id > $i)
+                                                <img src="{{ asset('assets/web/images/gold-star.png') }}"
+                                                    alt="Gold Star">
                                             @else
                                                 <img src="{{ asset('assets/web/images/silver-star.png') }}"
                                                     alt="Silver Star">
@@ -159,34 +166,34 @@
                                         @endfor
                                     </div>
                                     <div class="bottom-price-area mb-3">
-                                        <p class="price-products">${{ $productItem['price'] }}
+                                        <p class="price-products">${{ $productItem->getMinPrice() }}
                                             -
-                                            ${{ $productItem['finalPrice'] }}
+                                            ${{ $productItem->getMaxPrice() }}
                                         </p>
                                     </div>
                                     <div class="btn-products-now">
-                                        <button class="bid-btn offer-btn">Make an Offer</button>
-                                        <a href="{{ route('products.show', ['id' => $productItem['id']]) }}"
+                                        <button class="bid-btn offer-btn" data-product="{{ $productItem }}">Make an
+                                            Offer</button>
+                                        <a href="{{ route('web.products.show', $productItem->slug) }}"
                                             class="bid-btn bid-btn-2 text-decoration-none">Buy Now</a>
                                     </div>
                                 </div>
                             </div>
+
                         @endforeach
                     </div>
                 </div>
-            </div> --}}
-            <div class="row">
+            </div>
+            {{-- <div class="row">
                 <div class="col-12">
                     <div class="sliders">
                         @foreach ($products as $index => $productItem)
                             @if ($index > 0 && $index % 5 == 0)
-                                {{-- Insert the sales slider after every 5 products --}}
                                 <div class="sales-slider">
                                     <div class="sale-card">
                                         <label for="sales-1" class="sale-label">
                                             <span>Exclusive Clothings Discounts</span>
-                                            <input type="radio" disabled class="sale-input" id="sales-1" name="sales"
-                                                checked>
+                                            <input type="radio" disabled class="sale-input" id="sales-1" name="sales" checked>
                                         </label>
                                     </div>
                                     <div class="sale-card">
@@ -213,13 +220,12 @@
                             <div class="product-card">
                                 <div class="products-img">
                                     <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <p class="top-img">{{ $productItem->category->name }}</p>
+                                        <p class="top-img">{{ $productItem->category }}</p>
                                         <button class="btn heart-save-btn p-0">
                                             <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
                                         </button>
                                     </div>
-                                    <img src="{{ asset('assets/web/images/' . $productItem->img) }}" class="img-fluid"
-                                        alt="">
+                                    <img src="{{ asset('assets/web/images/' . $productItem->img) }}" class="img-fluid" alt="">
                                 </div>
                                 <div class="product-content">
                                     <h2 class="card-main-heading mb-4">{{ $productItem->description }}</h2>
@@ -228,22 +234,21 @@
                                             @if ($productItem->id > $i)
                                                 <img src="{{ asset('assets/web/images/gold-star.png') }}" alt="Gold Star">
                                             @else
-                                                <img src="{{ asset('assets/web/images/silver-star.png') }}"
-                                                    alt="Silver Star">
+                                                <img src="{{ asset('assets/web/images/silver-star.png') }}" alt="Silver Star">
                                             @endif
                                         @endfor
                                     </div>
                                     <div class="bottom-price-area">
                                         <p class="price-products">${{ $productItem->price }}</p>
-                                        <a href="{{ route('products.show', ['id' => $productItem->id]) }}"
-                                            class="bid-btn text-decoration-none">Buy Now</a>
+                                        <a href="{{ route('products.show', ['id' => $productItem->id]) }}" class="bid-btn text-decoration-none">Buy Now</a>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                 </div>
-            </div>
+            </div> --}}
+
 
         </section>
 
@@ -272,27 +277,30 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="row">
+            <div class="row">
                 <div class="col-12">
                     <div class="sliders">
-                        @foreach ($products as $productItem)
+                        @foreach ($related1 as $productItem)
                             <div class="product-card">
                                 <div class="products-img">
                                     <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <p class="top-img">{{ $productItem['category'] }}</p>
-                                        <button class="btn heart-save-btn p-0">
-                                            <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
+                                        <p class="top-img">{{ $productItem->category->name }}</p>
+                                        <button class="btn heart-save-btn p-0 wishlist-btn"
+                                            data-slug="{{ $productItem->slug }}">
+                                            <i class=" {{ auth()?->user()?->hasWishlisted($productItem->id) ? 'fa-solid' : 'fa-regular' }} fa-heart"
+                                                data-slug="icon-{{ $productItem->slug }}"
+                                                style="color: rgb(255, 114, 114)"></i>
                                         </button>
                                     </div>
-                                    <img src="{{ asset('assets/web/images' . $productItem['img']) }}" class="img-fluid"
+                                    <img src="{{ $productItem->getFirstMediaUrl('featured_image') }}" class="img-fluid"
                                         alt="">
                                 </div>
                                 <div class="product-content">
 
-                                    <h2 class="card-main-heading mb-4">{{ $productItem['description'] }}</h2>
+                                    <h2 class="card-main-heading mb-4">{{ $productItem->description }}</h2>
                                     <div class="rating-stars mb-3">
                                         @for ($i = 0; $i < 5; $i++)
-                                            @if ($productItem['id'] > $i)
+                                            @if ($productItem->id > $i)
                                                 <img src="{{ asset('assets/web/images/gold-star.png') }}"
                                                     alt="Gold Star">
                                             @else
@@ -302,9 +310,9 @@
                                         @endfor
                                     </div>
                                     <div class="bottom-price-area">
-                                        <p class="price-products">${{ $productItem['price'] }}
+                                        <p class="price-products">${{ $productItem->price }}
                                         </p>
-                                        <a href="{{ route('products.show', ['id' => $productItem['id']]) }}"
+                                        <a href="{{ route('web.products.show', $productItem->slug) }}"
                                             class="bid-btn text-decoration-none">Buy Now</a>
                                     </div>
                                 </div>
@@ -345,24 +353,27 @@
                     </div>
 
                     <div class="sliders">
-                        @foreach ($products as $productItem)
+                        @foreach ($related2 as $productItem)
                             <div class="product-card">
                                 <div class="products-img">
                                     <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <p class="top-img">{{ $productItem['category'] }}</p>
-                                        <button class="btn heart-save-btn p-0">
-                                            <i class="fa-regular fa-heart" style="color: rgb(255, 114, 114)"></i>
+                                        <p class="top-img">{{ $productItem->category->name }}</p>
+                                        <button class="btn heart-save-btn p-0 wishlist-btn"
+                                            data-slug="{{ $productItem->slug }}">
+                                            <i class=" {{ auth()?->user()?->hasWishlisted($productItem->id) ? 'fa-solid' : 'fa-regular' }} fa-heart"
+                                                data-slug="icon-{{ $productItem->slug }}"
+                                                style="color: rgb(255, 114, 114)"></i>
                                         </button>
                                     </div>
-                                    <img src="{{ asset('assets/web/images' . $productItem['img']) }}" class="img-fluid"
+                                    <img src="{{ $productItem->getFirstMediaUrl('featured_image') }}" class="img-fluid"
                                         alt="">
                                 </div>
                                 <div class="product-content">
-                                    
-                                    <h2 class="card-main-heading mb-4">{{ $productItem['description'] }}</h2>
+
+                                    <h2 class="card-main-heading mb-4">{{ $productItem->description }}</h2>
                                     <div class="rating-stars mb-3">
                                         @for ($i = 0; $i < 5; $i++)
-                                            @if ($productItem['id'] > $i)
+                                            @if ($productItem->id > $i)
                                                 <img src="{{ asset('assets/web/images/gold-star.png') }}"
                                                     alt="Gold Star">
                                             @else
@@ -372,9 +383,9 @@
                                         @endfor
                                     </div>
                                     <div class="bottom-price-area">
-                                        <p class="price-products">${{ $productItem['price'] }}
+                                        <p class="price-products">${{ $productItem->price }}
                                         </p>
-                                        <a href="{{ route('products.show', ['id' => $productItem['id']]) }}"
+                                        <a href="{{ route('web.products.show', $productItem->slug) }}"
                                             class="bid-btn text-decoration-none">Buy Now</a>
                                     </div>
                                 </div>
@@ -382,7 +393,7 @@
                         @endforeach
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
         </section>
 
@@ -801,7 +812,7 @@
             </div>
         </section>
 
-        <x-offer-modal />
+            {{-- <x-offer-modal /> --}}
     </main>
 
 

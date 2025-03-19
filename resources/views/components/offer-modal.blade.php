@@ -1,6 +1,6 @@
 @props(['product'])
 {{-- @dd($product) --}}
-{{-- <div class="offer-modal-area">
+<div class="offer-modal-area">
     <div class="custom-offer-modal">
         <div class="modal-offer-header">
             <h3>Make an Offer</h3>
@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js">
