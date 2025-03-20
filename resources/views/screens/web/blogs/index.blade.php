@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="filter-product-1 mb-4">
+                        {{-- <div class="filter-product-1 mb-4">
                             <div class="filter-header-1">
                                 <h2 class="filter-heading">Tags</h2>
                             </div>
@@ -99,7 +99,7 @@
                                         alt="">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="mb-4">
                             <div class="range-area position-relative p-0 flex-row">
                                 <img src="{{ asset('assets/web/images/sale-img.png') }}" class="img-fluid sale-img-product"
@@ -110,32 +110,12 @@
                     </div>
                 </div>
                 <div class="col-xl-8 col-12 ">
-                    <div class="row">
-                        <div class="col-12">
+                    <div class="row blog-container">
+                        {{-- <div class="col-12">
                             <button class="btn-open-sidebar mb-2"><i class="fa-solid fa-arrow-right"></i></button>
-                        </div>
-                        <div class="col-lg-6 col-xl-12 px-4 mb-5">
-                            <div class="blog-sect-card">
-                                <div class="blog-img-area">
-                                    <img src="{{ asset('assets/web/images/blogs-main-image.jpg') }}" class="img-fluid cont-images  m-0"
-                                        alt="" />
-                                    <span class="img-banner">June 1, 2024</span>
-                                </div>
-                                <div class="blog-content">
-                                    <h2 class="card-main-heading heading-blg text-sm-start">
-                                        Lorem ipsum dolor, sit amet conse.
-                                    </h2>
-                                    <p class="para gray my-3">At tellus at urna condimentum. Ut enim blandit volutpat
-                                        maecenas
-                                        volutpat blandit.
-                                        Posuere urna nec tincidunt
-                                        praesent. Aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque
-                                        habitant.</p>
-                                    <a href="{{ route('best-camera') }}" class="link-btn">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-xl-12 px-4 mb-5">
+                        </div> --}}
+                        @include('screens.web.blogs.list')
+                        {{-- <div class="col-lg-6 col-xl-12 px-4 mb-5">
                             <div class="blog-sect-card">
                                 <div class="blog-img-area">
                                     <img src="{{ asset('assets/web/images/blog2.png') }}" class="img-fluid cont-images  m-0"
@@ -175,15 +155,10 @@
                                     <a href="{{ route('best-camera') }}" class="link-btn">Read More</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
+
                     </div>
-                    <div class="col-12">
-                        <div class="pagination-btns">
-                            <button class="pag-btn pagination-active">1</button>
-                            <button class="pag-btn">2</button>
-                            <button class="pag-btn">3</button>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -198,3 +173,6 @@
         });
     </script>
 @endsection
+@push('scripts')
+    @include('includes.web.paginate-script')
+@endpush

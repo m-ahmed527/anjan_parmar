@@ -2,7 +2,7 @@
 @push('styles')
     @include('includes.admin.data-table-css')
 @endpush
-@section('title', 'Blogs')
+@section('title', 'Newsletters')
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
@@ -10,10 +10,8 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>All Blogs</h1>
+                        <h1>All Emails</h1>
                     </div>
-
-
                 </div>
             </div>
         </section>
@@ -21,13 +19,11 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
-                    <div class="col-10">
+                    <div class="col-9">
                         <div class="card">
                             <div class="card-header">
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
-                                <div class="col-sm-12 d-flex justify-content-end">
-                                    <a href="{{ route('admin.blog.create') }}" class="btn btn-primary">Add Blog</a>
-                                </div>
+
                             </div>
 
                             <div class="card-body">
@@ -37,53 +33,54 @@
                                         <tr>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Featured Image: activate to sort column descending">
-                                                Blog Image
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                ID
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Name: activate to sort column descending">
-                                                Name</th>
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                EMAIL
+                                            </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Actions: activate to sort column descending">
-                                                Actions
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                TERMS & CONDITIONS
+                                            </th>
+                                            <th class="" tabindex="0" aria-controls="example1" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                ACTIONS
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($blogs as $blog)
+                                        @foreach ($newsletters as $newsletter)
                                             <tr class="odd">
-                                                <td>
-                                                    @if ($blog->getFirstMediaUrl('blog_image'))
-                                                        <img src="{{ $blog->getFirstMediaUrl('blog_image') }} "
-                                                            alt="blog Image" style="max-width: 100px; max-height: 100px;">
-                                                    @else
-                                                        No Image Found
-                                                    @endif
-                                                </td>
 
-                                                <td class="dtr-control sorting_1" tabindex="1">
-                                                    {{ $blog->name }}</td>
+                                                <td>{{ $newsletter->id }}</td>
+                                                <td>{{ $newsletter->email }}</td>
+                                                <td>{{ $newsletter->agreement ? 'Agreed' : 'Not Agreed' }}</td>
 
                                                 <td class="d-flex gap-20">
-                                                    <a href="{{ route('admin.blog.edit', $blog->slug) }}"
-                                                        class="btn btn-primary">Edit</a>
-                                                    <form action="{{ route('admin.blog.delete', $blog->slug) }}"
-                                                        method="POST">
+                                                    <form action="{{ route('admin.newsletter.delete', $newsletter->id) }}"
+                                                        id="delete-form" method="POST">
                                                         @csrf
-                                                        <button class="btn btn-danger" id="delete-btn">Delete</button>
+                                                        <button data-id="{{ $newsletter->id }}"
+                                                            class="delete btn btn-danger" id="delete-btn">Delete</button>
                                                     </form>
-                                                    <a href="{{ route('admin.blog.show', $blog->slug) }}"
-                                                        class="btn btn-info">Details</a>
                                                 </td>
                                             </tr>
                                         @endforeach
+
                                     </tbody>
                                 </table>
+                                <form action="" id="delete" onclick="return confirm('Are you sure?');"
+                                    method="POST">
+                                    @csrf
+                                    @method('delete')
+                                </form>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

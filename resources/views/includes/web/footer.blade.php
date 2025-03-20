@@ -1,5 +1,5 @@
-<footer class="footer">
-    <div class="container-fluid">
+<footer class="footer loader">
+    <div class="container-fluid ">
         <div class="row align-items-center justify-content-between">
             <div class="col-lg-5 col-xl-5 col-md-5 col-12">
                 <div>
@@ -10,15 +10,21 @@
                 </div>
             </div>
             <div class="col-lg-5 col-xl-3 col-md-5 col-12">
-                <h3 class="footer-stay-hd">Stay on top of the latest trends</h3>
-                <form action="#" class="email-form">
-                    <input type="text" placeholder="Enter Your Mail Id" class="form-control-input">
-                    <button class="submit-btn">Submit</button>
+                <h3 class="footer-stay-hd footer-stay-hd-2 error-message">Stay on top of the latest trends</h3>
+                <form action="{{ route('web.newsletter.store') }}" method="POST" class="form-class"
+                    id="newsletter-form">
+                    @csrf
+                    <div class="group-inps-area">
+                        <input type="email" name="email" placeholder="Enter Your Mail Id"
+                            class="form-control-input email-form">
+                        <button type="button" class="submit-btn" id="newsletter-btn">Submit</button>
+                    </div>
+                    <label for="agree" class="agree-label">
+                        <input type="checkbox" id="agree" name="agreement">
+                        <span>I agree with the terms & conditions</span>
+                    </label>
                 </form>
-                <label for="agree" class="agree-label">
-                    <input type="checkbox" id="agree">
-                    <span>I agree with the terms & conditions</span>
-                </label>
+
             </div>
         </div>
         <div class="row mt-3">
@@ -114,7 +120,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('blogs') }}" class="footer-link text-decoration-none">
+                            <a href="{{ route('web.blogs.index') }}" class="footer-link text-decoration-none">
                                 Blogs
                             </a>
                         </li>
@@ -251,10 +257,9 @@
 @stack('scripts')
 @include('includes.logout-script', ['redirectUrl' => route('index')])
 @include('includes.web.products.add-to-wishilist-script')
-
+@include('includes.web.news-letter-script')
 
 @if (session('empty_wishlist'))
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script>
         Swal.fire({
             title: "Such an Empty!",

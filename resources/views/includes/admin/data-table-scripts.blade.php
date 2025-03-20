@@ -1,7 +1,7 @@
 <script>
-    let request = "{{ request()->url() }}";
-    // console.log(request);
+    var request = "{{ request()->url() }}";
 
+    // console.log(request);
     if (request.includes("details")) {
         $(function() {
             $("#example1").DataTable({
@@ -18,11 +18,15 @@
     } else {
 
         $(document).ready(function() {
+
+            let ordering = request.includes('newsletters') ? false : true;
+            console.log(ordering);
             // Ensure DataTable is properly initialized
             var table = $("#example1").DataTable({
                 "responsive": true,
                 "lengthChange": true,
-                "autoWidth": false
+                "autoWidth": false,
+                "ordering": ordering
             });
 
             // Custom filter function for filtering status

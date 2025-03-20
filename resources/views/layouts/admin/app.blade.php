@@ -224,52 +224,7 @@
                                 <p> Dashboard</p>
                             </a>
                         </li>
-                        {{-- <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Brand Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.brand.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Brands</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.brand.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add Brand</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> --}}
-                        {{-- <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Category Type Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.category.type.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Category Types</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.category.type.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create Category Type</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> --}}
+
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
                                 {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
@@ -358,6 +313,29 @@
                             <a href="#" class="nav-link active">
                                 {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
                                 <p>
+                                    Blogs Management
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.blog.index') }}" class="nav-link active">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>All Blogs</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.blog.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Create Blog</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="#" class="nav-link active">
+                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <p>
                                     Order Management
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
@@ -404,6 +382,11 @@
                         <li class="nav-item mb-3">
                             <a href="{{ route('admin.users.index') }}" class="nav-link active">
                                 <p>User Management</p>
+                            </a>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.newsletter.index') }}" class="nav-link active">
+                                <p>News Letters Mangement</p>
                             </a>
                         </li>
                         <li class="nav-item mb-3">

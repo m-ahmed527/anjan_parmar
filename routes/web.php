@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Web\BlogController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\NewsletterController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\StoreController;
 use App\Http\Controllers\Web\WishlistController;
@@ -17,7 +19,7 @@ Route::view('/categories', 'screens.web.categories.index')->name('categories');
 Route::view('/about-us', 'screens.web.about-us.index')->name('about-us');
 Route::view('/cart-page', 'screens.web.cart.index')->name('cart-page');
 Route::view('/checkout', 'screens.web.checkout.index')->name('checkout');
-Route::view('/blogs', 'screens.web.blogs.index')->name('blogs');
+// Route::view('/blogs', 'screens.web.blogs.index')->name('blogs');
 Route::view('/best-camera', 'screens.web.blogs.show')->name('best-camera');
 Route::view('/shipping', 'screens.web.shipping-policy.index')->name('shipping');
 Route::view('/terms-condition', 'screens.web.terms-conditions.index')->name('terms-condition');
@@ -71,6 +73,13 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
         Route::get('/wishlist', 'index')->name('index')->middleware(['not_auth', 'empty_wishlist']);
         Route::post('/add-to-wishlist/{product}', 'store')->name('store');
         Route::post('/remove-wishlist/{product}', 'destroy')->name('delete');
+    });
+    Route::name('newsletter.')->controller(NewsletterController::class)->group(function () {
+        Route::post('/newsletter/submit', 'store')->name('store');
+    });
+    Route::name('blogs.')->controller(BlogController::class)->group(function () {
+        Route::get('/blogs', 'index')->name('index');
+        Route::get('/blog/show/{blog}', 'show')->name('show');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');

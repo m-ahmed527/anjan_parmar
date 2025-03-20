@@ -62,6 +62,10 @@
     .price-products {
         font-size: 16px;
     }
+
+    .footer-stay-hd {
+        font-size: 18px;
+    }
 }
 
 @media (max-width: 1440px) {
@@ -992,8 +996,23 @@
         right: 35%;
     }
 
+    .form-class {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .btn-products-now {
         justify-content: center;
+    }
+
+    .submit-btn,
+    .form-control-input {
+        height: 50px;
+    }
+    .footer-stay-hd-2 {
+        font-size: 16px;
+       text-align: center;
     }
 }
 

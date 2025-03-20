@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class StoreBlogRequest extends FormRequest
 {
@@ -22,22 +23,22 @@ class StoreBlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'blog_category_id' => 'required',
-            'short_description' => 'sometimes',
+
             'name' => 'required',
-            'content' => 'required',
-            'image' => 'sometimes'
+            'short_description' => 'required',
+            'long_description' => 'required',
+            'blog_image' => 'required'
         ];
     }
 
-    public function sanitized() : array {
+    public function sanitized(): array
+    {
         return [
 
-            'blog_category_id' => $this->blog_category_id,
-            'slug' => \Str::slug($this->name),
+            'slug' => Str::slug($this->name),
             'name' => $this->name,
-            'short_description' => $this->short_description ? $this->short_description : null,
-            'content' => $this['content'],
+            'short_description' => $this->short_description,
+            'long_description' => $this->long_description,
         ];
     }
 }

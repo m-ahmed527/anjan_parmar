@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BrandManagementController;
 use App\Http\Controllers\Admin\CategoryManagementController;
 use App\Http\Controllers\Admin\CategoryTypeManegementController;
 use App\Http\Controllers\Admin\ContactManagementController;
+use App\Http\Controllers\Admin\NewsLetterMangement;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\OfferManagementController;
 use App\Http\Controllers\Admin\OrderManagementController;
@@ -146,6 +147,9 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     // Route::get('/edit/{vendor}', [VendorManagementController::class, 'edit'])->name('vendor.edit');
     // Route::post('/update/{vendor}', [VendorManagementController::class, 'update'])->name('update.vendor');
 
+    //
+    Route::get('/all-newsletters', [NewsLetterMangement::class, 'index'])->name('newsletter.index');
+    Route::post('/all-newsletter/delete/{newsLetter}', [NewsLetterMangement::class, 'destroy'])->name('newsletter.delete');
 
     //blogs categories
 
@@ -158,15 +162,15 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     // Route::post('/delete/blog-category/{blogCategory}', [BlogCategoryManagementController::class, 'destroy'])->name('blog.category.delete');
 
     //blogs
-    // Route::get('/all-blogs', [BlogManagementController::class, 'index'])->name('blog.index');
-    // Route::get('/create/new-blog', [BlogManagementController::class, 'create'])->name('blog.create');
-    // Route::post('/store', [BlogManagementController::class, 'store'])->name('blog.store');
-    // Route::post('/upload-content-image', [BlogManagementController::class, 'uploadContentImage'])->name('blog.store.content.image');
+    Route::get('/all-blogs', [BlogManagementController::class, 'index'])->name('blog.index');
+    Route::get('/create/new-blog', [BlogManagementController::class, 'create'])->name('blog.create');
+    Route::post('/store', [BlogManagementController::class, 'store'])->name('blog.store');
+    Route::post('/upload-content-image', [BlogManagementController::class, 'uploadContentImage'])->name('blog.store.content.image');
 
-    // Route::get('/edit/blog/{blog}', [BlogManagementController::class, 'edit'])->name('blog.edit');
-    // Route::post('/update/blog/{blog}', [BlogManagementController::class, 'update'])->name('blog.update');
-    // Route::get('/details/blog/{blog}', [BlogManagementController::class, 'show'])->name('blog.show');
-    // Route::post('/delete/blog/{blog}', [BlogManagementController::class, 'destroy'])->name('blog.delete');
+    Route::get('/edit/blog/{blog}', [BlogManagementController::class, 'edit'])->name('blog.edit');
+    Route::post('/update/blog/{blog}', [BlogManagementController::class, 'update'])->name('blog.update');
+    Route::get('/details/blog/{blog}', [BlogManagementController::class, 'show'])->name('blog.show');
+    Route::post('/delete/blog/{blog}', [BlogManagementController::class, 'destroy'])->name('blog.delete');
 
 
     // // Notificaitons

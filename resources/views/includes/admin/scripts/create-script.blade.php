@@ -36,7 +36,10 @@
 
             // Convert variants array to JSON and append it to FormData
             formData.append("variants", JSON.stringify(variants));
-
+            if (typeof quill !== "undefined" && $('#editor').length) {
+                let quillContent = quill.root.innerHTML;
+                formData.append('long_description', quillContent);
+            }
             $.LoadingOverlay("show");
             console.log(123);
             $.ajax({
@@ -66,6 +69,9 @@
                                     redirectUrl;
                             }, 1500)
                         }
+                        if (typeof quill !== "undefined" && $('#editor').length) {
+                            quill.root.innerHTML = "";
+                        }
                     }
                 },
                 error: function(error) {
@@ -91,6 +97,9 @@
     })
     $(document).on('input change keydown', 'input, select, textarea', function() {
         $(this).next('span.error-message').text('');
+        if ($('.blog-image-parent').length > 0) {
+            $('.blog-image-parent').next('span.error-message').text('');
+        }
     });
 
 
@@ -150,6 +159,24 @@
                 );
                 inputField.after(errorMessage);
             } else if (@json(request()->url()).includes('vendor-requests')) {
+                let inputField = $(
+                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                );
+                let errorMessage = $(
+                    `<span class='error-message text-danger'>${value}</span>`
+                );
+                inputField.after(errorMessage);
+            }
+             else if (@json(request()->url()).includes('new-blog')) {
+                if (key == 'blog_image') {
+                    let inputField = $(
+                        `.blog-image-parent`
+                    );
+                    let errorMessage = $(
+                        `<span class='error-message text-danger'>${value}</span>`
+                    );
+                    inputField.after(errorMessage);
+                }
                 let inputField = $(
                     `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
                 );

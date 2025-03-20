@@ -780,7 +780,7 @@
 
         </section>
 
-        <section class="gallery-section ">
+        {{-- <section class="gallery-section ">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
@@ -811,7 +811,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         {{-- <x-offer-modal /> --}}
     </main>

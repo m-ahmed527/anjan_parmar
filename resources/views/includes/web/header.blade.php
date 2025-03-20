@@ -107,7 +107,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('blogs') }}" class="nav-link">
+                <a href="{{ route('web.blogs.index') }}" class="nav-link">
                     Blogs
                 </a>
             </li>
@@ -163,7 +163,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('blogs') }}" class="nav-link">
+                    <a href="{{ route('web.blogs.index') }}" class="nav-link">
                         Blogs
                     </a>
                 </li>
@@ -283,6 +283,35 @@
 
 
 <script>
+    $(document).on('click', '.heart-btn', function(e) {
+        e.preventDefault(); // Prevent default link behavior
+
+        $.ajax({
+            url: "{{ route('web.wishlist.index') }}",
+            method: "GET",
+            success: function(response) {
+                console.log(response.success);
+
+                // if (response.success) {
+                window.location.href =
+                    "{{ route('web.wishlist.index') }}"; // Open Wishlist if allowed
+                // }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401 || xhr.status === 403) { // Unauthorized or Empty Wishlist
+                    Swal.fire({
+                        icon: "info",
+                        title: xhr.responseJSON.message,
+                        showConfirmButton: true
+                    });
+                }
+            }
+        });
+    });
+
+
+
+
     $(document).ready(function() {
         const input = $(".search-input");
         const select = $(".search-select");
@@ -291,9 +320,6 @@
         function detectSearch() {
             let query = input.val().trim() ?? null;
             let category = select.val() ?? null;
-
-
-
             $.ajax({
                 url: "{{ route('web.products.header.search') }}",
                 type: "GET",

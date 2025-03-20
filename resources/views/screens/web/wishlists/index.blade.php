@@ -98,6 +98,19 @@
                             row.fadeOut(500, function() {
                                 $(this).remove();
                             });
+                            if (response.wishlist_count == 0) { // Only header row remains
+                                setTimeout(function() {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "info",
+                                        title: "Your wishlist is now empty!",
+                                        showConfirmButton: true
+                                    }).then(() => {
+                                        window.location.href =
+                                            "{{ route('index') }}"; // Redirect to products page
+                                    });
+                                }, 500);
+                            }
                         } else {
                             Swal.fire({
                                 position: "center",

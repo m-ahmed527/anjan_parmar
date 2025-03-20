@@ -7,7 +7,9 @@ use App\Http\Requests\Admin\StoreBlogRequest;
 use App\Http\Requests\Admin\UpdateBlogRequest;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BlogManagementController extends Controller
 {
@@ -18,7 +20,7 @@ class BlogManagementController extends Controller
     {
         $blogs = Blog::all();
 
-        return view('screens.admin.blog-management.index',compact('blogs'));
+        return view('screens.admin.blog-management.index', get_defined_vars());
     }
 
     /**
@@ -26,8 +28,7 @@ class BlogManagementController extends Controller
      */
     public function create()
     {
-        $blogCategories = BlogCategory::all();
-        return view('screens.admin.blog-management.create',compact('blogCategories'));
+        return view('screens.admin.blog-management.create');
     }
 
     /**
@@ -35,36 +36,31 @@ class BlogManagementController extends Controller
      */
     public function store(StoreBlogRequest $request)
     {
-        if($request->sanitized())
-        {
+        // dd($request->all());
+        try {
+            DB::beginTransaction();
             $blog = Blog::create($request->sanitized());
-            if($request->hasFile('featured_image'))
-            {
-                $blog->addMedia($request->featured_image)->toMediaCollection('blog-featured-image');
-            }
-            toastr()->success('Blog uploaded successfully ..!');
-            return redirect()->route('admin.blog.index');
+            $blog->addMedia($request->blog_image, 'blog_image');
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Blog created successfully',
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 400);
         }
-        toastr()->error('Blog upload failed ..!. something went wrong , please try again later.');
-        return back();
-
     }
 
-    public function uploadContentImage(Request $request) {
-        $imageName = $request->upload->HashName();
-        $request->upload->move(public_path('/images'),$imageName);
-        $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-        $url = asset('images/'.$imageName);
-        $res = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum,'$url')</script>";
-        @header("Content-Type : text-html; charset=utf-8");
-        echo $res;
-    }
     /**
      * Display the specified resource.
      */
     public function show(Blog $blog)
     {
-        return view('screens.admin.blog-management.show',compact('blog'));
+        return view('screens.admin.blog-management.show', get_defined_vars());
     }
 
     /**
@@ -72,8 +68,7 @@ class BlogManagementController extends Controller
      */
     public function edit(Blog $blog)
     {
-        $blogCategories = BlogCategory::all();
-        return view('screens.admin.blog-management.edit',compact('blog','blogCategories'));
+        return view('screens.admin.blog-management.edit', get_defined_vars());
     }
 
     /**
@@ -81,18 +76,24 @@ class BlogManagementController extends Controller
      */
     public function update(UpdateBlogRequest $request, Blog $blog)
     {
-        if($request->sanitized())
-        {
+        try {
+            DB::beginTransaction();
             $blog->update($request->sanitized());
-            if($request->hasFile('featured_image'))
-            {
-                $blog->addMedia($request->featured_image)->toMediaCollection('blog-featured-image');
+            if ($request->blog_image) {
+                $blog->addMedia($request->blog_image, 'blog_image');
             }
-            toastr()->success($blog->name . ' updated successfully ..!');
-            return redirect()->route('admin.blog.index');
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Blog updated successfully',
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 400);
         }
-        toastr()->success($blog->name . ' updation failed ..!');
-        return back();
     }
 
     /**
@@ -100,8 +101,24 @@ class BlogManagementController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        $blog->delete();
-        toastr()->success('Blog deleted Successfully !');
-        return back();
+        try {
+            DB::beginTransaction();
+            $delete = $blog->delete();
+            if ($delete) {
+                $blog->clearMediaCollection('blog_image');
+            }
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Blog deleted successfully',
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
 }

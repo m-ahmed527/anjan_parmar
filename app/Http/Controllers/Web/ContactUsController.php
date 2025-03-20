@@ -26,7 +26,7 @@ class ContactUsController extends Controller
             $contact = ContactUs::create($request->sanitized());
             $admin->notify(new NewContactNotification(
                 'New Contact Recieved',
-                "{$contact->name} wants to Conatct You",
+                "{$contact->name} wants to Contact You",
                 route('admin.contact.detail', $contact->id),
             ));
             DB::commit();

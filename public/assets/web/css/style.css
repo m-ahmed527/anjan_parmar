@@ -1285,12 +1285,11 @@ a {
     display: flex;
     align-items: center;
     height: 59px;
-    width: 100%;
+    width: 70%;
     margin-bottom: 20px;
 }
 
 .form-control-input {
-    background: transparent;
     border: transparent;
     color: #ffffffab;
     font-size: 1rem;
@@ -1304,7 +1303,7 @@ a {
 
 .submit-btn {
     background: rgba(79, 126, 255, 1);
-    width: 137px;
+    width: 30%;
     font-size: 20px;
     color: #fff;
     font-weight: 600;
@@ -3833,4 +3832,8 @@ table {
 .slick-track {
     display: flex;
     margin: 0;
+}
+
+.group-inps-area{
+    display: flex;
 }
