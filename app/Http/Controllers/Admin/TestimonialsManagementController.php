@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTestimonialRequest;
 use App\Http\Requests\Admin\UpdateTestimonialRequest;
 use App\Models\Testimonial;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TestimonialsManagementController extends Controller
 {
     public function index(): View
     {
         $testimonials = Testimonial::all();
-        return view('screens.admin.testimonial-management.index', compact('testimonials'));
+        return view('screens.admin.testimonial-management.index', get_defined_vars());
     }
 
     public function create(): View
@@ -24,41 +26,60 @@ class TestimonialsManagementController extends Controller
 
     function store(StoreTestimonialRequest $request)
     {
-        // dd($request->sanitized());
-        $testimonial  = Testimonial::create($request->sanitized());
-        if ($testimonial) {
-            toastr()->success('Testimonial created successfully.!');
-            return redirect()->route('admin.testimonial.index');
+        try {
+            DB::beginTransaction();
+            $testimonial = Testimonial::create($request->sanitized());
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Testimonial created successfully.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
-        toastr()->error('Something went wrong, try again .');
-        return back();
     }
 
     public function edit(Testimonial $testimonial): View
     {
-        return view('screens.admin.testimonial-management.edit', compact('testimonial'));
+        return view('screens.admin.testimonial-management.edit', get_defined_vars());
     }
 
     public function update(UpdateTestimonialRequest $request, Testimonial $testimonial)
     {
-        if ($testimonial) {
+        try {
+            DB::beginTransaction();
             $testimonial->update($request->sanitized());
-            toastr()->success('Testimonial updated successfully.!');
-            return redirect()->route('admin.testimonial.index');
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Testimonial updated successfully.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
-        toastr()->error('Something went wrong, try again .');
-        return back();
     }
 
     public function delete(Request $request, Testimonial $testimonial)
     {
-        if ($testimonial) {
-
+        try {
+            DB::beginTransaction();
             $testimonial->delete();
-            toastr()->success('Testimonial deleted successfully.!');
-            return redirect()->route('admin.testimonial.index');
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Testimonial deleted successfully.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
-        toastr()->error('Something went wrong, try again .');
-        return back();
     }
 }

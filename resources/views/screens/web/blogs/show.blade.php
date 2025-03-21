@@ -32,46 +32,14 @@
                         </div>
                         <div class="content-sidebar">
                             <div class="mb-4">
-                                <input type="text" class="keyword-search-inp" placeholder="Enter Keyword">
+                                <input type="text" name="term" class="keyword-search-inp" placeholder="Enter Keyword">
                             </div>
                             <div class="filter-product-1  mb-4">
                                 <div class="filter-header-1">
                                     <h2 class="filter-heading">Recent Posts</h2>
                                 </div>
-                                <div class="radio-list oveflow-block">
-                                    <div class="blog-row">
-
-                                        <img src="{{ asset('assets/web/images/blog-1-img.jpg') }}" class="blog-image"
-                                            alt="blogs">
-
-                                        <div class="">
-                                            <span class="text-area-blogs">June 1, 2024</span>
-                                            <h2 class="blog-main-heading mt-3">
-                                                Lorem ipsum dolor sit amet consectetur.
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div class="blog-row">
-                                        <img src="{{ asset('assets/web/images/blog-2-img.jpg') }}" class="blog-image"
-                                            alt="blogs">
-                                        <div class="">
-                                            <span class="text-area-blogs">June 1, 2024</span>
-                                            <h2 class="blog-main-heading mt-3">
-                                                Lorem ipsum dolor sit amet consectetur.
-                                            </h2>
-                                        </div>
-                                    </div>
-
-                                    <div class="blog-row">
-                                        <img src="{{ asset('assets/web/images/blog-3-img.jpg') }}" class="blog-image"
-                                            alt="blogs">
-                                        <div class="">
-                                            <span class="text-area-blogs">June 1, 2024</span>
-                                            <h2 class="blog-main-heading mt-3">
-                                                Lorem ipsum dolor sit amet consectetur.
-                                            </h2>
-                                        </div>
-                                    </div>
+                                <div class="radio-list oveflow-block recent-blog-list">
+                                    @include('screens.web.blogs.recent-list')
                                 </div>
                             </div>
 
@@ -90,8 +58,8 @@
                         </div>
                         <div class="blog-sect-card blog-sect-card-border mb-5">
                             <div class="blog-img-area blog-img-area-2 m-0">
-                                <img src="{{ asset('assets/web/images/blogs-main-image.jpg') }}"
-                                    class="img-fluid cont-images" alt="">
+                                <img src="{{ $blog->getFirstMediaUrl('blog_image') }}" class="img-fluid cont-images"
+                                    alt="">
                                 <span class="img-banner">{{ $blog->created_at }}</span>
                             </div>
                             <div>
@@ -167,3 +135,6 @@
         });
     </script>
 @endsection
+@push('scripts')
+    @include('includes.web.blogs.blog-search-script')
+@endpush

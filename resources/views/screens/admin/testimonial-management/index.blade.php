@@ -1,9 +1,8 @@
 @extends('layouts.admin.app')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    @include('includes.admin.data-table-css')
 @endpush
+@section('title', 'Testimonials')
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
@@ -27,7 +26,8 @@
                             <div class="card-header">
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
                                 <div class="col-sm-12 d-flex justify-content-end">
-                                    <a href="{{ route('admin.testimonial.create') }}" class="btn btn-primary">Add Testimonial</a>
+                                    <a href="{{ route('admin.testimonial.create') }}" class="btn btn-primary">Create
+                                        Testimonial</a>
                                 </div>
                             </div>
 
@@ -56,16 +56,18 @@
                                         @foreach ($testimonials as $testimonial)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
-                                                    {{ $testimonial->title }}</td>
+                                                    {{ $testimonial->name }}</td>
                                                 <td class="dtr-control sorting_1" tabindex="1">
                                                     {!! $testimonial->description !!}</td>
                                                 <td class="d-flex gap-20">
-                                                    <a href="{{ route('admin.testimonial.edit', $testimonial->id) }}"
+                                                    <a href="{{ route('admin.testimonial.edit', $testimonial->slug) }}"
                                                         class="btn btn-primary">Edit</a>
-                                                    <form action="{{ route('admin.testimonial.delete', $testimonial->id) }}"
-                                                        onclick="return confirm('Are you sure?');" method="POST">
+                                                    <form
+                                                        action="{{ route('admin.testimonial.delete', $testimonial->slug) }}"
+                                                        method="POST">
                                                         @csrf
-                                                        <button class="btn btn-danger">Delete</button>
+                                                        <button type="button" id="delete-btn"
+                                                            class="btn btn-danger">Delete</button>
                                                     </form>
 
                                                 </td>
@@ -83,31 +85,6 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
-     $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-        });
-    </script>
-    <script src="{{ asset('assets/admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    @include('includes.admin.data-table-scripts')
+    @include('includes.admin.scripts.delete-script')
 @endsection

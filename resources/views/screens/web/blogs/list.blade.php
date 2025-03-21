@@ -1,14 +1,8 @@
-<div id="showing-results" class="small text-muted d-none">
-    Showing <span class="fw-semibold">{{ $blogs->firstItem() }}</span>
-    to <span class="fw-semibold">{{ $blogs->lastItem() }}</span>
-    of <span class="fw-semibold">{{ $blogs->total() }}</span> results
-</div>
 @forelse ($blogs as $blog)
     <div class="col-lg-6 col-xl-12 px-4 mb-5">
         <div class="blog-sect-card">
             <div class="blog-img-area">
-                <img src="{{ asset('assets/web/images/blogs-main-image.jpg') }}" class="img-fluid cont-images  m-0"
-                    alt="" />
+                <img src="{{ $blog->getFirstMediaUrl('blog_image') }}" class="img-fluid cont-images  m-0" alt="" />
                 <span class="img-banner">{{ $blog->created_at }}</span>
             </div>
             <div class="blog-content">

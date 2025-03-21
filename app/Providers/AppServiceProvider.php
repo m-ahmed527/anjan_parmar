@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Interfaces\AuthRepositoryInterface;
 use App\Interfaces\LoginRepositoryInterface;
+use App\Models\Blog;
 use App\Repositories\AuthRepository;
 use App\Repositories\LoginRepository;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,5 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('permission', function ($permission) {
             return auth()->check() && auth()->user()->hasPermission($permission);
         });
+        $blogs = Blog::latest()->get()->take(3);
+        View::share('blogs', $blogs);
     }
 }

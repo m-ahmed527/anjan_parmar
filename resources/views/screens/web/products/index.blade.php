@@ -42,7 +42,8 @@
                                 @forelse ($categories as $key=> $category)
                                     <label for="radio_{{ $key }}">
                                         <input id="radio_{{ $key }}" name="category" type="radio"
-                                            value="{{ $category->slug }}" {{$category->slug == request()->category ? 'checked' : ''}}>
+                                            value="{{ $category->slug }}"
+                                            {{ $category->slug == request()->category ? 'checked' : '' }}>
                                         <span>{{ $category->name }}</span>
                                     </label>
                                 @empty
@@ -125,7 +126,7 @@
 
 
         <x-slide-blog />
-        <x-our-blog />
+        <x-our-blog :$blogs />
     </main>
 
 

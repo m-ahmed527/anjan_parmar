@@ -221,13 +221,14 @@
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                         <li class="nav-item mb-3">
                             <a href="{{ route('admin.index') }}" class="nav-link active">
+                                <i class="fa fa-tachometer-alt"></i>
                                 <p> Dashboard</p>
                             </a>
                         </li>
 
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="fa fa-tags"></i>
                                 <p>
                                     Attribute Management
                                     <i class="right fas fa-angle-left"></i>
@@ -250,7 +251,7 @@
                         </li>
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="fa fa-list"></i>
                                 <p>
                                     Category Management
                                     <i class="right fas fa-angle-left"></i>
@@ -275,7 +276,7 @@
 
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="fa fa-box"></i>
                                 <p>
                                     Product Management
                                     <i class="right fas fa-angle-left"></i>
@@ -311,7 +312,7 @@
                         </li>
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="fa fa-newspaper"></i>
                                 <p>
                                     Blogs Management
                                     <i class="right fas fa-angle-left"></i>
@@ -334,115 +335,7 @@
                         </li>
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
-                                <p>
-                                    Order Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Orders</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.offers.index') }}" class="nav-link active">
-                                <p> Offers Management</p>
-                            </a>
-
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.vendor.requests') }}" class="nav-link active">
-                                <p> Vendor's Requests</p>
-                            </a>
-
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.contact.index') }}" class="nav-link active">
-                                <p> Contacts Management</p>
-                            </a>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.profile.index') }}" class="nav-link active">
-                                <p> Profile Management</p>
-                            </a>
-
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.vendors.index') }}" class="nav-link active">
-                                <p> Vendors Management</p>
-                            </a>
-
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.users.index') }}" class="nav-link active">
-                                <p>User Management</p>
-                            </a>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.newsletter.index') }}" class="nav-link active">
-                                <p>News Letters Mangement</p>
-                            </a>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('index') }}" class="nav-link active">
-                                <p>Back to Website</p>
-                            </a>
-                        </li>
-                        {{-- <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    BlogCategory Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.blog.category.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Blog Categories </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.blog.category.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add Blog Category</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Blogs Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.blog.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Blogs</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.blog.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add Blog</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="fa fa-comment-dots"></i>
                                 <p>
                                     Testimonials Management
                                     <i class="right fas fa-angle-left"></i>
@@ -462,7 +355,79 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li> --}}
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="#" class="nav-link active">
+                                <i class="fa fa-shopping-cart"></i>
+                                <p>
+                                    Order Management
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link active">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>All Orders</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.offers.index') }}" class="nav-link active">
+                                <i class="fa fa-gift"></i>
+                                <p> Offers Management</p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.vendor.requests') }}" class="nav-link active">
+                                <i class="fa fa-user-check"></i>
+                                <p> Vendor's Requests</p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.contact.index') }}" class="nav-link active">
+                                <i class="fa fa-address-book"></i>
+                                <p> Contacts Management</p>
+                            </a>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.profile.index') }}" class="nav-link active">
+                                <i class="fa fa-user"></i>
+                                <p> Profile Management</p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.vendors.index') }}" class="nav-link active">
+                                <i class="fa fa-store"></i>
+                                <p> Vendors Management</p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.users.index') }}" class="nav-link active">
+                                <i class="fa fa-users"></i>
+                                <p>User Management</p>
+                            </a>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.newsletter.index') }}" class="nav-link active">
+                                <i class="fa fa-envelope"></i>
+                                <p>News Letters Mangement</p>
+                            </a>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('index') }}" class="nav-link active">
+                                <i class="fa fa-arrow-left"></i>
+                                <p>Back to Website</p>
+                            </a>
+                        </li>
+
+
                         {{-- <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>

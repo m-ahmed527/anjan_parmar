@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Web\BlogController;
+use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\NewsletterController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\StoreController;
+use App\Http\Controllers\Web\TestimonialController;
 use App\Http\Controllers\Web\WishlistController;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -15,19 +17,19 @@ use Illuminate\Support\Facades\Route;
 
 
 // Route::view('/products', 'screens.web.products')->name('products');
-Route::view('/categories', 'screens.web.categories.index')->name('categories');
+// Route::view('/categories', 'screens.web.categories.index')->name('categories');
 Route::view('/about-us', 'screens.web.about-us.index')->name('about-us');
 Route::view('/cart-page', 'screens.web.cart.index')->name('cart-page');
 Route::view('/checkout', 'screens.web.checkout.index')->name('checkout');
 // Route::view('/blogs', 'screens.web.blogs.index')->name('blogs');
-Route::view('/best-camera', 'screens.web.blogs.show')->name('best-camera');
+// Route::view('/best-camera', 'screens.web.blogs.show')->name('best-camera');
 Route::view('/shipping', 'screens.web.shipping-policy.index')->name('shipping');
 Route::view('/terms-condition', 'screens.web.terms-conditions.index')->name('terms-condition');
 // Route::view('/contacts', 'screens.web.contact-us.index')->name('contacts');
 // Route::view('/wishlist', 'screens.web.wishlists.index')->name('wishlist');
 // Route::view('/categories-store', 'screens.web.stores.index')->name('categories-store');
 // Route::view('/categories-store', 'screens.web.categories-store')->name('categories-store');
-Route::view('/testimonials', 'screens.web.testimonials.index')->name('testimonials');
+// Route::view('/testimonials', 'screens.web.testimonials.index')->name('testimonials');
 
 
 // Auth
@@ -80,6 +82,12 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
     Route::name('blogs.')->controller(BlogController::class)->group(function () {
         Route::get('/blogs', 'index')->name('index');
         Route::get('/blog/show/{blog}', 'show')->name('show');
+    });
+    Route::name('testimonials.')->controller(TestimonialController::class)->group(function () {
+        Route::get('/testimonials', 'index')->name('index');
+    });
+    Route::name('categories.')->controller(CategoryController::class)->group(function () {
+        Route::get('/categories', 'index')->name('index');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');

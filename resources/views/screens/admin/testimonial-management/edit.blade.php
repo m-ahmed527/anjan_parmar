@@ -1,6 +1,7 @@
 @extends('layouts.admin.app')
 @push('styles')
 @endpush
+@section('title', 'Update Testimonial')
 @section('content')
     <div class="content-wrapper" style="">
 
@@ -19,30 +20,27 @@
                         <div class="col-md-8">
                             <div class="card card-primary">
 
-                                <form action="{{ route('admin.testimonial.update',$testimonial->id) }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('admin.testimonial.update', $testimonial->slug) }}" method="POST"
+                                    enctype="multipart/form-data" id="update-form">
                                     @csrf
                                     <div class="card-body">
 
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Testimonial Title/ Name *</label>
-                                            <input type="text" class="form-control" name="name" value="{{ $testimonial->title }}" placeholder="Blog Tile / Name">
-                                            @error('name')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <input type="text" class="form-control" name="name"
+                                                value="{{ $testimonial->name }}" placeholder="Tile / Name">
+
                                         </div>
 
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Description *</label>
-                                            <textarea name="description" class="form-control" >{{ $testimonial->description }}</textarea>
-                                            @error('description')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <textarea name="description" class="form-control" rows="8">{{ $testimonial->description }}</textarea>
                                         </div>
 
                                     </div>
                                     <div class="card-footer d-flex gap-20">
                                         <a href="{{ route('admin.testimonial.index') }}" class="btn btn-secondary">Back</a>
-                                        <button type="submit" class="btn btn-primary">Update</button>
+                                        <button type="button" class="btn btn-primary" id="update-btn">Update</button>
                                     </div>
                                 </form>
                             </div>
@@ -53,15 +51,5 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="{{ asset('assets/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-    <script>
-        // CKEDITOR.replace('description', {
-        //     // filebrowserUploadUrl: "{{ route('admin.blog.store.content.image', ['_token' => csrf_token()]) }}",
-        //     // filebrowserUploadMethod: "form",
-        // });
-        $(function() {
-            bsCustomFileInput.init();
-        });
-    </script>
+    @include('includes.admin.scripts.update-script', ['redirectUrl' => route('admin.testimonial.index')]);
 @endsection

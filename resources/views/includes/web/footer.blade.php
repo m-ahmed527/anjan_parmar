@@ -115,7 +115,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('categories') }}" class="footer-link text-decoration-none">
+                            <a href="{{ route('web.categories.index') }}" class="footer-link text-decoration-none">
                                 Categories
                             </a>
                         </li>
@@ -125,7 +125,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('testimonials') }}" class="footer-link text-decoration-none">
+                            <a href="{{ route('web.testimonials.index') }}" class="footer-link text-decoration-none">
                                 Testimonial
                             </a>
                         </li>

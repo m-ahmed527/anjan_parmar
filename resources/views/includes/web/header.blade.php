@@ -92,7 +92,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('categories') }}" class="nav-link">
+                <a href="{{ route('web.categories.index') }}" class="nav-link">
                     Categories
                 </a>
             </li>
@@ -148,7 +148,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('categories') }}" class="nav-link">
+                    <a href="{{ route('web.categories.index') }}" class="nav-link">
                         Categories
                     </a>
                 </li>
@@ -333,8 +333,7 @@
                     results.empty();
                     if (response.success) {
                         if (products.length > 0) {
-
-
+                            results.removeClass("hidden");
                             products.forEach(function(product) {
                                 let html = `
 
@@ -368,12 +367,12 @@
                     console.error(error);
                 }
             });
-            if (query || category) {
+            if (query || category != '') {
                 results.removeClass("hidden");
             } else {
                 results.addClass("hidden");
             }
-            console.log(query, category);
+            console.log(query, category == '');
         }
         input.on("keyup change", detectSearch);
         select.on("change", detectSearch);

@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Services\MediaService\HasMedia;
+use App\Traits\Filter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
-    use HasMedia;
+    use HasMedia, Filter;
 
 
     protected $guarded = ['id'];
@@ -27,5 +28,4 @@ class Blog extends Model
     {
         return Carbon::parse($value)->format('M-d-Y');
     }
-
 }

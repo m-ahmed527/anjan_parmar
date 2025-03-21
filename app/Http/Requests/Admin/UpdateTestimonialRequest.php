@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class UpdateTestimonialRequest extends FormRequest
 {
@@ -27,9 +28,11 @@ class UpdateTestimonialRequest extends FormRequest
         ];
     }
 
-    public function sanitized() : array {
+    public function sanitized(): array
+    {
         return [
-            'title' => $this->name,
+            'slug' => Str::slug($this->name),
+            'name' => $this->name,
             'description' => $this->description,
         ];
     }

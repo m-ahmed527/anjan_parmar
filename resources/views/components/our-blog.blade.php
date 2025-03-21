@@ -1,4 +1,8 @@
-@props(['headTitle' => $headTitle ?? 'Our Blogs', 'subTitle' => $subTitle ?? 'Latest News & Update'])
+@props([
+    'headTitle' => $headTitle ?? 'Our Blogs',
+    'subTitle' => $subTitle ?? 'Latest News & Update',
+    'blogs' => $blogs ?? null,
+])
 
 <section class="blog-section mx-3">
     <div class="container-fluid p-0">
@@ -17,51 +21,23 @@
         </div>
         <hr class="blog-hr">
         <div class="row">
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 p-0">
-                <div class="blog-card">
-                    <div class="blog-img-area">
-                        <img class="img-fluid blog-img" src="{{ asset('assets/web/images/blog1.png') }}" alt="">
-                        <span class="img-banner">June 1, 2024</span>
-                    </div>
-                    <div class="blog-text-area">
-                        <h3 class="card-main-heading">The Best Clothing's To Buy As A Modeling</h3>
-                        <p class="para gray">At tellus at urna condimentum. Ut enim blandit volutpat maecenas
-                            volutpat
-                            blandit. Posuere urna nec tincidunt praesent....</p>
-                        <a href="{{route('best-camera')}}" class="link-btn">Read More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 p-0">
-                <div class="blog-card">
-                    <div class="blog-img-area">
-                        <img class="img-fluid blog-img" src="{{ asset('assets/web/images/blog2.png') }}" alt="">
-                        <span class="img-banner">June 1, 2024</span>
-                    </div>
-                    <div class="blog-text-area">
-                        <h3 class="card-main-heading">10 Devices To Make Your Everyday Life Better</h3>
-                        <p class="para gray">At tellus at urna condimentum. Ut enim blandit volutpat maecenas
-                            volutpat
-                            blandit. Posuere urna nec tincidunt praesent....</p>
-                        <a href="{{route('best-camera')}}" class="link-btn">Read More</a>
+            @forelse ($blogs as $blog)
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12 p-0">
+                    <div class="blog-card">
+                        <div class="blog-img-area">
+                            <img class="img-fluid blog-img" src="{{ $blog->getFirstMediaUrl('blog_image') }}"
+                                alt="">
+                            <span class="img-banner">{{ $blog->created_at }}</span>
+                        </div>
+                        <div class="blog-text-area">
+                            <h3 class="card-main-heading">{{ $blog->name }}</h3>
+                            <p class="para gray">{{ \Str::limit($blog->short_description, 50, '...') }}</p>
+                            <a href="{{ route('web.blogs.show', $blog->slug) }}" class="link-btn">Read More</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 p-0">
-                <div class="blog-card">
-                    <div class="blog-img-area">
-                        <img class="img-fluid blog-img" src="{{ asset('assets/web/images/blog3.png') }}" alt="">
-                        <span class="img-banner">June 1, 2024</span>
-                    </div>
-                    <div class="blog-text-area">
-                        <h3 class="card-main-heading">The Top 10 Devices You Must Have In 2024</h3>
-                        <p class="para gray">At tellus at urna condimentum. Ut enim blandit volutpat maecenas
-                            volutpat
-                            blandit. Posuere urna nec tincidunt praesent....</p>
-                        <a href="{{ route('best-camera') }}" class="link-btn">Read More</a>
-                    </div>
-                </div>
-            </div>
+            @empty
+            @endforelse
         </div>
     </div>
 

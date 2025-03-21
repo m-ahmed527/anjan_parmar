@@ -104,6 +104,6 @@
 
         </section>
         <x-slide-blog />
-        <x-our-blog />
+        <x-our-blog :$blogs />
     </main>
 @endsection

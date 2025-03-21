@@ -173,6 +173,7 @@
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                         <li class="nav-item mb-3">
                             <a href="{{ route('vendor.dashboard.index') }}" class="nav-link active">
+                                <i class="fa fa-tachometer-alt"></i>
                                 <p> Dashboard</p>
                             </a>
                         </li>
@@ -181,7 +182,7 @@
                         @if (auth()?->user()?->status == 'approved')
                             <li class="nav-item mb-3">
                                 <a href="#" class="nav-link active">
-                                    {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                    <i class="fa fa-box"></i>
                                     <p>
                                         Product Management
                                         <i class="right fas fa-angle-left"></i>
@@ -207,7 +208,7 @@
                         @endif
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="fa fa-user-check"></i>
                                 <p>
                                     Requests to Admin
                                     <i class="right fas fa-angle-left"></i>
@@ -232,7 +233,7 @@
                         </li>
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
-                                {{-- <i class="nav-icon fas fa-tachometer-alt"></i> --}}
+                                <i class="fa fa-shopping-cart"></i>
                                 <p>
                                     Order Management
                                     <i class="right fas fa-angle-left"></i>
@@ -250,6 +251,7 @@
                         </li>
                         <li class="nav-item mb-3">
                             <a href="{{ route('vendor.account.index') }}" class="nav-link active">
+                                <i class="fa fa-user"></i>
                                 <p> Account Management</p>
                             </a>
 
@@ -257,6 +259,7 @@
 
                         <li class="nav-item mb-3">
                             <a href="{{ route('index') }}" class="nav-link active">
+                                <i class="fa fa-arrow-left"></i>
                                 <p>Back to Website</p>
                             </a>
                         </li>

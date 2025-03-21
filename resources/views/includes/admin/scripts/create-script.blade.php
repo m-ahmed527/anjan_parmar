@@ -166,8 +166,7 @@
                     `<span class='error-message text-danger'>${value}</span>`
                 );
                 inputField.after(errorMessage);
-            }
-             else if (@json(request()->url()).includes('new-blog')) {
+            } else if (@json(request()->url()).includes('new-blog')) {
                 if (key == 'blog_image') {
                     let inputField = $(
                         `.blog-image-parent`
@@ -177,6 +176,15 @@
                     );
                     inputField.after(errorMessage);
                 }
+                let inputField = $(
+                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                );
+                let errorMessage = $(
+                    `<span class='error-message text-danger'>${value}</span>`
+                );
+                inputField.after(errorMessage);
+            } else if (@json(request()->url()).includes('testimonial')) {
+
                 let inputField = $(
                     `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
                 );

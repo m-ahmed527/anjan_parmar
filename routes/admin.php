@@ -195,12 +195,12 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     // Testimonials
 
-    // Route::get('/all-testimonials', [TestimonialsManagementController::class, 'index'])->name('testimonial.index');
-    // Route::get('/create/new-testimonial', [TestimonialsManagementController::class, 'create'])->name('testimonial.create');
-    // Route::post('/store/new-testimonial', [TestimonialsManagementController::class, 'store'])->name('testimonial.store');
-    // Route::get('/edit/testimonial/{testimonial}', [TestimonialsManagementController::class, 'edit'])->name('testimonial.edit');
-    // Route::post('/update/testimonial/{testimonial}', [TestimonialsManagementController::class, 'update'])->name('testimonial.update');
-    // Route::post('/delete/testimonial/{testimonial}', [TestimonialsManagementController::class, 'delete'])->name('testimonial.delete');
+    Route::get('/all-testimonials', [TestimonialsManagementController::class, 'index'])->name('testimonial.index');
+    Route::get('/create/new-testimonial', [TestimonialsManagementController::class, 'create'])->name('testimonial.create');
+    Route::post('/store/new-testimonial', [TestimonialsManagementController::class, 'store'])->name('testimonial.store');
+    Route::get('/edit/testimonial/{testimonial}', [TestimonialsManagementController::class, 'edit'])->name('testimonial.edit');
+    Route::post('/update/testimonial/{testimonial}', [TestimonialsManagementController::class, 'update'])->name('testimonial.update');
+    Route::post('/delete/testimonial/{testimonial}', [TestimonialsManagementController::class, 'delete'])->name('testimonial.delete');
 
 
     //home page management

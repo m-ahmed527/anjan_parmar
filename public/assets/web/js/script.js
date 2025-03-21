@@ -306,6 +306,7 @@ function initializeSlick() {
             ],
         });
     } else {
+     
         $(".side-images-wrap").slick({
             slidesToShow: 3,
             slidesToScroll: 2,

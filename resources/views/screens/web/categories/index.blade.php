@@ -1,27 +1,14 @@
 @extends('layouts.web.app')
 
-@php
+{{-- @php
     $tabContent = [
         ['btnText' => 'All Products', 'imgUrl' => 'assets/web/images/icon-1.png'],
         ['btnText' => 'Gadgets', 'imgUrl' => 'assets/web/images/tv-icon.png'],
         ['btnText' => "Clothing's", 'imgUrl' => 'assets/web/images/fashion.png'],
         ['btnText' => 'Appliances', 'imgUrl' => 'assets/web/images/portfolio.png'],
     ];
-
-    // $categories = [
-    //     ['img' => 'assets/web/images/laptop.png', 'text' => 'Laptops'],
-    //     ['img' => 'assets/web/images/smart-watch-img.png', 'text' => 'Smart Watches'],
-    //     ['img' => 'assets/web/images/purse.png', 'text' => 'Branded Bags'],
-    //     ['img' => 'assets/web/images/choclate-spread.png', 'text' => 'Chocolate Spread'],
-    //     ['img' => 'assets/web/images/head-set-img.png', 'text' => 'Headsets'],
-    //     ['img' => 'assets/web/images/smart-phone-img.png', 'text' => 'Smart Phones'],
-    //     ['img' => 'assets/web/images/gaming-console.png', 'text' => 'Gaming Setups'],
-    //     ['img' => 'assets/web/images/branded-hoodies.png', 'text' => 'Branded Hoodies'],
-    //     ['img' => 'assets/web/images/air-shoes.png', 'text' => 'Air Shoes '],
-    //     ['img' => 'assets/web/images/drone-3.png', 'text' => 'Drone Cameras'],
-    // ];
-    $categories = App\Models\Category::all();
-@endphp
+    
+@endphp --}}
 
 @section('content')
     <main>
@@ -50,19 +37,8 @@
 
                         </div>
                         <div class="col-12">
-                            <div class="class-row">
-                                @foreach ($categories as $index => $categoryItem)
-                                    <a href="{{ route('web.products.index', ['category' => $categoryItem->slug]) }}"
-                                        class="text-decoration-none">
-                                        <div class="cat-card-wrper">
-                                            <div class="card-categories back-category-{{ $index + 1 }}">
-                                                <img src="{{ $categoryItem->getFirstMediaUrl('category') }}"
-                                                    class="img-fluid" alt="">
-                                            </div>
-                                            <p class="cat-text">{{ $categoryItem->name }}</p>
-                                        </div>
-                                    </a>
-                                @endforeach
+                            <div class="class-row category-list" id="category-list" data-page="1">
+                                @include('screens.web.categories.list')
                             </div>
                         </div>
                         <div class="col-12">
@@ -76,6 +52,52 @@
                 </div>
         </section>
         <x-slide-blog />
-        <x-our-blog />
+        <x-our-blog :$blogs />
     </main>
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $(".view-more-btn").click(function() {
+                let page = parseInt($("#category-list").attr("data-page")) + 1;
+
+                $.ajax({
+                    url: "{{ route('web.categories.index') }}",
+                    type: "GET",
+                    data: {
+                        page: page
+                    },
+                    beforeSend: function() {
+                        $("#category-list").LoadingOverlay("show");
+                    },
+                    success: function(response) {
+                        $("#category-list").LoadingOverlay("hide");
+
+                        if (response.html.trim() !== '') {
+                            $("#category-list").append(response.html);
+                            $("#category-list").attr("data-page", page);
+
+                            // Agar current page lastPage ke barabar ho gaya to button hide kar do
+                            if (page >= response.lastPage) {
+                                $(".view-more-btn").hide();
+                            }
+                        } else {
+                            $(".view-more-btn").hide();
+                        }
+                    },
+                    error: function() {
+                        $("#category-list").LoadingOverlay("hide");
+                    }
+                });
+            });
+
+            // **Page Load par bhi check kar lo ke sab categories agayi hain ya nahi**
+            let currentPage = parseInt($("#category-list").attr("data-page"));
+            let lastPage = "{{ $categories->lastPage() }}";
+
+            if (currentPage >= lastPage) {
+                $(".view-more-btn").hide();
+            }
+        });
+    </script>
+@endpush
