@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Web\BlogController;
+use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Http\Controllers\Web\HomeController;
@@ -89,8 +90,22 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
     Route::name('categories.')->controller(CategoryController::class)->group(function () {
         Route::get('/categories', 'index')->name('index');
     });
+    Route::name('cart.')->controller(CartController::class)->group(function () {
+        Route::get('/cart', 'index')->name('index');
+        Route::post('/cart/add', 'addToCart')->name('add');
+        Route::post('/cart/remove', 'removeFromCart')->name('remove');
+        Route::post('/cart/update', 'updateCart')->name('update');
+    });
 });
 // Route::view('/login', 'auth.web.login')->name('login');
+// Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+// Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+// Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
+// Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+
+
+
+
 
 $products = [
     [

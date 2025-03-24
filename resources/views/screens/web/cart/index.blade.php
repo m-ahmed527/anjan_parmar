@@ -14,62 +14,86 @@
             </div>
         </div>
     </section>
+    {{-- @dd(empty($cart['items'])) --}}
     <section class="cart-section sh-space">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-9 col-lg-8 col-12">
                     <div class="parent-table-area">
-                        <table class="cart-table">
-                            <tr>
-                                <th class="">
-                                </th>
+                        @if (!empty($cart['items']))
+                            <table class="cart-table">
+                                <tr>
+                                    <th class="">
+                                    </th>
+                                    <th class="">
+                                        Image
+                                    </th>
 
-                                <th class="">
-                                    Items
-                                </th>
-                                <th class="">
-                                    Price
-                                </th>
-                                <th class="qty-th">
-                                    Qty.
-                                </th>
-                                <th class="">
-                                    Sub Total
-                                </th>
-                            </tr>
-                            <tr class="tr-hover">
-                                <td class="pr-title dlt-td">
-                                    <button class="delete-btn btn" type="button">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </td>
-                                <td class="pr-title d-flex flex-column justify-content-center gap-2" colspan="2">
-                                    <!-- Merged two cells -->
-                                    <span>
-                                        <img src="{{ asset('assets/web/images/laptop.png') }}" class="img-fluid cart-images"
-                                            alt="">
-                                    </span>
-                                    <span>
-                                        <p>Lorem Ipsum</p>
-                                    </span>
-                                </td>
-                                <td class="pr-title"><span>$599.99</span></td>
-                                <td class="pr-title">
-                                    <div class="counter">
-                                        <div class="pr-title counter counter-area-2">
-                                            <button class="decrement btn dec-btn">
-                                                <i class="fa-solid fa-minus"></i>
+                                    <th class="">
+                                        Items
+                                    </th>
+                                    <th class="">
+                                        Price
+                                    </th>
+                                    <th class="qty-th">
+                                        Qty.
+                                    </th>
+                                    <th class="">
+                                        Sub Total
+                                    </th>
+                                </tr>
+                                @forelse ($cart['items']  as $key => $item)
+                                    <tr class="tr-hover">
+                                        <td class="pr-title dlt-td">
+                                            <button class="delete-btn btn" type="button"
+                                                data-cart_id="{{ $key }}">
+                                                <i class="fa-solid fa-xmark"></i>
                                             </button>
-                                            <input class="inp-single-inp" value="1" readonly />
-                                            <button class="increment btn btn-inc">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="pr-title"><span>$599.99</span></td>
-                            </tr>
-                        </table>
+                                        </td>
+                                        <td class="pr-title d-flex flex-column justify-content-center gap-2">
+                                            <!-- Merged two cells -->
+                                            <span>
+                                                <img src="{{ $item['image'] }}" class="img-fluid cart-images"
+                                                    alt="">
+                                            </span>
+
+                                        </td>
+                                        <td class="pr-title">
+                                            <span>
+                                                <p>{{ ucfirst($item['name']) }}</p>
+                                            </span>
+                                            <span>
+                                                <p>({{ $item['variant_name'] }})</p>
+                                            </span>
+                                        </td>
+                                        <td class="pr-title"><span>${{ $item['price'] }}</span></td>
+                                        <td class="pr-title">
+                                            <div class="counter">
+                                                <div class="pr-title counter counter-area-2">
+                                                    <button class="decrement btn dec-btn">
+                                                        <i class="fa-solid fa-minus"></i>
+                                                    </button>
+                                                    <input class="inp-single-inp" value="{{ $item['item_quantity'] }}"
+                                                        readonly />
+                                                    <button class="increment btn btn-inc">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="pr-title"><span>${{ $item['item_sub_total'] }}</span></td>
+                                    </tr>
+                                @empty
+                                @endforelse
+                            </table>
+                        @else
+                            <div class="col-12 text-center">
+                                <div class="wishlist-block">
+                                    <p class="wishlist-area">Your Cart is currently empty.</p>
+                                </div>
+                                <a href="{{ route('web.products.index') }}" class="return-shop">Return To Shop</a>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-4">
@@ -77,13 +101,13 @@
                     <div class="total total-area">
                         <div class="sub-total">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="subttl-hd">Cart Total</h4>
+                                <h4 class="subttl-hd">Cart Total ({{ $cart['total_items'] }})</h4>
                             </div>
                         </div>
                         <div class="sub-total">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="subttl-para">subtotal</h4>
-                                <p class="subttl-para">$599.99</p>
+                                <h4 class="subttl-para">Subtotal</h4>
+                                <p class="subttl-para">${{ $cart['sub_total'] }}</p>
                             </div>
                         </div>
                         <div class="sub-total">
@@ -95,7 +119,7 @@
                         <div class="sub-total">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="subttl-para">Total:</h4>
-                                <p class="subttl-para">$599.99</p>
+                                <p class="subttl-para">${{ $cart['total'] }}</p>
                             </div>
                         </div>
 
@@ -130,3 +154,32 @@
         })
     </script>
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.delete-btn').click(function() {
+                let cart_id = $(this).data('cart_id');
+                console.log(cart_id);
+                $.ajax({
+                    url: "{{ route('web.cart.remove') }}",
+                    type: 'POST',
+                    data: {
+                        cart_id: cart_id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Removed!',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

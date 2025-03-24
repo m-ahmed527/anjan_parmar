@@ -145,7 +145,7 @@
                                         <hr>
                                         <h3>Attribute Variants</h3>
                                         <div class="attribute-variants-ka-parent">
-                                            @foreach ($variants as $variant)
+                                            @forelse ($variants as $variant)
                                                 {{-- @dd($variant->attributeValues) --}}
                                                 <div class="row attribute-variants">
                                                     @foreach ($variant->attributeValues as $attribute)
@@ -207,7 +207,11 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                            @endforeach
+                                            @empty
+                                                <div class="row attribute-variants">
+                                                    @include('includes.vendor-store.product.fetch-attributes-variants')
+                                                </div>
+                                            @endforelse
                                         </div>
 
 

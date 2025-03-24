@@ -112,7 +112,7 @@
                                                 </div>
                                                 <div class="form-group col-md-12 mt-2">
                                                     <img src="{{ $product->getFirstMediaUrl('featured_image') }}"
-                                                        alt="">
+                                                        alt="" style="max-width: 150px; max-height: 150px;">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-6">
@@ -140,7 +140,8 @@
                                         <hr>
                                         <h3>Attribute Variants</h3>
                                         <div class="attribute-variants-ka-parent">
-                                            @foreach ($variants as $variant)
+
+                                            @forelse ($variants as $variant)
                                                 <div class="row attribute-variants">
                                                     @foreach ($variant->attributeValues as $attribute)
                                                         <div class="form-group col-md-4">
@@ -201,11 +202,12 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                            @endforeach
+                                            @empty
+                                                <div class="row attribute-variants">
+                                                    @include('includes.vendor-store.product.fetch-attributes-variants')
+                                                </div>
+                                            @endforelse
                                         </div>
-
-
-
 
                                         <div
                                             class="form-group col-md-12 d-flex align-items-center gap-20 justify-content-end mt-5">

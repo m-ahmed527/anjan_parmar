@@ -41,7 +41,7 @@
             </div>
         </div>
 
-
+        {{-- @dd(session('cart')) --}}
         <ul class="nav-links-main">
             <li class="position-relative">
                 <a href="{{ route('web.wishlist.index') }}" class="btn-style heart-btn text-decoration-none">
@@ -50,12 +50,13 @@
                 <span class="number-badge wishlist-count">{{ auth()?->user()?->wishlistCount() ?? 0 }}</span>
             </li>
             <li class="position-relative">
-                <a href="{{ route('cart-page') }}" class="cart-price-area text-decoration-none">
+                <a href="{{ route('web.cart.index') }}" class="cart-price-area text-decoration-none">
                     <span class="cart-icon-area">
                         <i class="fa-solid fa-cart-arrow-down"></i>
                     </span>
-                    <span class="price-total">$00.00</span>
+                    <span class="price-total cart-price">${{ session('cart')['total'] ?? 00.0 }}</span>
                 </a>
+                <span class="number-badge cart-count">{{ session('cart')['total_items'] ?? 0 }}</span>
             </li>
             <li>
                 @auth

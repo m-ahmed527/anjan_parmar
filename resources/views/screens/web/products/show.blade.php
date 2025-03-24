@@ -178,7 +178,7 @@
                             <div class="buttons-group">
                                 <div class="quantity-selection counter-area">
                                     <button class="btn  decrement decrement-2">-</button>
-                                    <input type="text" readonly value="1" class="qtyValue">
+                                    <input type="text" name="qty" readonly value="1" class="qtyValue">
                                     <button class="btn  increment increment-2">+</button>
                                 </div>
                                 <button href="{{ route('cart-page') }}" class="add-to-cart-btn text-decoration-none"
@@ -447,6 +447,100 @@
 
         // Window resize hone pe bhi chalayega
         window.addEventListener("resize", updateButtonIcons);
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#add-to-cart').on('click', function() {
+                let product_id = $('input[name="product_id"]').val();
+                let quantity = $('input[name="qty"]').val();
+                let selectedAttributes = $('input[name^="attribute_values"]:checked');
+
+                let attributeValues = [];
+                selectedAttributes.each(function() {
+                    attributeValues.push($(this).val());
+                });
+
+                if (attributeValues.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Please select a variant!',
+                    });
+                    return;
+                }
+                console.log('Product ID:', product_id, 'quantity : ', quantity, 'attributeValues : ',
+                    attributeValues);
+
+                // Pehle variant price aur stock check karenge
+                $.ajax({
+                    url: '/get-variant-price',
+                    type: 'POST',
+                    data: {
+                        _token: $('input[name="_token"]').val(),
+                        product_id: product_id,
+                        attribute_values: attributeValues
+                    },
+                    success: function(data) {
+                        if (!data.price) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Not Available',
+                                text: 'Selected combination is not available!',
+                            });
+                            return;
+                        }
+                        console.log(data)
+                        // Ab cart me add karenge
+                        $.ajax({
+                            url: "{{ route('web.cart.add') }}",
+                            type: 'POST',
+                            data: {
+                                _token: $('input[name="_token"]').val(),
+                                product_id: product_id,
+                                variant_id: data.variant_id,
+                                quantity: quantity,
+                                attribute_values: attributeValues
+                            },
+                            success: function(cartData) {
+                                console.log('success :', cartData);
+
+                                if (cartData.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Added!',
+                                        text: 'Item added to cart successfully!',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    $('.cart-count').text(cartData.cart
+                                    .total_items);
+                                    $('.cart-price').text('$' + cartData.cart
+                                    .total);
+                                }
+
+                            },
+                            error: function(error) {
+                                console.log('Error:', error);
+
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Sorrry.!',
+                                    text: error.responseJSON.message,
+                                });
+                            }
+                        });
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Opps...!',
+                            text: error.responseJSON.message,
+                        });
+                    }
+                });
+            });
+        });
     </script>
 @endsection
 

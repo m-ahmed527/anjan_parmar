@@ -62,6 +62,8 @@ class ProductController extends Controller
 
     public function show($product)
     {
+        // session()->forget('cart');
+        // dd(session()->all());
         $product = Product::with(['variants.attributeValues.attribute'])->where('slug', $product)->first();
         $relatedProducts = Product::where('category_id', $product->category_id)->get();
         return view('screens.web.products.show', get_defined_vars());
@@ -70,19 +72,16 @@ class ProductController extends Controller
 
     public function getVariantPrice(Request $request)
     {
-        // dd($request->all());
         $attributeValueIds = $request->input('attribute_values', []);
-        // dd($attributeValueIds);
 
         if (!is_array($attributeValueIds) || empty($attributeValueIds)) {
-            return response()->json(['price' => null, 'error' => 'No attribute values provided.']);
+            return response()->json(['price' => null, 'message' => 'No attribute values provided.']);
         }
         $variant = Variant::where('product_id', $request->product_id)->whereHas('attributeValues', function ($query) use ($attributeValueIds) {
             $query->whereIn('attribute_value_id', $attributeValueIds);
         }, '=', count($attributeValueIds))->first();
-        // dd($variant);
         $quantity = $variant ? $variant->quantity : null;
-        return response()->json(['price' => $variant ? $variant->price : null, 'quantity' => $quantity]);
+        return response()->json(['price' => $variant ? $variant->price : null, 'quantity' => $quantity, 'variant_id' => $variant->id ?? null]);
     }
 
 
