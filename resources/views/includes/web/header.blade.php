@@ -44,13 +44,14 @@
         {{-- @dd(session('cart')) --}}
         <ul class="nav-links-main">
             <li class="position-relative">
-                <a href="{{ route('web.wishlist.index') }}" class="btn-style heart-btn text-decoration-none">
+                <a href="{{ route('web.wishlist.index') }}"
+                    class="btn-style heart-btn text-decoration-none wishlist-btn">
                     <i class="fa fa-heart"></i>
                 </a>
                 <span class="number-badge wishlist-count">{{ auth()?->user()?->wishlistCount() ?? 0 }}</span>
             </li>
             <li class="position-relative">
-                <a href="{{ route('web.cart.index') }}" class="cart-price-area text-decoration-none">
+                <a href="{{ route('web.cart.index') }}" class="cart-price-area text-decoration-none cart-btn">
                     <span class="cart-icon-area">
                         <i class="fa-solid fa-cart-arrow-down"></i>
                     </span>
@@ -280,112 +281,8 @@
 </header>
 
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 
-<script>
-    $(document).on('click', '.heart-btn', function(e) {
-        e.preventDefault(); // Prevent default link behavior
-
-        $.ajax({
-            url: "{{ route('web.wishlist.index') }}",
-            method: "GET",
-            success: function(response) {
-                console.log(response.success);
-
-                // if (response.success) {
-                window.location.href =
-                    "{{ route('web.wishlist.index') }}"; // Open Wishlist if allowed
-                // }
-            },
-            error: function(xhr) {
-                if (xhr.status === 401 || xhr.status === 403) { // Unauthorized or Empty Wishlist
-                    Swal.fire({
-                        icon: "info",
-                        title: xhr.responseJSON.message,
-                        showConfirmButton: true
-                    });
-                }
-            }
-        });
-    });
-
-
-
-
-    $(document).ready(function() {
-        const input = $(".search-input");
-        const select = $(".search-select");
-        const results = $(".search-suggestions--list");
-
-        function detectSearch() {
-            let query = input.val().trim() ?? null;
-            let category = select.val() ?? null;
-            $.ajax({
-                url: "{{ route('web.products.header.search') }}",
-                type: "GET",
-                data: {
-                    product_name: query,
-                    category: category
-                },
-                success: function(response) {
-                    console.log(response);
-                    let products = response.products;
-                    results.empty();
-                    if (response.success) {
-                        if (products.length > 0) {
-                            results.removeClass("hidden");
-                            products.forEach(function(product) {
-                                let html = `
-
-                                    <li>
-                                     <a href="{{ route('web.products.show', '') }}/${product.slug}" >
-                                       <div class="searched-content">
-                                         <img src="${product.image}" alt="">
-                                        <div>
-                                            ${product.name}
-                                            <p>${product.category.name}</p>
-                                        </div>
-                                        </div>
-                                     </a>
-                                    </li>
-
-                            `;
-                                results.append(html);
-                                results.addClass("style");
-                            });
-                        } else {
-                            let html = `
-                                <li>No products found.</li>
-                            `;
-                            results.append(html);
-                            results.removeClass("style");
-                        }
-                    }
-
-                },
-                error: function(error) {
-                    console.error(error);
-                }
-            });
-            if (query || category != '') {
-                results.removeClass("hidden");
-            } else {
-                results.addClass("hidden");
-            }
-            console.log(query, category == '');
-        }
-        input.on("keyup change", detectSearch);
-        select.on("change", detectSearch);
-
-        let body = document.body;
-
-        $("body").on("click", () => {
-            results.addClass("hidden");
-            input.val("");
-        })
-    });
-</script>
 
 
 

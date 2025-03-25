@@ -34,7 +34,7 @@ class Cart
         $sub_total = (floatval($variant->price) + floatval($variant->product->price)) * $quantity;
         if (array_key_exists($cartKey,  $cart['items'])) {
             // Agar item pehle se cart me hai, to quantity update karo
-            $cart['items'][$cartKey]['item_quantity'] += $quantity;
+            // $cart['items'][$cartKey]['item_quantity'] += $quantity;
             $cart['items'][$cartKey]['item_quantity'] = $quantity;
             $cart['items'][$cartKey]['item_sub_total'] = $sub_total;
             $cart['items'][$cartKey]['item_total'] = $sub_total;
@@ -72,22 +72,25 @@ class Cart
             unset($cart['items'][$cartKey]);
             $this->recalculateCartConditions($cart);
         }
-
-        return ['success' => true, 'message' => 'Item removed from cart!', 'cart' => $cart];
+        if ($cart['total_items'] == 0) {
+            session()->forget('cart');
+        }
+        return ['success' => true, 'message' => 'Item removed from cart!', 'cart' => session()->get('cart')];
     }
 
-    // public function updateCart($product_id, $variant_id, $quantity)
-    // {
-    //     $cart = Session::get('cart', []);
-    //     $cartKey = $product_id . '-' . $variant_id;
+    public function updateCart($cartKey, $quantity)
+    {
+        $cart = Session::get('cart', []);
+        if (array_key_exists($cartKey,  $cart['items'])) {
+            $cart['items'][$cartKey]['item_quantity'] = $quantity;
+            $sub_total = $cart['items'][$cartKey]['price'] * $quantity;
+            $cart['items'][$cartKey]['item_sub_total'] = $sub_total;
+            $cart['items'][$cartKey]['item_total'] = $sub_total;
+            $this->recalculateCartConditions($cart);
+        }
 
-    //     if (isset($cart[$cartKey])) {
-    //         $cart[$cartKey]['quantity'] = $quantity;
-    //         Session::put('cart', $cart);
-    //     }
-
-    //     return ['success' => true, 'message' => 'Cart updated!', 'cart' => $cart];
-    // }
+        return ['success' => true, 'message' => 'Cart updated!', 'cart' => session()->get('cart'), 'item' => session()->get('cart')['items'][$cartKey]];
+    }
 
     private function recalculateCartConditions($cart)
     {

@@ -258,7 +258,9 @@
 @include('includes.logout-script', ['redirectUrl' => route('index')])
 @include('includes.web.products.add-to-wishilist-script')
 @include('includes.web.news-letter-script')
-
+@include('includes.web.header-scripts.search-script')
+@include('includes.web.header-scripts.wishlist-index-script')
+@include('includes.web.header-scripts.cart-index-script')
 @if (session('empty_wishlist'))
     <script>
         Swal.fire({

@@ -91,7 +91,7 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
         Route::get('/categories', 'index')->name('index');
     });
     Route::name('cart.')->controller(CartController::class)->group(function () {
-        Route::get('/cart', 'index')->name('index');
+        Route::get('/cart', 'index')->name('index')->middleware('empty_cart');
         Route::post('/cart/add', 'addToCart')->name('add');
         Route::post('/cart/remove', 'removeFromCart')->name('remove');
         Route::post('/cart/update', 'updateCart')->name('update');

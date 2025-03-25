@@ -14,7 +14,7 @@
             </div>
         </div>
     </section>
-    {{-- @dd(empty($cart['items'])) --}}
+    {{-- @dd($cart) --}}
     <section class="cart-section sh-space">
         <div class="container-fluid">
             <div class="row">
@@ -70,18 +70,21 @@
                                         <td class="pr-title">
                                             <div class="counter">
                                                 <div class="pr-title counter counter-area-2">
-                                                    <button class="decrement btn dec-btn">
+                                                    <button class="decrement btn dec-btn quantity-btn"
+                                                        data-cart_id="{{ $key }}">
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
-                                                    <input class="inp-single-inp" value="{{ $item['item_quantity'] }}"
-                                                        readonly />
-                                                    <button class="increment btn btn-inc">
+                                                    <input class="inp-single-inp" name="qty"
+                                                        value="{{ $item['item_quantity'] }}" readonly />
+                                                    <button class="increment btn btn-inc quantity-btn"
+                                                        data-cart_id="{{ $key }}">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </button>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="pr-title"><span>${{ $item['item_sub_total'] }}</span></td>
+                                        <td class="pr-title"><span
+                                                class="item-subtotal">${{ $item['item_sub_total'] }}</span></td>
                                     </tr>
                                 @empty
                                 @endforelse
@@ -101,13 +104,13 @@
                     <div class="total total-area">
                         <div class="sub-total">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="subttl-hd">Cart Total ({{ $cart['total_items'] }})</h4>
+                                <h4 class="subttl-hd cart-items-count">Cart Total ({{ $cart['total_items'] ?? 0 }})</h4>
                             </div>
                         </div>
                         <div class="sub-total">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="subttl-para">Subtotal</h4>
-                                <p class="subttl-para">${{ $cart['sub_total'] }}</p>
+                                <p class="subttl-para cart-subtotal">${{ $cart['sub_total'] ?? 0 }}</p>
                             </div>
                         </div>
                         <div class="sub-total">
@@ -119,7 +122,7 @@
                         <div class="sub-total">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="subttl-para">Total:</h4>
-                                <p class="subttl-para">${{ $cart['total'] }}</p>
+                                <p class="subttl-para cart-total">${{ $cart['total'] ?? 0 }}</p>
                             </div>
                         </div>
 
@@ -155,31 +158,46 @@
     </script>
 @endsection
 @push('scripts')
+    @include('includes.web.cart.delete-scripts');
     <script>
-        $(document).ready(function() {
-            $('.delete-btn').click(function() {
-                let cart_id = $(this).data('cart_id');
-                console.log(cart_id);
+        $(document).ready(function(e) {
+            $(document).on('click', '.quantity-btn', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                var row = $(this).closest("tr");
+                var quantityInput = row.find('input[name="qty"]');
+                var quantity = row.find('input[name="qty"]').val();
+                var cartId = $(this).data('cart_id');
+                var cartSubTotal = $('.cart-subtotal');
+                var cartTotal = $('.cart-total');
+                var itemSubTotal = row.find('.item-subtotal');
+                console.log(quantity);
+
                 $.ajax({
-                    url: "{{ route('web.cart.remove') }}",
+                    url: "{{ route('web.cart.update') }}",
                     type: 'POST',
                     data: {
-                        cart_id: cart_id,
-                        _token: "{{ csrf_token() }}"
+                        _token: $('input[name="_token"]').val(),
+                        quantity: quantity,
+                        cart_id: cartId
                     },
                     success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Removed!',
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        }
+                        console.log('success :', response);
+                        cartSubTotal.text("$" + response.cart.sub_total);
+                        cartTotal.text("$" + response.cart.total);
+                        itemSubTotal.text("$" + response.item.item_sub_total);
+                        quantityInput.val(response.item.item_quantity);
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Sorrry.!',
+                            text: error.responseJSON.message,
+                        });
                     }
                 });
             });
-        });
+        })
     </script>
 @endpush

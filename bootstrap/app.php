@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CartEmptyMiddleware;
 use App\Http\Middleware\NotAuthenticatedMiddleware;
 use App\Http\Middleware\PermissionMiddleware;
 use App\Http\Middleware\RoleMiddleware;
@@ -36,6 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'is_admin' => AdminMiddleware::class,
             'not_auth' => NotAuthenticatedMiddleware::class,
             'empty_wishlist' => WishlistEmptyMiddleware::class,
+            'empty_cart' => CartEmptyMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

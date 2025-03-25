@@ -52,19 +52,29 @@ class CartController extends Controller
     {
         // dd($request->all());
         $response = Cart::removeFromCart($request->cart_id);
-
-        return response()->json($response);
+        if ($response['success']) {
+            return response()->json($response, 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => "Something went wrong.!"
+            ]);
+        }
     }
 
     public function updateCart(Request $request)
     {
-
         $response = Cart::updateCart(
-            $request->product_id,
-            $request->variant_id,
+            $request->cart_id,
             $request->quantity
         );
-
-        return response()->json($response);
+        if ($response['success']) {
+            return response()->json($response, 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => "Something went wrong.!"
+            ], 400);
+        }
     }
 }
