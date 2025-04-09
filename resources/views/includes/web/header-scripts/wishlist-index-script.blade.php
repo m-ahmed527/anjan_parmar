@@ -1,5 +1,5 @@
 <script>
-    $(document).on('click', '.wishlist-btn', function(e) {
+    $(document).on('click', '.wishlist-btn-header', function(e) {
         e.preventDefault(); // Prevent default link behavior
 
         $.ajax({

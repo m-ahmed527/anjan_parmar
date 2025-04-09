@@ -127,7 +127,7 @@
                         </div>
 
 
-                        <a href="{{ route('checkout') }}" class="chckout-btn"><span href="checkout-page.php"
+                        <a href="{{ route('web.checkout.index') }}" class="chckout-btn"><span href="checkout-page.php"
                                 class="white">PROCEED TO CHECKOUT</span></a>
                     </div>
                 </div>

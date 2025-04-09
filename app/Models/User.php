@@ -92,4 +92,8 @@ class User extends Authenticatable implements InteractsWithMedia
     {
         return $this->wishlist()->count();
     }
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
 }

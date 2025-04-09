@@ -192,6 +192,15 @@
                     `<span class='error-message text-danger'>${value}</span>`
                 );
                 inputField.after(errorMessage);
+            } else if (@json(request()->url()).includes('checkout')) {
+
+                let inputField = $(
+                    `input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`
+                );
+                let errorMessage = $(
+                    `<span class='error-message text-danger'>${value}</span>`
+                );
+                inputField.after(errorMessage);
             }
         });
     }

@@ -113,7 +113,7 @@ class RequestManagementController extends Controller
      */
     public function destroy(VendorRequest $vendorRequest)
     {
-        dd($vendorRequest);
+        // dd($vendorRequest);
         try {
             DB::beginTransaction();
             $vendorRequest->delete();

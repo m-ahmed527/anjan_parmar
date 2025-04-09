@@ -6,6 +6,7 @@ use App\Services\MediaService\HasMedia;
 use App\Traits\Filter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -50,6 +51,7 @@ class Product extends Model
         return $this->hasMany(Offer::class);
     }
 
+
     // public function getValidCombinations()
     // {
     //     $combinations = [];
@@ -90,5 +92,11 @@ class Product extends Model
     {
         $this->addMediaCollection('featured_image')->single();
         $this->addMediaCollection('multiple_images')->multiple();
+    }
+
+
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class)->withPivot(['product_name', 'variant_id', 'variant_name', 'quantity', 'price', 'discount', 'sub_total', 'total'])->withTimestamps();
     }
 }

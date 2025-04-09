@@ -45,7 +45,7 @@
         <ul class="nav-links-main">
             <li class="position-relative">
                 <a href="{{ route('web.wishlist.index') }}"
-                    class="btn-style heart-btn text-decoration-none wishlist-btn">
+                    class="btn-style heart-btn text-decoration-none wishlist-btn-header">
                     <i class="fa fa-heart"></i>
                 </a>
                 <span class="number-badge wishlist-count">{{ auth()?->user()?->wishlistCount() ?? 0 }}</span>
@@ -55,7 +55,7 @@
                     <span class="cart-icon-area">
                         <i class="fa-solid fa-cart-arrow-down"></i>
                     </span>
-                    <span class="price-total cart-price">${{ session('cart')['total'] ?? 00.0 }}</span>
+                    <span class="price-total cart-price">${{ session('cart')['total'] ?? 0.0 }}</span>
                 </a>
                 <span class="number-badge cart-count">{{ session('cart')['total_items'] ?? 0 }}</span>
             </li>
@@ -279,45 +279,3 @@
 
 
 </header>
-
-
-
-
-
-
-
-
-
-
-
-{{-- // results.on("click", "li", function() {
-    //     input.val("");
-    //     // select.val("Relevance");
-    //     results.addClass("hidden");
-    // }); --}}
-
-{{-- // const input = document.querySelectorAll('.header-search-input');
-// const results = document.querySelector('.search-suggestions--list');
-// const lists = document.querySelectorAll(".search-suggestions--list");
-
-// lists.forEach(listItem => {
-//     listItem.addEventListener("click", () => {
-//         input[0] ? input[0].value = "" : input[1].value = ""
-//         results.classList.add("hidden");
-//     })
-// });
-
-// const detectSearch = (event) => {
-//     const query = event.target.value.trim();
-//     console.log(query);
-//     if (query) {
-//         // getSearchSuggestions(query);
-//         results.classList.remove("hidden")
-//     } else {
-//         // hideSearchSuggestions();
-//         results.classList.add("hidden")
-//     }
-// };
-// console.log(input);
-// input[0].addEventListener('keyup', detectSearch);
-// input[1].addEventListener('keyup', detectSearch); --}}

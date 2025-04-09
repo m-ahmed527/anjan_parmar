@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Web\BlogController;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\CategoryController;
+use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\NewsletterController;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 // Route::view('/categories', 'screens.web.categories.index')->name('categories');
 Route::view('/about-us', 'screens.web.about-us.index')->name('about-us');
 Route::view('/cart-page', 'screens.web.cart.index')->name('cart-page');
-Route::view('/checkout', 'screens.web.checkout.index')->name('checkout');
+// Route::view('/checkout', 'screens.web.checkout.index')->name('checkout');
 // Route::view('/blogs', 'screens.web.blogs.index')->name('blogs');
 // Route::view('/best-camera', 'screens.web.blogs.show')->name('best-camera');
 Route::view('/shipping', 'screens.web.shipping-policy.index')->name('shipping');
@@ -58,7 +59,7 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
         Route::get('/products', 'index')->name('index');
         Route::get('/product/{product}', 'show')->name('show');
         // Route::post('/get-variant-price/{attributeValue}', 'getVariantPrice')->name('get-variant-price');
-        Route::post('/get-variant-price', 'getVariantPrice')->name('get-variant-price');
+        Route::post('/get-variant-price', 'getVariantPrice')->name('get.variant.price');
         Route::get('/get-variant-combinations', 'getVariantCombinations');
         Route::post('/product/make-offer/{product}', 'makeOffer')->name('make.offer');
         Route::get('/products/header-search', 'headerSearch')->name('header.search');
@@ -95,6 +96,10 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
         Route::post('/cart/add', 'addToCart')->name('add');
         Route::post('/cart/remove', 'removeFromCart')->name('remove');
         Route::post('/cart/update', 'updateCart')->name('update');
+    });
+    Route::name('checkout.')->controller(CheckoutController::class)->group(function () {
+        Route::get('/checkout', 'index')->name('index');
+        Route::post('/checkout/store', 'store')->name('store');
     });
 });
 // Route::view('/login', 'auth.web.login')->name('login');

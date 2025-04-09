@@ -393,7 +393,7 @@
                 var buyNowBtn = document.getElementById('buy-now');
                 var priceDisplayDiv = document.getElementById('priceDisplay');
 
-                fetch('/get-variant-price', {
+                fetch("{{ route('web.products.get.variant.price') }}", {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
@@ -474,7 +474,7 @@
 
                 // Pehle variant price aur stock check karenge
                 $.ajax({
-                    url: '/get-variant-price',
+                    url: "{{ route('web.products.get.variant.price') }}",
                     type: 'POST',
                     data: {
                         _token: $('input[name="_token"]').val(),
@@ -514,9 +514,9 @@
                                         timer: 2000
                                     });
                                     $('.cart-count').text(cartData.cart
-                                    .total_items);
+                                        .total_items);
                                     $('.cart-price').text('$' + cartData.cart
-                                    .total);
+                                        .total);
                                 }
 
                             },
