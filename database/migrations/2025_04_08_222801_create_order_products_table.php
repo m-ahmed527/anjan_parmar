@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('variant_id')->nullable();
             $table->string('variant_name')->nullable();
             $table->integer('quantity')->nullable();
+            $table->float('product_price')->nullable();
+            $table->float('variant_price')->nullable();
             $table->float('price')->nullable();
             $table->float('discount')->nullable();
             $table->float('sub_total')->nullable();

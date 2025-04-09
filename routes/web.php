@@ -97,7 +97,7 @@ Route::name('web.')->controller(AuthController::class)->group(function () {
         Route::post('/cart/remove', 'removeFromCart')->name('remove');
         Route::post('/cart/update', 'updateCart')->name('update');
     });
-    Route::name('checkout.')->controller(CheckoutController::class)->group(function () {
+    Route::middleware('auth')->name('checkout.')->controller(CheckoutController::class)->group(function () {
         Route::get('/checkout', 'index')->name('index');
         Route::post('/checkout/store', 'store')->name('store');
     });

@@ -36,8 +36,11 @@
     </div>
 @endsection
 
-
-@include('includes.login-script', ['redirectUrl' => route('index')])
+@if (str_contains(url()->previous(), 'cart'))
+    @include('includes.login-script', ['redirectUrl' => route('web.checkout.index')])
+@else
+    @include('includes.login-script', ['redirectUrl' => route('index')])
+@endif
 
 {{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js">

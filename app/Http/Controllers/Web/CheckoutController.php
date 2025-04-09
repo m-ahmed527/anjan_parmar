@@ -37,8 +37,8 @@ class CheckoutController extends Controller
         try {
             $cart = session('cart');
             DB::beginTransaction();
-            // dd($request->billingSanitized(), $request->shippingSanitized());
             $order = $this->createOrder($cart, $request->billingSanitized(), $request->shippingSanitized());
+            session()->forget('cart');
             DB::commit();
             return response()->json([
                 'success' => true,
@@ -46,8 +46,6 @@ class CheckoutController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
-
             return response()->json([
                 'success' => false,
                 'message' => 'Something went wrong',
@@ -75,5 +73,30 @@ class CheckoutController extends Controller
         if (!empty($shipping)) {
             $order->shippingAddress()->create($shipping);
         }
+        $this->createOrderItems($order, $cart['items']);
+    }
+    private function createOrderItems($order, $items)
+    {
+        $products = $this->prepareOrderItems($items);
+        $order->products()->sync($products);
+    }
+    private function prepareOrderItems($items)
+    {
+        $products = [];
+        foreach ($items as $item) {
+            $products[$item['product_id']] = [
+                'product_name' => $item['name'],
+                'variant_id' => $item['variant_id'],
+                'variant_name' => $item['variant_name'],
+                'quantity' => $item['item_quantity'],
+                'product_price' => $item['product_price'],
+                'variant_price' => $item['variant_price'],
+                'price' => $item['price'],
+                'discount' => 0,
+                'sub_total' => $item['item_sub_total'],
+                'total' => $item['item_total'],
+            ];
+        }
+        return $products;
     }
 }

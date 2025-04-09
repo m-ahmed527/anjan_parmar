@@ -189,7 +189,8 @@
                                 @if ($product->is_premium)
                                     <button class="add-cart-btn offer-btn">Make an offer</button>
                                 @endif
-                                <button href="{{ route('checkout') }}" class="add-cart-btn buy-outline" id="buy-now">Buy
+                                <button href="{{ route('web.checkout.index') }}" class="add-cart-btn buy-outline"
+                                    id="buy-now">Buy
                                     Now</button>
                             </div>
                         </div>
