@@ -153,18 +153,18 @@
             })
 
 
-            let phones = $('.phone');
-            phones.each(function(index, element) {
-                let phone = $(element).text();
-                console.log(phone);
+            // let phones = $('.phone');
+            // phones.each(function(index, element) {
+            //     let phone = $(element).text();
+            //     console.log(phone);
 
-                console.log(phone.trim().slice(2, 5));
-                let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2, 5) + ') ' + phone
-                    .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
-                console.log(newPhone);
-                $(element).text(newPhone);
+            //     console.log(phone.trim().slice(2, 5));
+            //     let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2, 5) + ') ' + phone
+            //         .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
+            //     console.log(newPhone);
+            //     $(element).text(newPhone);
 
-            })
+            // })
 
         });
     </script>

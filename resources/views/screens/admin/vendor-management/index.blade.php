@@ -230,16 +230,17 @@
                 });
             });
 
-            let phones = $('.phone');
-            phones.each(function(index, element) {
-                let phone = $(element).text();
+            // let phones = $('.phone');
+            // phones.each(function(index, element) {
+            //     let phone = $(element).text();
 
 
-                let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2, 5) + ') ' + phone
-                    .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
-                $(element).text(newPhone);
+            //     let newPhone = phone.trim().slice(0, 2) + ' (' + phone.trim().slice(2, 5) + ') ' + phone
+            //         .trim().slice(5, 8) + '-' + phone.trim().slice(8, 12);
+            //     $(element).text(newPhone);
 
-            })
+            // })
         });
     </script>
 @endsection
+

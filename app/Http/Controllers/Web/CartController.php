@@ -26,14 +26,17 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'variant_id' => 'required|exists:variants,id',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
         ]);
-        // dd($request->all());
+
+        $variant_id = $request->input('variant_id');
+        $attribute_values = $request->input('attribute_values', []);
+
         $response = Cart::addToCart(
             $request->product_id,
-            $request->variant_id,
-            $request->quantity
+            $variant_id,
+            $request->quantity,
+            $attribute_values
         );
         // dd($response);
         if (!$response['success']) {

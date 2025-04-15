@@ -63,7 +63,7 @@
                                                 <p>{{ ucfirst($item['name']) }}</p>
                                             </span>
                                             <span>
-                                                <p>({{ $item['variant_name'] }})</p>
+                                                <p>{{ ($item['variant_name']) ??'' }}</p>
                                             </span>
                                         </td>
                                         <td class="pr-title"><span>${{ $item['price'] }}</span></td>

@@ -1,9 +1,8 @@
 @extends('layouts.admin.app')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    @include('includes.admin.data-table-css')
 @endpush
+@section('title', 'Orders')
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
@@ -21,7 +20,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
-                    <div class="col-10">
+                    <div class="col-12">
                         <div class="card">
                             {{-- <div class="card-header">
                                 <div class=" d-flex justify-content-end">
@@ -38,7 +37,7 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="ID: activate to sort column descending">
-                                               ID
+                                                CUSTOMER NAME
                                             </th>
 
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
@@ -54,17 +53,22 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
+                                                PAYMENT STATUS
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
                                                 AMOUNT</th>
 
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                STATUS
+                                                ORDER STATUS
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                ORDER DESCRIPTION
+                                                ORDER PLACED AT
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
@@ -77,26 +81,25 @@
                                         @foreach ($orders as $order)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
-                                                    {{ $order->id }}
+                                                    {{ $order->user->first_name }}
                                                 </td>
-                                                <td>{{ $order->payment_id }}</td>
-                                                <td>{{ $order->type }}</td>
-                                                <td>{{ $order->total_price }}</td>
+                                                <td>{{ $order->order_id }}</td>
+                                                <td>{{ $order->payment_method }}</td>
+                                                <td>{{ $order->payment_status }}</td>
 
 
-                                                <td>
-                                                    <a href="#" data-id="{{ $order->id }}" id="status"
-                                                        data-status="{{ $order->status }}">{{ $order->status == 'pending' ? 'pending' : 'delivered' }}</a>
-                                                </td>
-                                                <td>
-                                                    {{ $order->description }}
-                                                </td>
+                                                <td>${{ $order->total }}</td>
+                                                <td>{{ $order->order_status }}</td>
+                                                <td>{{ $order->created_at }}</td>
                                                 <td class="d-flex gap-20">
-                                                    {{-- <a href="{{ route('admin.product.edit', $order->id) }}"
-                                                        class="btn btn-primary">Edit</a>--}}
-                                                    <a href="#" data-id="{{ $order->id }}"
-                                                        class="delete btn btn-danger btn-sm">Delete</a>
-                                                    <a href="{{ route('admin.order.details', $order->id) }}"
+
+                                                    {{-- <form action="{{ route('admin.order.delete', $order->order_id) }}"
+                                                        id="delete-form" method="POST">
+                                                        @csrf
+                                                        <button data-id="{{ $order->order_id }}"
+                                                            class="delete btn btn-danger" id="delete-btn">Delete</button>
+                                                    </form> --}}
+                                                    <a href="{{ route('admin.order.details', $order->order_id) }}"
                                                         class="btn btn-info">Details</a>
                                                 </td>
                                             </tr>
@@ -104,11 +107,11 @@
 
                                     </tbody>
                                 </table>
-                                <form action="" id="delete" onclick="return confirm('Are you sure?');"
+                                {{-- <form action="" id="delete" onclick="return confirm('Are you sure?');"
                                     method="POST">
                                     @csrf
                                     @method('delete')
-                                </form>
+                                </form> --}}
                             </div>
                         </div>
                     </div>
@@ -118,64 +121,6 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
-        $(document).ready(function() {
-            $(document).on("click", "#status", function(e) {
-                e.preventDefault()
-                var id = $(this).data("id");
-                var element = $(this);
-                var status = $(this).data("status");
-
-                console.log(element, id, status);
-
-                $.ajax({
-                    method: "GET",
-                    url: "{{ route('admin.order.change.status','') }}/" + id,
-                    data: {
-                        status: status
-                    },
-                    success: function(response) {
-                        console.log(response.status);
-                        element.data("status", response.status);
-                        // var newText = ;
-                        element.html(response.status == 'pending' ? 'pending' : 'delivered');
-                    },
-                });
-            });
-            $(document).on("click", ".delete", function(e) {
-                e.preventDefault();
-                let id = $(this).data("id");
-                if (confirm('Are you sure?')) {
-                    $("#delete").attr('action', "{{ route('admin.product.delete', '') }}/" + id)
-                    $("#delete").submit();
-                }
-            })
-
-        });
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-        });
-    </script>
-    <script src="{{ asset('assets/admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    @include('includes.admin.data-table-scripts')
+    @include('includes.admin.scripts.delete-script')
 @endsection

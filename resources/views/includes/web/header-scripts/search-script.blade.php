@@ -7,6 +7,11 @@
         function detectSearch() {
             let query = input.val().trim() ?? null;
             let category = select.val() ?? null;
+            console.log(query, category);
+            if (query == '' && category == '') {
+                results.addClass("hidden");
+                return;
+            }
             $.ajax({
                 url: "{{ route('web.products.header.search') }}",
                 type: "GET",
@@ -59,7 +64,7 @@
             } else {
                 results.addClass("hidden");
             }
-            console.log(query, category == '');
+            // console.log(query, category == '');
         }
         input.on("keyup change", detectSearch);
         select.on("change", detectSearch);

@@ -19,6 +19,7 @@ class ProductFilter
         if (request()->has('product_name') && request()->get('product_name') != null) {
             $query->where('name', 'like', '%' . request()->product_name . '%');
         } else {
+            // dd($query->get());
             return $next($query);
         }
 

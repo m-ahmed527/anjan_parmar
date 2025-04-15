@@ -1,4 +1,8 @@
 @extends('layouts.admin.app')
+@push('styles')
+    @include('includes.admin.data-table-css')
+@endpush
+@section('title', 'Order Details')
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
 
@@ -6,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>{{ $order->name }} Order Details</h1>
+                        <h1>{{ $order->user->first_name }} Order Details</h1>
                     </div>
 
 
@@ -38,7 +42,7 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                NAME</th>
+                                                FIRST NAME</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -52,42 +56,26 @@
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 PHONE</th>
 
-                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending">
-                                                Actions
-                                            </th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="odd">
 
                                             <td class="dtr-control sorting_1" tabindex="0">
-                                                {{ $order->name }}
+                                                {{ $order->user->first_name }}
                                             </td>
                                             <td class="dtr-control sorting_1" tabindex="1">
-                                                {{ $order->last_name ?? '' }}
+                                                {{ $order->user->last_name ?? '' }}
                                             </td>
                                             <td class="dtr-control sorting_1" tabindex="1">
-                                                {{ $order->email }}
+                                                {{ $order->user->email }}
 
                                             </td>
                                             <td class="dtr-control sorting_1" tabindex="1">
-                                                {{ $order->phone }}
+                                                {{ $order->user->phone }}
 
                                             </td>
 
-                                            {{-- <td class="d-flex gap-20">
-                                                <a href="{{ route('admin.product.edit', $order->id) }}"
-                                                    class="btn btn-primary">Edit</a>
-                                                <form action="{{ route('admin.product.delete', $order->id) }}"
-                                                    onclick="return confirm('Are you sure?');" method="POST">
-                                                    @csrf
-                                                    <button class="btn btn-danger">Delete</button>
-                                                </form>
-                                                <a href="{{ route('admin.order.variant.detail', $order->id) }}"
-                                                    class="btn btn-secondary">Details</a>
-                                            </td> --}}
                                         </tr>
                                     </tbody>
                                 </table>
@@ -121,11 +109,7 @@
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 ADDRESS</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending">
-                                                STREET
-                                            </th>
+
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -147,46 +131,28 @@
                                                 ZIP
                                             </th>
 
-                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending">
-                                                Actions
-                                            </th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="odd">
 
                                             <td>
-                                                {{ $order->address }}
-                                            </td>
-                                            <td>
-                                                {{ $order->street_appartment }}
-                                            </td>
-                                            <td>
-                                                {{ $order->country }}
-                                            </td>
-                                            <td>
-                                                {{ $order->city }}
-                                            </td>
-                                            <td>
-                                                {{ $order->state }}
-                                            </td>
-                                            <td>
-                                                {{ $order->zip }}
+                                                {{ $order->billingAddress->address }}
                                             </td>
 
-                                            {{-- <td class="d-flex gap-20">
-                                                <a href="{{ route('admin.product.edit', $order->id) }}"
-                                                    class="btn btn-primary">Edit</a>
-                                                <form action="{{ route('admin.product.delete', $order->id) }}"
-                                                    onclick="return confirm('Are you sure?');" method="POST">
-                                                    @csrf
-                                                    <button class="btn btn-danger">Delete</button>
-                                                </form>
-                                                <a href="{{ route('admin.order.variant.detail', $order->id) }}"
-                                                    class="btn btn-secondary">Details</a>
-                                            </td> --}}
+                                            <td>
+                                                {{ $order->billingAddress->country }}
+                                            </td>
+                                            <td>
+                                                {{ $order->billingAddress->city }}
+                                            </td>
+                                            <td>
+                                                {{ $order->billingAddress->state }}
+                                            </td>
+                                            <td>
+                                                {{ $order->billingAddress->zip }}
+                                            </td>
+
                                         </tr>
 
                                     </tbody>
@@ -198,6 +164,87 @@
                 </div>
             </div>
         </section>
+        @if (!$order->billingAddress->same_as_billing)
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-10">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row d-flex justify-content-space-between">
+                                        <div class="col-sm-11 ">
+                                            <h2>Customer's Shipping Details</h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <table id="example1"
+                                        class="table table-bordered table-striped dataTable dtr-inline mt-2"
+                                        aria-describedby="example1_info">
+                                        <thead>
+                                            <tr>
+
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Rendering engine: activate to sort column descending">
+                                                    ADDRESS</th>
+
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Rendering engine: activate to sort column descending">
+                                                    COUNTRY
+                                                </th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Rendering engine: activate to sort column descending">
+                                                    CITY
+                                                </th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Rendering engine: activate to sort column descending">
+                                                    STATE
+                                                </th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Rendering engine: activate to sort column descending">
+                                                    ZIP
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="odd">
+
+                                                <td>
+                                                    {{ $order->shippingAddress->address }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $order->shippingAddress->country }}
+                                                </td>
+                                                <td>
+                                                    {{ $order->shippingAddress->city }}
+                                                </td>
+                                                <td>
+                                                    {{ $order->shippingAddress->state }}
+                                                </td>
+                                                <td>
+                                                    {{ $order->shippingAddress->zip }}
+                                                </td>
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        @endif
         <section class="content">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center align-items-center">
@@ -206,18 +253,11 @@
                             <div class="card-header">
                                 <div class="row d-flex justify-content-space-between">
                                     <div class="col-sm-8 ">
-                                        <h2> Products </h2>
+                                        <h2>Order Products </h2>
                                     </div>
                                     <div class="col-sm-4 ">
                                         <div class="row d-flex justify-content-space-between align-items-center">
-                                            <div class="col-md-8">
-                                                <label for="">Ordered Products Variant Details</label>
 
-                                            </div>
-                                            <div class="col-md-3 d-flex justify-content-end">
-                                                <a href="{{ route('admin.order.variant.detail', $order->id) }}"
-                                                    class="btn btn-secondary">Details</a>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -231,7 +271,7 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                PRODUCT</th>
+                                                IMAGE </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
@@ -239,69 +279,61 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                PRODUCT WEIGHT</th>
+                                                VARIANT NAME</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                PRODUCT HEIGHT</th>
+                                                PRODUCT PRICE</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                PRODUCT WIDTH</th>
+                                                VARIANT PRICE</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                PRODUCT LENGTH
+                                                PRODUCT QUANTITY
                                             </th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
-                                                PRODUCT RADIUS
+                                                TOTAL
                                             </th>
-                                            {{-- <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Rendering engine: activate to sort column descending">
-                                                Actions
-                                            </th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse ($order->products as $product)
+                                            {{-- @dd($product->pivot) --}}
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
-                                                    <img src="{{ $product?->getFirstMediaUrl('product-featured-image') }}"
-                                                        alt="">
-                                                </td>
-                                                <td class="dtr-control sorting_1" tabindex="1">
-                                                    {{ $product->name ?? '' }}
-                                                </td>
-                                                <td class="dtr-control sorting_1" tabindex="1">
-                                                    {{ $product->weight }}
+                                                    @if ($product?->getFirstMediaUrl('featured_image'))
+                                                        <img src="{{ $product?->getFirstMediaUrl('featured_image') }}"
+                                                            alt="" width="100px">
+                                                    @else
+                                                        No Image
+                                                    @endif
 
                                                 </td>
                                                 <td class="dtr-control sorting_1" tabindex="1">
-                                                    {{ $product->height }}
+                                                    {{ $product?->pivot?->product_name ?? '' }}
+                                                </td>
+                                                <td class="dtr-control sorting_1" tabindex="1">
+                                                    {{ $product?->pivot?->variant_name ?? 'No variant' }}
+
+                                                </td>
+                                                <td class="dtr-control sorting_1" tabindex="1">
+                                                    ${{ $product?->pivot?->product_price }}
 
                                                 </td>
                                                 <td>
-                                                    {{ $product->width }}
+                                                    ${{ $product?->pivot?->variant_price }}
                                                 </td>
                                                 <td>
-                                                    {{ $product->length }}
+                                                    {{ $product?->pivot?->quantity }}
                                                 </td>
                                                 <td>
-                                                    {{ $product->radius }}
+                                                    ${{ $product?->pivot?->total }}
                                                 </td>
-                                                {{--<td class="d-flex gap-20">
-                                                     <a href="{{ route('admin.product.edit', $order->id) }}"
-                                                        class="btn btn-primary">Edit</a>
-                                                     <form action="{{ route('admin.product.delete', $order->id) }}"
-                                                    onclick="return confirm('Are you sure?');" method="POST">
-                                                    @csrf
-                                                    <button class="btn btn-danger">Delete</button>
-                                                </form>
 
-                                                </td>--}}
                                             </tr>
                                         @empty
                                         @endforelse
@@ -317,75 +349,5 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
-        $(function() {
-            $("#example1").DataTable({
-                "searching": false,
-                "info": false,
-                "paging": false,
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-
-        $(document).ready(function() {
-            $(document).on("click", "#status", function(e) {
-                e.preventDefault()
-                var slug = $(this).data("slug");
-                var element = $(this);
-                var status = $(this).data("status");
-
-                console.log(element);
-                if (confirm('Are you sure?')) {
-                    $.ajax({
-                        method: "GET",
-                        url: "/admin/category-status/change/" + slug,
-                        data: {
-                            status: status
-                        },
-                        success: function(response) {
-                            if (response.status) {
-                                // Update the status attribute in the DOM element
-                                element.data("status", response.status);
-
-                                // Update the displayed text or perform any other DOM updates as needed
-                                var newText = response.status === 'Active' ? 'Active' :
-                                    'Inactive';
-                                element.html(newText);
-                            }
-
-                        },
-                    });
-                }
-            })
-        })
-    </script>
-    <script src="{{ asset('assets/admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
-    <script src="{{ asset('assets/admin/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    @include('includes.admin.data-table-scripts')
 @endsection

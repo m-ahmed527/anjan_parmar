@@ -75,13 +75,35 @@ class CheckoutController extends Controller
         }
         $this->createOrderItems($order, $cart['items']);
     }
+
     private function createOrderItems($order, $items)
     {
-        $products = $this->prepareOrderItems($items);
-        $order->products()->sync($products);
+        foreach ($items as $item) {
+            $order->products()->attach($item['product_id'], [
+                'product_name'   => $item['name'],
+                'variant_id'     => $item['variant_id'],
+                'variant_name'   => $item['variant_name'],
+                'quantity'       => $item['item_quantity'],
+                'product_price'  => $item['product_price'],
+                'variant_price'  => $item['variant_price'],
+                'price'          => $item['price'],
+                'discount'       => 0,
+                'sub_total'      => $item['item_sub_total'],
+                'total'          => $item['item_total'],
+                // 'created_at'     => now(),
+                // 'updated_at'     => now(),
+            ]);
+        }
     }
+    // private function createOrderItems($order, $items)
+    // {
+    //     // $products = $this->prepareOrderItems($items);
+    //     // dd($products);
+    //     // $order->products()->attach($products);
+    // }
     private function prepareOrderItems($items)
     {
+        dd($items);
         $products = [];
         foreach ($items as $item) {
             $products[$item['product_id']] = [

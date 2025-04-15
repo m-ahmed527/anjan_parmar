@@ -9,16 +9,23 @@ use Illuminate\Http\Request;
 
 class OrderManagementController extends Controller
 {
-    public function index() : View {
-        $orders = Order::all();
-        return view('screens.admin.order-management.index',compact('orders'));
+    public function index(): View
+    {
+        $orders = Order::with(['user'])->get();
+        // dd($orders[0]->products[0]->pivot);
+        return view('screens.admin.order-management.index', get_defined_vars());
     }
 
-    public function orderDetails(Order $order) : View {
-        return view('screens.admin.order-management.detail',compact('order'));
+    public function orderDetails(Order $order): View
+    {
+        $order->load(['user', 'products', 'billingAddress', 'shippingAddress']);
+        // dd($order);
+        return view('screens.admin.order-management.detail', get_defined_vars());
     }
-    public function orderVariantDetails(Order $order) : View {
-        return view('screens.admin.order-management.variant-detail',compact('order'));
+    public function orderVariantDetails(Order $order): View
+    {
+
+        return view('screens.admin.order-management.variant-detail', compact('order'));
     }
 
     public function changeStatus(Order $order)
@@ -38,5 +45,4 @@ class OrderManagementController extends Controller
             ]);
         }
     }
-
 }

@@ -12,6 +12,7 @@ class CartServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('cart', function ($app) {
+            // dd($app);
             return new Cart();
         });
     }

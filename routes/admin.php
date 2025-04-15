@@ -95,8 +95,8 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     Route::get('/all-orders', [OrderManagementController::class, 'index'])->name('orders.index');
     Route::get('/order/details/{order}', [OrderManagementController::class, 'orderDetails'])->name('order.details');
-    Route::get('/order-status/change/{order}', [OrderManagementController::class, 'changeStatus'])->name('order.change.status');
-    Route::get('/order/variant/details/{order}', [OrderManagementController::class, 'orderVariantDetails'])->name('order.variant.detail');
+    // Route::get('/order-status/change/{order}', [OrderManagementController::class, 'changeStatus'])->name('order.change.status');
+    // Route::get('/order/variant/details/{order}', [OrderManagementController::class, 'orderVariantDetails'])->name('order.variant.detail');
 
     // offers
     Route::get('/all-offers', [OfferManagementController::class, 'index'])->name('offers.index');

@@ -57,6 +57,11 @@ class User extends Authenticatable implements InteractsWithMedia
         $this->addMediaCollection('avatar')->single();
     }
 
+    public function getPhoneAttribute($value)
+    {
+        return preg_replace('/(\d{1})(\d{3})(\d{3})(\d{4})/', '$1 ($2) $3-$4', $value);
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class)->withTimestamps();

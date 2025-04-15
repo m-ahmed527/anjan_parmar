@@ -18,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // dd($this->app);
         $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
         $this->app->bind(LoginRepositoryInterface::class, LoginRepository::class);
     }

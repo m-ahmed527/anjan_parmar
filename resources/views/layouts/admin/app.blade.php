@@ -225,7 +225,13 @@
                                 <p> Dashboard</p>
                             </a>
                         </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('admin.profile.index') }}" class="nav-link active">
+                                <i class="fa fa-user"></i>
+                                <p> Profile Management</p>
+                            </a>
 
+                        </li>
                         <li class="nav-item mb-3">
                             <a href="#" class="nav-link active">
                                 <i class="fa fa-tags"></i>
@@ -366,7 +372,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link active">
+                                    <a href="{{ route('admin.orders.index') }}" class="nav-link active">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>All Orders</p>
                                     </a>
@@ -394,13 +400,7 @@
                                 <p> Contacts Management</p>
                             </a>
                         </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('admin.profile.index') }}" class="nav-link active">
-                                <i class="fa fa-user"></i>
-                                <p> Profile Management</p>
-                            </a>
 
-                        </li>
                         <li class="nav-item mb-3">
                             <a href="{{ route('admin.vendors.index') }}" class="nav-link active">
                                 <i class="fa fa-store"></i>

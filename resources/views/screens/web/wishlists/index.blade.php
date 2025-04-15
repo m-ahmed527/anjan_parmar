@@ -49,8 +49,8 @@
                                 <td class="pr-title"><span>${{ $wishlist->price }}</span></td>
                                 <td class="pr-title">
                                     <span>
-                                        <button href="{{ route('cart-page') }}"
-                                            class="add-to-cart-btn text-decoration-none">Add To Cart</button>
+                                        <a href="{{ route('web.products.show', $wishlist->slug) }}"
+                                            class="add-to-cart-btn text-decoration-none">View Product</a>
                                     </span>
                                 </td>
                             </tr>

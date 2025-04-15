@@ -17,12 +17,13 @@ class CategoryFilter
 
 
         // Apply category filter
+        // dd(request()->get('category'));
         if (request()->has('category') && request()->get('category') != null) {
             $category = Category::whereSlug(request()->category)->first();
             $query->where('category_id', $category->id);
-            // dd($query->get());
             return $next($query);
         } else {
+            // dd($query->get());
             return $next($query);
         }
     }

@@ -34,6 +34,8 @@
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
                                 <div class=" d-flex justify-content-end">
                                     <a class="btn btn-primary move-btn mr-2" href="#">Make Selected</a>
+                                    <a class="btn btn-success mr-2" href="{{ route('admin.product.premium.index') }}">All
+                                        Premiums</a>
                                     <a href="{{ route('admin.product.create') }}" class="btn btn-primary">Create New
                                         Product</a>
                                 </div>

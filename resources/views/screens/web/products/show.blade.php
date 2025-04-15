@@ -142,20 +142,20 @@
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}" id="">
                                 {{-- @foreach ($groupedAttributes as $attributeName => $values)
-                                    <input type="hidden" name="attributes[]" value="{{ $attributeName }}" id="">
-                                    <p class="product-price">{{ $attributeName }}</p>
-                                    <div class="storage-btn-area">
-                                        @foreach ($values as $value)
-                                            @php
-                                                $radioId = $attributeName . '-' . $value;
-                                            @endphp
-                                            <input type="radio" type="hidden" id="{{ $radioId }}"
-                                                class="custom-radios" name="attributes[{{ strtolower($attributeName) }}]"
-                                                value="{{ $value }}">
-                                            <label for="{{ $radioId }}">{{ $value }}</label>
-                                        @endforeach
-                                    </div>
-                                @endforeach --}}
+                                        <input type="hidden" name="attributes[]" value="{{ $attributeName }}" id="">
+                                        <p class="product-price">{{ $attributeName }}</p>
+                                        <div class="storage-btn-area">
+                                            @foreach ($values as $value)
+                                                @php
+                                                    $radioId = $attributeName . '-' . $value;
+                                                @endphp
+                                                <input type="radio" type="hidden" id="{{ $radioId }}"
+                                                    class="custom-radios" name="attributes[{{ strtolower($attributeName) }}]"
+                                                    value="{{ $value }}">
+                                                <label for="{{ $radioId }}">{{ $value }}</label>
+                                            @endforeach
+                                        </div>
+                                    @endforeach --}}
                                 @foreach ($groupedVariants as $attributeName => $attributeValues)
                                     <input type="hidden" name="attributes[]" value="{{ $attributeName }}" id="">
                                     <p class="product-price">{{ $attributeName }}</p>
@@ -172,9 +172,8 @@
                                     </div>
                                 @endforeach
                             </form>
-
-
                             <p><span id="priceDisplay" class="text-danger"></span></p>
+
                             <div class="buttons-group">
                                 <div class="quantity-selection counter-area">
                                     <button class="btn  decrement decrement-2">-</button>
@@ -204,37 +203,17 @@
                             <div class="content-box-products">
                                 <div class="content-header-products">
                                     <button class="product-tab-btn active" data-value="description">Description</button>
-                                    <button class="product-tab-btn" data-value="additional-information">Additional
-                                        Information
-                                    </button>
+                                    {{-- <button class="product-tab-btn" data-value="reviews">Reviews</button> --}}
                                 </div>
                                 <div class="text-sec-pro">
                                     <div id="description">
                                         <p class="des-text-area">{{ $product->long_description }}
                                     </div>
-                                    <div id="additional-information" style="display: none">
-                                        <p class="des-text-area">hy,Cras aliquam ultricies ante, eu sollicitudin nulla
-                                            mattis
-                                            et.
-                                            Proin
-                                            non
-                                            sapien commodo,
-                                            maximus libero eu, dictum massa. Interdum et malesuada fames ac ante ipsum
-                                            primis in
-                                            faucibus. Mauris posuere sem a tellus posuere, non aliquet lacus faucibus.
-                                            Aliquam
-                                            sodales
-                                            vestibulum sollicitudin. Proin ullamcorper gravida mi, sit amet pharetra justo
-                                            rhoncus
-                                            vitae. Suspendisse volutpat tempor massa id efficitur. Ut fermentum rhoncus
-                                            hendrerit.
-                                            Vestibulum maximus tempus turpis, vel aliquet odio euismod at. Sed sed justo non
-                                            mauris
-                                            cursus varius in a leo. Proin iaculi placerat placerat.icitudin. Proin
-                                            ullamcorper
-                                            gravida
-                                            mi, sit amet pharetra justo rhoncus vitae.</p>
-                                    </div>
+                                    {{-- <div id="reviews" style="display: none">
+                                      <form>
+                                        <textarea name="reviews" class="reviews-input" placeholder="Write your message..."></textarea>
+                                      </form>
+                                    </div> --}}
                                     {{-- <div class="images-area-warn mt-5">
                                         <div class="box-warn-icon">
                                             <img src="{{ asset('assets/web/images/usb-icon.png') }}" alt="">
@@ -384,6 +363,8 @@
     </script>
 
     <script>
+        console.log(@json($product->variants->isEmpty()));
+
         document.querySelectorAll('#variantForm .custom-radios').forEach(select => {
             select.addEventListener('change', () => {
                 const form = document.getElementById('variantForm');
@@ -462,7 +443,7 @@
                     attributeValues.push($(this).val());
                 });
 
-                if (attributeValues.length === 0) {
+                if (@json($product->variants->isNotEmpty()) && attributeValues.length === 0) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Oops...',
@@ -472,74 +453,114 @@
                 }
                 console.log('Product ID:', product_id, 'quantity : ', quantity, 'attributeValues : ',
                     attributeValues);
-
-                // Pehle variant price aur stock check karenge
-                $.ajax({
-                    url: "{{ route('web.products.get.variant.price') }}",
-                    type: 'POST',
-                    data: {
-                        _token: $('input[name="_token"]').val(),
-                        product_id: product_id,
-                        attribute_values: attributeValues
-                    },
-                    success: function(data) {
-                        if (!data.price) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Not Available',
-                                text: 'Selected combination is not available!',
-                            });
-                            return;
-                        }
-                        console.log(data)
-                        // Ab cart me add karenge
-                        $.ajax({
-                            url: "{{ route('web.cart.add') }}",
-                            type: 'POST',
-                            data: {
-                                _token: $('input[name="_token"]').val(),
-                                product_id: product_id,
-                                variant_id: data.variant_id,
-                                quantity: quantity,
-                                attribute_values: attributeValues
-                            },
-                            success: function(cartData) {
-                                console.log('success :', cartData);
-
-                                if (cartData.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Added!',
-                                        text: 'Item added to cart successfully!',
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
-                                    $('.cart-count').text(cartData.cart
-                                        .total_items);
-                                    $('.cart-price').text('$' + cartData.cart
-                                        .total);
-                                }
-
-                            },
-                            error: function(error) {
-                                console.log('Error:', error);
-
+                if (@json($product->variants->isNotEmpty())) {
+                    // Pehle variant price aur stock check karenge
+                    $.ajax({
+                        url: "{{ route('web.products.get.variant.price') }}",
+                        type: 'POST',
+                        data: {
+                            _token: $('input[name="_token"]').val(),
+                            product_id: product_id,
+                            attribute_values: attributeValues
+                        },
+                        success: function(data) {
+                            if (!data.price) {
                                 Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Sorrry.!',
-                                    text: error.responseJSON.message,
+                                    icon: 'error',
+                                    title: 'Not Available',
+                                    text: 'Selected combination is not available!',
                                 });
+                                return;
                             }
-                        });
-                    },
-                    error: function(error) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Opps...!',
-                            text: error.responseJSON.message,
-                        });
-                    }
-                });
+                            console.log(data)
+                            // Ab cart me add karenge
+                            $.ajax({
+                                url: "{{ route('web.cart.add') }}",
+                                type: 'POST',
+                                data: {
+                                    _token: $('input[name="_token"]').val(),
+                                    product_id: product_id,
+                                    variant_id: data.variant_id,
+                                    quantity: quantity,
+                                    attribute_values: attributeValues
+                                },
+                                success: function(cartData) {
+                                    console.log('success :', cartData);
+
+                                    if (cartData.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Added!',
+                                            text: 'Item added to cart successfully!',
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                        $('.cart-count').text(cartData.cart
+                                            .total_items);
+                                        $('.cart-price').text('$' + cartData.cart
+                                            .total);
+                                    }
+
+                                },
+                                error: function(error) {
+                                    console.log('Error:', error);
+
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Sorrry.!',
+                                        text: error.responseJSON.message,
+                                    });
+                                }
+                            });
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Opps...!',
+                                text: error.responseJSON.message,
+                            });
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "{{ route('web.cart.add') }}",
+                        type: 'POST',
+                        data: {
+                            _token: $('input[name="_token"]').val(),
+                            product_id: product_id,
+                            variant_id: null,
+                            quantity: quantity,
+                            attribute_values: [],
+                        },
+                        success: function(cartData) {
+                            console.log('success :', cartData);
+
+                            if (cartData.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Added!',
+                                    text: 'Item added to cart successfully!',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                $('.cart-count').text(cartData.cart
+                                    .total_items);
+                                $('.cart-price').text('$' + cartData.cart
+                                    .total);
+                            }
+
+                        },
+                        error: function(error) {
+                            console.log('Error:', error);
+
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Sorrry.!',
+                                text: error.responseJSON.message,
+                            });
+                        }
+                    });
+                }
             });
         });
     </script>
