@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Offers on Products')
 
@@ -123,6 +123,72 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     @include('includes.admin.scripts.delete-script')
+
+
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [{
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.user.first_name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.product.name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.offer_quantity;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return "$" + row.offer_price;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return "$" + row.total_price;
+                }
+            },
+
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
+                       <div class="d-flex gap-20">
+
+                                    <a href="{{ route('admin.offer.details', '') }}/${data.id}"
+                                        class="btn btn-primary">Details</a>
+                             </div>
+                        `;
+                },
+            }
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.offers.get.data')])
 @endsection

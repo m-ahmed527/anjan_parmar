@@ -17,6 +17,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductManagementController extends Controller
 {
@@ -29,6 +30,24 @@ class ProductManagementController extends Controller
             ->get();
         return view('screens.admin.product-management.index', get_defined_vars());
     }
+
+    public function getProductsData(Request $request)
+    {
+        // dd($request->all());
+        $products = Product::where('is_premium', $request->premium)->with('user')
+            ->whereHas('user', function ($query) use ($request) {
+                $query->role($request->role);
+            })->get();
+        $products->map(function ($product) {
+            $product->discounted_price = $product->discount();
+            $product->image = $product->getFirstMediaUrl('featured_image');
+            $product->search_key = $product->slug . $product->name . $product->price . $product->discounted_price . $product->discount_type;
+        });
+
+        return DataTables::of($products)->make(true);
+    }
+
+
     public function premiumIndex(): View
     {
         $products = Product::where('is_premium', 1)->whereHas('user', function ($query) {
@@ -36,6 +55,11 @@ class ProductManagementController extends Controller
         })->get();
         return view('screens.admin.product-management.premium', get_defined_vars());
     }
+
+
+
+
+
 
     public function vednorProducts(): View
     {

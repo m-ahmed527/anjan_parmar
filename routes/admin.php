@@ -34,6 +34,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     // Attributes
     Route::get('/attributes', [AttributeManagementController::class, 'index'])->name('attribute.index');
+    Route::get('/attributes/get-data', [AttributeManagementController::class, 'getAttributeData'])->name('attribute.get.data');
     Route::get('/attribute/create', [AttributeManagementController::class, 'create'])->name('attribute.create');
     Route::post('/attribute/store', [AttributeManagementController::class, 'store'])->name('attribute.store');
     Route::get('/attribute/edit/{attribute}', [AttributeManagementController::class, 'edit'])->name('attribute.edit');
@@ -43,8 +44,10 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     // Products
     Route::get('/all/products', [ProductManagementController::class, 'index'])->name('product.index');
+    Route::get('/all/products/get-data', [ProductManagementController::class, 'getProductsData'])->name('product.get.data');
     Route::get('/all/vendor-products', [ProductManagementController::class, 'vednorProducts'])->name('vendor-products.index');
     Route::get('/all/products/premium', [ProductManagementController::class, 'premiumIndex'])->name('product.premium.index');
+    Route::get('/all/products/premium/get-data', [ProductManagementController::class, 'getPremiumData'])->name('product.premium.get.data');
     Route::get('/product/create', [ProductManagementController::class, 'create'])->name('product.create');
     // Route::get('/get-variants/{attribute}', [ProductManagementController::class, 'getVariants'])->name('get.variant');
     // Route::get('/get-selected-variants/{attribute}', [ProductManagementController::class, 'selectedVariants'])->name('get.selected.variant');
@@ -83,6 +86,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     // Categories
     Route::get('/categories', [CategoryManagementController::class, 'index'])->name('category.index');
+    Route::get('/categories/get-data', [CategoryManagementController::class, 'getCategoryData'])->name('category.get.data');
     Route::get('/category/create', [CategoryManagementController::class, 'create'])->name('category.create');
     Route::get('/category/edit/{category}', [CategoryManagementController::class, 'edit'])->name('category.edit');
     Route::post('/category/store', [CategoryManagementController::class, 'store'])->name('category.store');
@@ -94,12 +98,14 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     // orders
 
     Route::get('/all-orders', [OrderManagementController::class, 'index'])->name('orders.index');
+    Route::get('/all-orders/get-data', [OrderManagementController::class, 'getOrdersData'])->name('orders.get.data');
     Route::get('/order/details/{order}', [OrderManagementController::class, 'orderDetails'])->name('order.details');
     // Route::get('/order-status/change/{order}', [OrderManagementController::class, 'changeStatus'])->name('order.change.status');
     // Route::get('/order/variant/details/{order}', [OrderManagementController::class, 'orderVariantDetails'])->name('order.variant.detail');
 
     // offers
     Route::get('/all-offers', [OfferManagementController::class, 'index'])->name('offers.index');
+    Route::get('/all-offers/get-data', [OfferManagementController::class, 'getOffersData'])->name('offers.get.data');
     Route::get('/offer/details/{offer}', [OfferManagementController::class, 'show'])->name('offer.details');
     // Route::get('/offer-status/change/{offer}', [OfferManagementController::class, 'changeStatus'])->name('offer.change.status');
     // Route::get('/offer/variant/details/{offer}', [OfferManagementController::class, 'offerVariantDetails'])->name('offer.variant.detail');
@@ -120,6 +126,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     // contact-us
 
     Route::get('/all-contacts', [ContactManagementController::class, 'index'])->name('contact.index');
+    Route::get('/all-contacts/get-data', [ContactManagementController::class, 'getContactData'])->name('contact.get.data');
     Route::get('/contact/details/{contact}', [ContactManagementController::class, 'show'])->name('contact.detail');
 
 
@@ -132,6 +139,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     //users
     Route::get('/all-users', [UserManagementController::class, 'index'])->name('users.index');
+    Route::get('/all-users/get-data', [UserManagementController::class, 'getUserData'])->name('users.get.data');
     Route::get('/details/{user}', [UserManagementController::class, 'show'])->name('user.detial');
     Route::get('/create/new-user', [UserManagementController::class, 'create'])->name('create.user');
     Route::post('/create/new-user', [UserManagementController::class, 'store']);
@@ -140,6 +148,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     // vendors
     Route::get('/all-vendors', [VendorManagementController::class, 'index'])->name('vendors.index');
+    Route::get('/all-vendors/get-data', [VendorManagementController::class, 'getVendorsDarta'])->name('vendors.get.data');
     Route::get('/details/{vendor}', [VendorManagementController::class, 'show'])->name('vendor.detial');
     Route::get('/vendor-status/change/{vendor}', [VendorManagementController::class, 'changeStatus'])->name('vendor.change.status');
     // Route::get('/create/new-vendor', [VendorManagementController::class, 'create'])->name('create.vendor');
@@ -147,8 +156,9 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     // Route::get('/edit/{vendor}', [VendorManagementController::class, 'edit'])->name('vendor.edit');
     // Route::post('/update/{vendor}', [VendorManagementController::class, 'update'])->name('update.vendor');
 
-    //
+    //news letter
     Route::get('/all-newsletters', [NewsLetterMangement::class, 'index'])->name('newsletter.index');
+    Route::get('/all-newsletters/get-data', [NewsLetterMangement::class, 'getNewLetterData'])->name('newsletter.get.data');
     Route::post('/all-newsletter/delete/{newsLetter}', [NewsLetterMangement::class, 'destroy'])->name('newsletter.delete');
 
     //blogs categories
@@ -163,6 +173,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
 
     //blogs
     Route::get('/all-blogs', [BlogManagementController::class, 'index'])->name('blog.index');
+    Route::get('/all-blogs/get-data', [BlogManagementController::class, 'getBlogData'])->name('blog.get.data');
     Route::get('/create/new-blog', [BlogManagementController::class, 'create'])->name('blog.create');
     Route::post('/store', [BlogManagementController::class, 'store'])->name('blog.store');
     Route::post('/upload-content-image', [BlogManagementController::class, 'uploadContentImage'])->name('blog.store.content.image');
@@ -196,6 +207,7 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     // Testimonials
 
     Route::get('/all-testimonials', [TestimonialsManagementController::class, 'index'])->name('testimonial.index');
+    Route::get('/all-testimonials/get-data', [TestimonialsManagementController::class, 'getTestimonialData'])->name('testimonial.get.data');
     Route::get('/create/new-testimonial', [TestimonialsManagementController::class, 'create'])->name('testimonial.create');
     Route::post('/store/new-testimonial', [TestimonialsManagementController::class, 'store'])->name('testimonial.store');
     Route::get('/edit/testimonial/{testimonial}', [TestimonialsManagementController::class, 'edit'])->name('testimonial.edit');

@@ -6,16 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class OrderManagementController extends Controller
 {
     public function index(): View
     {
-        $orders = Order::with(['user'])->get();
-        // dd($orders[0]->products[0]->pivot);
+        // $orders = Order::with(['user'])->get();
+        // $orders->map(function ($order) {
+        //     $order->search_key = $order->order_id . $order->payment_method . $order->payment_status . $order->order_status . $order->total . $order->created_at;
+        // });
+        // dd($orders);
         return view('screens.admin.order-management.index', get_defined_vars());
     }
 
+    public function getOrdersData()
+    {
+        $orders = Order::with(['user'])->get();
+        $orders->map(function ($order) {
+            $order->search_key = $order->user->first_name . $order->order_id . $order->payment_method . $order->payment_status . $order->order_status . $order->total . $order->created_at;
+        });
+        return DataTables::of($orders)->make(true);
+    }
     public function orderDetails(Order $order): View
     {
         $order->load(['user', 'products', 'billingAddress', 'shippingAddress']);

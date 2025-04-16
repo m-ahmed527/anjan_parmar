@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Contacts')
 
@@ -57,7 +57,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($contacts as $contact)
                                             <tr class="odd">
 
@@ -72,7 +72,7 @@
                                             </tr>
                                         @endforeach
 
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                                 <form action="" id="delete" onclick="return confirm('Are you sure?');"
                                     method="POST">
@@ -89,13 +89,53 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     <script>
         $(function() {
             bsCustomFileInput.init();
         });
     </script>
     <script>
-        
+        let columns = [];
+        // Define columns based on type
+
+        columns = [{
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.email;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.phone;
+                }
+            },
+
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
+                   <div class="d-flex gap-20">
+
+                                <a href="{{ route('admin.contact.detail', '') }}/${data.id}"
+                                    class="btn btn-primary">Details</a>
+                         </div>
+                    `;
+                },
+            }
+        ];
     </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.contact.get.data')])
 @endsection

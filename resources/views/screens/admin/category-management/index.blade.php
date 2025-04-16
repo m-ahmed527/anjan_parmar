@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Categories')
 
@@ -63,7 +63,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($categories as $category)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
@@ -80,9 +80,7 @@
                                                         No Image Found
                                                     @endif
                                                 </td>
-                                                {{-- @php
-                                                    $attributes = $category->attributes()->withTrashed()->get();
-                                                @endphp --}}
+
                                                 <td class="dtr-control sorting_1" tabindex="1">
                                                     @forelse ($category->attributes as $attribute)
                                                         {{ $loop->iteration }}-{{ $attribute->name }}<br>
@@ -98,12 +96,11 @@
                                                         <button type="button" class="btn btn-danger"
                                                             id="delete-btn">Delete</button>
                                                     </form>
-                                                    {{-- <a href="{{ route('admin.category.show', $category->slug) }}"
-                                                        class="btn btn-secondary">Details</a> --}}
+
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                             </div>
                         </div>
@@ -115,6 +112,73 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     @include('includes.admin.scripts.delete-script')
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [{
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    if (row.image) {
+                        return `
+                                <img src="${row.image}" alt="blog Image" style="max-width: 100px; max-height: 100px;">
+                        `;
+                    } else {
+                        return "No Image";
+                    }
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+                    if (row.attributes && row.attributes.length > 0) {
+                        return row.attributes.map((attribute, index) => `${index + 1} - ${attribute.name}<br>`).join('');
+                    } else {
+                        return "No Attributes";
+                    }
+                }
+
+            },
+
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
+                       <div class="d-flex gap-20">
+                                    <a href="{{ route('admin.category.edit', '') }}/${data.slug}"
+                                        class="btn btn-primary">Edit</a>
+                                    <form
+                                        action="{{ route('admin.category.delete', '') }}/${data.slug}"
+                                        method="POST" id="delete-form">
+                                        @csrf
+                                        <button type="button" class="btn btn-danger"
+                                            id="delete-btn">Delete</button>
+                                    </form>
+
+                             </div>
+                        `;
+                },
+            }
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.category.get.data')])
 @endsection

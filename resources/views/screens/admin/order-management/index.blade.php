@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Orders')
 @section('content')
@@ -70,14 +70,19 @@
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 ORDER PLACED AT
                                             </th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="example1"
+                                            <th class="sorting_disabled sorting_asc" tabindex="0" aria-controls="example1"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Rendering engine: activate to sort column descending">
                                                 ACTIONS
                                             </th>
+                                            {{-- <th class="sorting sorting_asc " tabindex="0" aria-controls="example1"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Rendering engine: activate to sort column descending">
+                                                SEARCH
+                                            </th> --}}
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($orders as $order)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
@@ -89,23 +94,35 @@
 
 
                                                 <td>${{ $order->total }}</td>
-                                                <td>{{ $order->order_status }}</td>
+                                                <td>
+                                                    {{ $order->order_status }}
+                                                    <select class="form-control order-status-select d-none"
+                                                        data-order-id="{{ $order->order_id }}">
+                                                        <option {{ $order->order_status == 'Created' ? 'selected' : '' }}>
+                                                            Created</option>
+                                                        <option
+                                                            {{ $order->order_status == 'In Transit' ? 'selected' : '' }}>In
+                                                            Transit</option>
+                                                        <option {{ $order->order_status == 'Delivered' ? 'selected' : '' }}>
+                                                            Delivered</option>
+                                                        <option
+                                                            {{ $order->order_status == 'Cancelled' ? 'selected' : '' }}>
+                                                            Cancelled</option>
+                                                    </select>
+                                                </td>
+
                                                 <td>{{ $order->created_at }}</td>
                                                 <td class="d-flex gap-20">
 
-                                                    {{-- <form action="{{ route('admin.order.delete', $order->order_id) }}"
-                                                        id="delete-form" method="POST">
-                                                        @csrf
-                                                        <button data-id="{{ $order->order_id }}"
-                                                            class="delete btn btn-danger" id="delete-btn">Delete</button>
-                                                    </form> --}}
+
                                                     <a href="{{ route('admin.order.details', $order->order_id) }}"
                                                         class="btn btn-info">Details</a>
                                                 </td>
+                                                <td class="">{{ $order->search_key }}</td>
                                             </tr>
                                         @endforeach
 
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                                 {{-- <form action="" id="delete" onclick="return confirm('Are you sure?');"
                                     method="POST">
@@ -121,6 +138,94 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
-    @include('includes.admin.scripts.delete-script')
+
+
+
+    {{-- @include('includes.admin.data-table-scripts') --}}
+    {{-- @include('includes.admin.scripts.delete-script') --}}
+    <script>
+        let columns = [];
+        // Define columns based on type
+        if ((@json(request()->url())).includes('all-orders')) {
+            columns = [{
+                    data: 'search_key',
+                    render: function(data, type, row) {
+
+                        return row.user.first_name;
+                    }
+                },
+                {
+                    data: 'search_key',
+                    render: function(data, type, row) {
+
+                        return row.order_id;
+                    }
+                },
+                {
+                    data: 'search_key',
+                    render: function(data, type, row) {
+
+                        return row.payment_method;
+                    }
+                },
+                {
+                    data: 'search_key',
+                    render: function(data, type, row) {
+
+                        return row.payment_status;
+                    }
+                },
+                {
+                    data: 'search_key',
+                    render: function(data, type, row) {
+
+                        return row.total;
+                    }
+
+                },
+
+                {
+                    data: 'search_key',
+                    render: function(data, type, row) {
+
+                        return `
+                            <select class="form-control order-status-select" data-order-id="">
+                                    <option ${ row.order_status == 'Created' ? 'selected' : '' }>
+                                        Created</option>
+                                    <option
+                                        ${ row.order_status == 'In Transit' ? 'selected' : '' }>In
+                                        Transit</option>
+                                    <option ${ row.order_status == 'Delivered' ? 'selected' : '' }>
+                                        Delivered</option>
+                                    <option
+                                        ${ data.order_status == 'Cancelled' ? 'selected' : '' }>
+                                        Cancelled</option>
+                                </select>
+                                `;
+                    },
+
+                },
+                {
+                    data: 'search_key',
+                    render: function(data, type, row) {
+
+                        return row.created_at;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data) {
+                        console.log(data);
+
+                        return `
+                       <a href="{{ route('admin.order.details', '') }}/${data.order_id}" class="btn btn-info">Details</a>
+                        `;
+                    },
+                }
+            ];
+        }
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.orders.get.data')])
+
+
 @endsection

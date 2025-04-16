@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Users')
 @section('content')
@@ -70,7 +70,7 @@
                                             </th> --}}
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($users as $user)
                                             @if ($user->hasRole('User'))
                                                 <tr class="odd">
@@ -92,17 +92,17 @@
                                                     <td class="phone">
                                                         {{ $user->phone }}
                                                     </td>
-                                                    {{-- <td class="d-flex gap-20">
+                                                    <td class="d-flex gap-20">
                                                         <a href="#" data-id="{{ $user->slug }}"
                                                         class="delete btn btn-danger btn-sm">Delete</a>
                                                         <a href="{{ route('admin.user.detial', $user->slug) }}"
                                                             class="btn btn-info">Details</a>
-                                                    </td> --}}
+                                                    </td>
                                                 </tr>
                                             @endif
                                         @endforeach
 
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                                 <form action="" id="delete" onclick="return confirm('Are you sure?');"
                                     method="POST">
@@ -118,7 +118,84 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
+
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [
+
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+                    if (row.image) {
+
+                        return `
+                            <img src="${row.image}" alt="" style="max-width: 50px; max-height: 50px;">
+                        `;
+                    } else {
+                        return "No Image"
+                    }
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.first_name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.last_name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.email;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.phone;
+                }
+            },
+
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.users.get.data')])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script>
         $(document).ready(function() {
             $(document).on("click", "#status", function(e) {

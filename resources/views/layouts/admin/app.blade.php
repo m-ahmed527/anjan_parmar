@@ -34,6 +34,7 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('assets/admin/plugins/summernote/summernote-bs4.min.css') }}">
     {{-- <link rel="stylesheet" href="~/adminlte/dist/css/skins/skin-yellow.min.css"> --}}
+
     <style>
         .user-panel img {
             width: 50px !important;

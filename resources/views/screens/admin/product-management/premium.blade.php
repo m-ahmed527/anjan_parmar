@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
     <style>
         .premium-single,
         .premium-all {
@@ -88,7 +88,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($products as $product)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
@@ -129,7 +129,7 @@
                                             </tr>
                                         @endforeach
 
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
 
                             </div>
@@ -141,8 +141,116 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     @include('includes.admin.scripts.delete-script')
+
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [{
+                data: null,
+                render: function(data) {
+
+                    return `
+                        <input type="checkbox" name="premium" id="" class="premium-single" value="${data.slug}">
+                    `;
+                },
+                orderable: false,
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    if (row.image) {
+                        return `
+                            <img src="${row.image}" alt="${row.name}" style="max-width: 100px; max-height: 100px;">
+                        `;
+                    }
+                },
+                orderable: false,
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.price;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.discounted_price;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+                    if (row.discount_type == 'price') {
+
+                        return '$' + row.discount;
+                    } else {
+
+                        return row.discount;
+                    }
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.discount_type;
+                }
+            },
+
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
+                       <div class="d-flex gap-20">
+                                    <a href="{{ route('admin.product.edit', '') }}/${data.slug}"
+                                        class="btn btn-primary">Edit</a>
+
+                                    <form
+                                        action="{{ route('admin.product.delete', '') }}/${data.slug}"
+                                        method="POST" id="delete-form">
+                                        @csrf
+                                        <button type="button" class="btn btn-danger"
+                                            id="delete-btn">Delete</button>
+                                    </form>
+                                    <a href="{{ route('admin.product.details', '') }}/${data.slug}"
+                                        class="btn btn-primary">Details</a>
+                             </div>
+                        `;
+                },
+            }
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', [
+        'url' => route('admin.product.get.data', ['premium' => 1, 'role' => 'Admin']),
+    ])
+
+
+
+
+
+
+
+
+
+
+
+
     <script>
         $(document).ready(function() {
             $(document).on("click", "#status", function(e) {

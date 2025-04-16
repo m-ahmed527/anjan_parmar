@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Vendors')
 
@@ -88,7 +88,7 @@
                                             </th> --}}
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($users as $user)
                                             @if ($user->hasRole('Vendor'))
                                                 <tr class="odd">
@@ -124,18 +124,18 @@
 
                                                         </Select>
                                                     </td>
-                                                    {{-- <td class="d-flex gap-20">
+                                                    <td class="d-flex gap-20">
                                                         <a href="{{ route('admin.user.edit', $user->slug) }}"
                                                             class="btn btn-primary">Edit</a>
 
                                                         <a href="{{ route('admin.user.detial', $user->slug) }}"
                                                             class="btn btn-info">Details</a>
-                                                    </td> --}}
+                                                    </td>
                                                 </tr>
                                             @endif
                                         @endforeach
 
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                                 <form action="" id="delete" onclick="return confirm('Are you sure?');"
                                     method="POST">
@@ -152,12 +152,94 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     <script>
         $(function() {
             bsCustomFileInput.init();
         });
     </script>
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [
+
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+                    if (row.image) {
+
+                        return `
+                            <img src="${row.image}" alt="" style="max-width: 50px; max-height: 50px;">
+                        `;
+                    } else {
+                        return "No Image"
+                    }
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.first_name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.business_name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.email;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.phone;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+                    return `
+                        <select class="form-control status-dropdown" id="status"
+                                data-id="${row.id}" data-status="${row.status}">
+                            <option value="pending" ${row.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="approved" ${row.status === 'approved' ? 'selected' : ''}>Approved</option>
+                            <option value="rejected" ${row.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                        </select>
+                    `;
+                }
+            },
+
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.vendors.get.data')])
+
+
+
+
+
+
+
+
+
+
+
     <script>
         $(document).ready(function() {
             $(document).on("change", "#status", function(e) {
@@ -243,4 +325,3 @@
         });
     </script>
 @endsection
-

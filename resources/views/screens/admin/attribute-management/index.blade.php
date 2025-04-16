@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Attributes')
 
@@ -53,7 +53,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($attributes as $attribute)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
@@ -77,7 +77,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                             </div>
                         </div>
@@ -89,6 +89,50 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     @include('includes.admin.scripts.delete-script')
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [{
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.name;
+                }
+            },
+
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
+                       <div class="d-flex gap-20">
+                                    <a href="{{ route('admin.attribute.edit', '') }}/${data.slug}"
+                                        class="btn btn-primary">Edit</a>
+                                    <form
+                                        action="{{ route('admin.attribute.delete', '') }}/${data.slug}"
+                                        method="POST" id="delete-form">
+                                        @csrf
+                                        <button type="button" class="btn btn-danger"
+                                            id="delete-btn">Delete</button>
+                                    </form>
+                                    <a href="{{ route('admin.attribute.details', '') }}/${data.slug}"
+                                        class="btn btn-primary">Details</a>
+                             </div>
+                        `;
+                },
+            }
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.attribute.get.data')])
 @endsection

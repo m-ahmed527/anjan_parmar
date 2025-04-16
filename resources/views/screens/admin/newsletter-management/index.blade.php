@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Newsletters')
 @section('content')
@@ -53,7 +53,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($newsletters as $newsletter)
                                             <tr class="odd">
 
@@ -72,7 +72,7 @@
                                             </tr>
                                         @endforeach
 
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                                 <form action="" id="delete" onclick="return confirm('Are you sure?');"
                                     method="POST">
@@ -88,6 +88,58 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     @include('includes.admin.scripts.delete-script')
+
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [{
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.email;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+                    if (row.agreement) {
+                        return 'Agreed';
+                    } else {
+                        return 'Not Agreed';
+                    }
+                }
+            },
+
+
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
+                   <div class="d-flex gap-20">
+
+                                <form action="{{ route('admin.newsletter.delete', '') }}/${data.id}"
+                                                        id="delete-form" method="POST">
+                                                        @csrf
+                                                        <button data-id=""
+                                                            class="delete btn btn-danger" id="delete-btn">Delete</button>
+                                                    </form>
+                         </div>
+                    `;
+                },
+            }
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.newsletter.get.data')])
 @endsection

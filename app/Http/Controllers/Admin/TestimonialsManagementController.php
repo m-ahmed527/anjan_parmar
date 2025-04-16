@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class TestimonialsManagementController extends Controller
 {
@@ -18,7 +19,14 @@ class TestimonialsManagementController extends Controller
         $testimonials = Testimonial::all();
         return view('screens.admin.testimonial-management.index', get_defined_vars());
     }
-
+    public function getTestimonialData()
+    {
+        $testimonials = Testimonial::all();
+        $testimonials->map(function ($testimonial) {
+            $testimonial->search_key = $testimonial->name . $testimonial->description;
+        });
+        return DataTables::of($testimonials)->make(true);
+    }
     public function create(): View
     {
         return view('screens.admin.testimonial-management.create');

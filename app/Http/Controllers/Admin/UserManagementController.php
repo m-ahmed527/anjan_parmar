@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserManagementController extends Controller
 {
@@ -16,7 +17,16 @@ class UserManagementController extends Controller
         $users = User::all();
         return view('screens.admin.user-management.index', get_defined_vars());
     }
-
+    public function  getUserData()
+    {
+        $users = User::role('User')->get();
+        // dd($users);
+        $users->map(function ($user) {
+            $user->image = $user->getFirstMediaUrl('avatar');
+            $user->search_key = $user->id . $user->first_name . $user->last_name . $user->email . $user->phone;
+        });
+        return DataTables::of($users)->make(true);
+    }
     public function show(User $user): View
     {
         return view('screens.admin.user-management.detail', compact('user'));

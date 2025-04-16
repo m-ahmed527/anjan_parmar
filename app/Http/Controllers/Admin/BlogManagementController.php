@@ -10,6 +10,7 @@ use App\Models\BlogCategory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class BlogManagementController extends Controller
 {
@@ -18,11 +19,20 @@ class BlogManagementController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::all();
+        // $blogs = Blog::all();
 
         return view('screens.admin.blog-management.index', get_defined_vars());
     }
 
+    public function  getBlogData()
+    {
+        $blogs = Blog::all();
+        $blogs->map(function ($blog) {
+            $blog->image = $blog->getFirstMediaUrl('blog_image');
+            $blog->search_key = $blog->id . $blog->slug . $blog->short_description . $blog->long_description;
+        });
+        return DataTables::of($blogs)->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      */

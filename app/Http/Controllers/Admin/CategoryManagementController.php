@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class CategoryManagementController extends Controller
 {
@@ -23,6 +24,17 @@ class CategoryManagementController extends Controller
         // dd($categories[0]->attributes()->withTrashed()->get());
 
         return view('screens.admin.category-management.index', get_defined_vars());
+    }
+
+    public function  getCategoryData()
+    {
+        $categories = Category::with('attributes')->get();
+        $categories->map(function ($category) {
+            $category->image = $category->getFirstMediaUrl('category');
+            $attributeNames = $category->attributes->pluck('name')->implode('');
+            $category->search_key = $category->id . $category->name . $category->slug . $attributeNames;
+        });
+        return DataTables::of($categories)->make(true);
     }
 
     public function create(): View

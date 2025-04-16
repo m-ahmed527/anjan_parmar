@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
 
 class AttributeManagementController extends Controller
 {
@@ -19,7 +20,14 @@ class AttributeManagementController extends Controller
         $attributes = Attribute::all();
         return view('screens.admin.attribute-management.index', get_defined_vars());
     }
-
+    public function getAttributeData()
+    {
+        $attributes = Attribute::all();
+        $attributes->map(function ($attribute) {
+            $attribute->search_key = $attribute->id . $attribute->name . $attribute->slug;
+        });
+        return DataTables::of($attributes)->make(true);
+    }
     public function show(Attribute $attribute)
     {
 

@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Blogs')
 @section('content')
@@ -51,7 +51,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($blogs as $blog)
                                             <tr class="odd">
                                                 <td>
@@ -79,7 +79,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                             </div>
                         </div>
@@ -91,6 +91,56 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     @include('includes.admin.scripts.delete-script')
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [{
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    if (row.image) {
+                        return `
+                                <img src="${row.image}" alt="blog Image" style="max-width: 100px; max-height: 100px;">
+                        `;
+                    } else {
+                        return "No Image";
+                    }
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.name;
+                }
+            },
+
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
+                       <div class="d-flex gap-20">
+                                    <a href="{{ route('admin.blog.edit', '') }}/${data.slug}"
+                                        class="btn btn-primary">Edit</a>
+                                    <form
+                                        action="{{ route('admin.blog.delete', '') }}/${data.slug}"
+                                        method="POST" id="delete-form">
+                                        @csrf
+                                        <button type="button" class="btn btn-danger"
+                                            id="delete-btn">Delete</button>
+                                    </form>
+                                    <a href="{{ route('admin.blog.show', '') }}/${data.slug}"
+                                        class="btn btn-primary">Details</a>
+                             </div>
+                        `;
+                },
+            }
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.blog.get.data')])
 @endsection

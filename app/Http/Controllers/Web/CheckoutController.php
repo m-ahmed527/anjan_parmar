@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreOrderRequest;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +39,13 @@ class CheckoutController extends Controller
         try {
             $cart = session('cart');
             DB::beginTransaction();
+            $admin = User::role('Admin')->first();
             $order = $this->createOrder($cart, $request->billingSanitized(), $request->shippingSanitized());
+            $admin->notify(new NewOrderNotification(
+                'New Order Placed',
+                "{$order->user->first_name} Placed a order",
+                route('admin.order.details', $order->order_id),
+            ));
             session()->forget('cart');
             DB::commit();
             return response()->json([
@@ -74,6 +82,7 @@ class CheckoutController extends Controller
             $order->shippingAddress()->create($shipping);
         }
         $this->createOrderItems($order, $cart['items']);
+        return $order;
     }
 
     private function createOrderItems($order, $items)
