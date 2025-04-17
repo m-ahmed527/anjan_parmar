@@ -11,6 +11,7 @@ use App\Models\Variant;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductManagementController extends Controller
 {
@@ -19,10 +20,19 @@ class ProductManagementController extends Controller
      */
     public function index()
     {
-        $products = auth()->user()->products;
+        // $products = auth()->user()->products;
         return view('screens.vendor-store.product-management.index', get_defined_vars());
     }
-
+    public function getProductsData()
+    {
+        $products = auth()->user()->products;
+        $products->map(function ($product) {
+            $product->discounted_price = $product->discount();
+            $product->image = $product->getFirstMediaUrl('featured_image');
+            $product->search_key = $product->slug . $product->name . $product->price . $product->discounted_price . $product->discount_type;
+        });
+        return DataTables::of($products)->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -124,7 +134,6 @@ class ProductManagementController extends Controller
 
                 $var = $product->variants()->create($structuredArray[$i]);
                 $var->attributeValues()->sync($variantData);
-
             }
         }
         // dd($structuredArray,$variantData, $data);

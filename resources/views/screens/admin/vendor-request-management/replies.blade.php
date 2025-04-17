@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Replies on a Request')
 
@@ -56,14 +56,13 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($replies as $reply)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
                                                     #{{ $reply->response_id }}</td>
 
                                                 <td class="dtr-control sorting_1" tabindex="1">
-                                                    {{-- {{ Str::limit($reply->reply, 25, '...') }} --}}
                                                     {{ $reply->reply }}
                                                 </td>
                                                 <td class="dtr-control sorting_1" tabindex="1">
@@ -73,10 +72,7 @@
                                                     </span>
                                                 </td>
                                                 <td class="d-flex gap-20">
-                                                    {{-- <a href="{{ route('admin.vendor.requests.detail', $request->request_id) }}"
-                                                        class="btn btn-info">Details & Reply</a>
-                                                    <a href="{{ route('admin.vendor.requests.detail', $request->request_id) }}"
-                                                        class="btn btn-primary">Replies</a> --}}
+
                                                     <form
                                                         action="{{ route('admin.vendor.requests.reply.delete', $reply->response_id) }}"
                                                         method="POST" id="delete-form">
@@ -88,7 +84,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                             </div>
                         </div>
@@ -100,6 +96,61 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     @include('includes.admin.scripts.delete-script')
+
+
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [
+
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return '#' + row.response_id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.reply;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return `
+                        <span class="badge ${ row.status == 'sent' ? 'badge-warning' : 'badge-success' } p-2">
+                                                        ${row.status.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}
+                        </span>
+                    `;
+                }
+            },
+
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return `
+                    <div class="d-flex align-items-center gap-20">
+                        <form action="{{ route('admin.vendor.requests.reply.delete', '') }}/${row.response_id}" method="POST" id="delete-form" class="m-0">
+                            @csrf
+                            <button type="button" class="btn btn-danger" id="delete-btn">Delete</button>
+                        </form>
+                    </div>
+                `;
+                },
+            },
+
+
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', [
+        'url' => route('admin.vendor.requests.all.replies.get.data', $vendorRequest->request_id),
+    ])
 @endsection

@@ -11,6 +11,7 @@ use App\Notifications\VendorRequestNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class RequestManagementController extends Controller
 {
@@ -19,11 +20,20 @@ class RequestManagementController extends Controller
      */
     public function index()
     {
-        $requests = auth()->user()->vendorRequests;
+        // $requests = auth()->user()->vendorRequests;
         // dd(User::role("Admin")->first());
         return view('screens.vendor-store.request-management.index', get_defined_vars());
     }
 
+
+    public function getRequestsData()
+    {
+        $requests = auth()->user()->vendorRequests;
+        $requests->map(function ($request) {
+            $request->search_key = $request->request_id  . $request->subject . $request->message . $request->status . $request->created_at;
+        });
+        return DataTables::of($requests)->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      */

@@ -22,7 +22,7 @@ class OrderManagementController extends Controller
 
     public function getOrdersData()
     {
-        $orders = Order::with(['user'])->get();
+        $orders = Order::with(['user'])->latest()->get();
         $orders->map(function ($order) {
             $order->search_key = $order->user->first_name . $order->order_id . $order->payment_method . $order->payment_status . $order->order_status . $order->total . $order->created_at;
         });

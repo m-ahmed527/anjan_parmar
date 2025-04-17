@@ -86,7 +86,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($products as $product)
                                             <tr class="odd">
 
@@ -105,10 +105,7 @@
                                                 <td>{{ $product->discount_type == 'price' ? '$' : '' }}{{ $product->discount }}
                                                 </td>
                                                 <td>{{ $product->discount_type }}</td>
-                                                {{-- <td>
-                                                    <a href="#" data-id="{{ $product->slug }}" id="status"
-                                                        data-status="{{ $product->is_active }}">{{ $product->is_active == 1 ? 'Active' : 'Inactive' }}</a>
-                                                </td> --}}
+
                                                 <td class="d-flex gap-20">
                                                     <a href="{{ route('vendor.products.edit', $product->slug) }}"
                                                         class="btn btn-primary">Edit</a>
@@ -124,7 +121,7 @@
                                             </tr>
                                         @endforeach
 
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
 
                             </div>
@@ -136,35 +133,91 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
 
     @include('includes.admin.scripts.delete-script')
     <script>
-        $(document).ready(function() {
-            $(document).on("click", "#status", function(e) {
-                e.preventDefault()
-                var id = $(this).data("id");
-                var element = $(this);
-                var status = $(this).data("status");
+        let columns = [];
+        // Define columns based on type
 
-                console.log(element, id, status);
+        columns = [{
+                data: 'search_key',
+                render: function(data, type, row) {
 
-                $.ajax({
-                    method: "GET",
-                    url: "/admin/product-status/change/" + id,
-                    data: {
-                        is_active: status
-                    },
-                    success: function(response) {
-                        console.log(response.status);
-                        element.data("status", response.status);
-                        // var newText = ;
-                        element.html(response.status == 0 ? 'Inactive' : 'Active');
-                    },
-                });
-            });
+                    if (row.image) {
+                        return `
+                            <img src="${row.image}" alt="${row.name}" style="max-width: 100px; max-height: 100px;">
+                        `;
+                    }
+                },
+                orderable: false,
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
 
+                    return row.name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
 
-        });
+                    return row.price;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.discounted_price;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+                    if (row.discount_type == 'price') {
+
+                        return '$' + row.discount;
+                    } else {
+
+                        return row.discount;
+                    }
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.discount_type;
+                }
+            },
+
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
+                       <div class="d-flex gap-20">
+                                    <a href="{{ route('admin.product.edit', '') }}/${data.slug}"
+                                        class="btn btn-primary">Edit</a>
+                                    <form
+                                        action="{{ route('admin.product.delete', '') }}/${data.slug}"
+                                        method="POST" id="delete-form">
+                                        @csrf
+                                        <button type="button" class="btn btn-danger"
+                                            id="delete-btn">Delete</button>
+                                    </form>
+                                    <a href="{{ route('admin.product.details', '') }}/${data.slug}"
+                                        class="btn btn-primary">Details</a>
+                             </div>
+                        `;
+                },
+            }
+        ];
     </script>
+    @include('includes.admin.new-data-table-script', [
+        'url' => route('vendor.products.index.get.data', ['premium' => 0, 'role' => 'Admin']),
+    ])
 @endsection

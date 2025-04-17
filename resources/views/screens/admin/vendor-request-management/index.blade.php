@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @push('styles')
-    @include('includes.admin.data-table-css')
+    {{-- @include('includes.admin.data-table-css') --}}
 @endpush
 @section('title', 'Vendor\'s Requests')
 
@@ -21,7 +21,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
-                    <div class="col-10">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 {{-- <h3 class="card-title">DataTable with default features</h3> --}}
@@ -32,7 +32,7 @@
                             </div>
 
                             <div class="card-body">
-                                <table id="example1" class="table table-bordered table-striped dataTable dtr-inline"
+                                <table id="example1" class="table table-bordered"
                                     aria-describedby="example1_info">
                                     <thead>
                                         <tr>
@@ -61,7 +61,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @foreach ($requests as $request)
                                             <tr class="odd">
                                                 <td class="dtr-control sorting_1" tabindex="0">
@@ -95,7 +95,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                             </div>
                         </div>
@@ -107,6 +107,61 @@
     </div>
 @endsection
 @section('scripts')
-    @include('includes.admin.data-table-scripts')
+    {{-- @include('includes.admin.data-table-scripts') --}}
     @include('includes.admin.scripts.delete-script')
+
+
+
+    <script>
+        let columns = [];
+        // Define columns based on type
+
+        columns = [
+
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return '#' +row.request_id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.vendor.first_name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.vendor.business_name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return row.subject;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return `
+                        <div class="d-flex align-items-center gap-20">
+                            <a href="{{ route('admin.vendor.requests.detail', '') }}/${row.request_id}" class="btn btn-info">Details & Reply</a>
+                            <a href="{{ route('admin.vendor.requests.all.replies', '') }}/${row.request_id}" class="btn btn-primary">Replies</a>
+
+                        </div>
+                    `;
+                },
+            },
+
+
+        ];
+    </script>
+    @include('includes.admin.new-data-table-script', ['url' => route('admin.vendor.requests.get.data')])
 @endsection

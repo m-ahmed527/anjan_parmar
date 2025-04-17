@@ -145,50 +145,51 @@
     {{-- @include('includes.admin.scripts.delete-script') --}}
     <script>
         let columns = [];
+        let order = [];
         // Define columns based on type
-        if ((@json(request()->url())).includes('all-orders')) {
-            columns = [{
-                    data: 'search_key',
-                    render: function(data, type, row) {
 
-                        return row.user.first_name;
-                    }
-                },
-                {
-                    data: 'search_key',
-                    render: function(data, type, row) {
+        columns = [{
+                data: 'search_key',
+                render: function(data, type, row) {
 
-                        return row.order_id;
-                    }
-                },
-                {
-                    data: 'search_key',
-                    render: function(data, type, row) {
+                    return row.user.first_name;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
 
-                        return row.payment_method;
-                    }
-                },
-                {
-                    data: 'search_key',
-                    render: function(data, type, row) {
+                    return row.order_id;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
 
-                        return row.payment_status;
-                    }
-                },
-                {
-                    data: 'search_key',
-                    render: function(data, type, row) {
+                    return row.payment_method;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
 
-                        return row.total;
-                    }
+                    return row.payment_status;
+                }
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
 
-                },
+                    return row.total;
+                }
 
-                {
-                    data: 'search_key',
-                    render: function(data, type, row) {
+            },
 
-                        return `
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
+
+                    return `
                             <select class="form-control order-status-select" data-order-id="">
                                     <option ${ row.order_status == 'Created' ? 'selected' : '' }>
                                         Created</option>
@@ -202,28 +203,30 @@
                                         Cancelled</option>
                                 </select>
                                 `;
-                    },
-
                 },
-                {
-                    data: 'search_key',
-                    render: function(data, type, row) {
 
-                        return row.created_at;
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data) {
-                        console.log(data);
+            },
+            {
+                data: 'search_key',
+                render: function(data, type, row) {
 
-                        return `
+                    return row.created_at;
+                }
+            },
+            {
+                data: null,
+                render: function(data) {
+                    console.log(data);
+
+                    return `
                        <a href="{{ route('admin.order.details', '') }}/${data.order_id}" class="btn btn-info">Details</a>
                         `;
-                    },
-                }
-            ];
-        }
+                },
+            }
+        ];
+        order = [
+            [6, 'desc']
+        ];
     </script>
     @include('includes.admin.new-data-table-script', ['url' => route('admin.orders.get.data')])
 

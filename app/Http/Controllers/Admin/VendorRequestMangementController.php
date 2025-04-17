@@ -9,15 +9,27 @@ use App\Notifications\VendorResponseNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class VendorRequestMangementController extends Controller
 {
     public function index()
     {
         $requests = VendorRequest::all();
-        // dd($requests[0]->vendor);
         return view('screens.admin.vendor-request-management.index', get_defined_vars());
     }
+
+    public function getVendorRequestsData()
+    {
+        $requests = VendorRequest::with('vendor')->get();
+        $requests->map(function ($request) {
+            $request->search_key = $request->request_id . $request->vendor->first_name . $request->vendor->business_name . $request->subject . $request->status . $request->created_at;
+        });
+        return DataTables::of($requests)->make(true);
+    }
+
+
+
     public function show(VendorRequest $vendorRequest)
     {
         return view('screens.admin.vendor-request-management.details', get_defined_vars());
@@ -63,9 +75,19 @@ class VendorRequestMangementController extends Controller
     }
     public function allReplies(VendorRequest $vendorRequest)
     {
-        $replies = $vendorRequest->responses;
-        // dd($replies);
+        // $replies = $vendorRequest->responses;
+        // dd($vendorRequest);
         return view('screens.admin.vendor-request-management.replies', get_defined_vars());
+    }
+
+    public function getAllRepliesData(VendorRequest $vendorRequest)
+    {
+        $vendorRequest->load('responses');
+        $responses = $vendorRequest->responses;
+        $responses->map(function ($response) {
+            $response->search_key = $response->response_id . $response->reply . $response->status . $response->created_at;
+        });
+        return DataTables::of($responses)->make(true);
     }
     public function deleteReply(VendorResponse $vendorRequestReply)
     {

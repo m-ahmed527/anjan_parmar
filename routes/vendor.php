@@ -23,6 +23,7 @@ Route::middleware('auth', 'role_or_permission:Vendor')->group(function () {
     });
     Route::name('products.')->controller(ProductManagementController::class)->group(function () {
         Route::get('/products', 'index')->name('index');
+        Route::get('/products/get-data', 'getProductsData')->name('index.get.data');
         Route::get('/product/create', 'create')->name('create');
         Route::get('/product/get-attribues/{category}', 'getAttribute')->name('get.attributes');
         Route::post('/product/store', 'store')->name('store');
@@ -33,6 +34,7 @@ Route::middleware('auth', 'role_or_permission:Vendor')->group(function () {
     });
     Route::name('requests.')->controller(RequestManagementController::class)->group(function () {
         Route::get('/requests', 'index')->name('index');
+        Route::get('/requests/get-data', 'getRequestsData')->name('index.get.data');
         Route::get('/request/create', 'create')->name('create');
         Route::post('/request/store', 'store')->name('store');
         Route::get('/request/details/{vendorRequest}', 'show')->name('show');

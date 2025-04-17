@@ -111,16 +111,18 @@ Route::middleware('auth', 'is_admin', 'role_or_permission:Admin')->group(functio
     // Route::get('/offer/variant/details/{offer}', [OfferManagementController::class, 'offerVariantDetails'])->name('offer.variant.detail');
 
     // vendor requests
-    Route::get('/all-vendor-requests', [VendorRequestMangementController::class, 'index'])->name('vendor.requests');
-    Route::get('/vendor-requests/details/{vendorRequest}', [VendorRequestMangementController::class, 'show'])->name('vendor.requests.detail');
+    // Route::get('/all-vendor-requests', [VendorRequestMangementController::class, 'index'])->name('vendor.requests');
+    // Route::get('/vendor-requests/details/{vendorRequest}', [VendorRequestMangementController::class, 'show'])->name('vendor.requests.detail');
 
 
 
     // vendor requests
     Route::get('/all-vendor-requests', [VendorRequestMangementController::class, 'index'])->name('vendor.requests');
+    Route::get('/all-vendor-requests/get-data', [VendorRequestMangementController::class, 'getVendorRequestsData'])->name('vendor.requests.get.data');
     Route::get('/vendor-requests/details/{vendorRequest}', [VendorRequestMangementController::class, 'show'])->name('vendor.requests.detail');
     Route::post('/vendor-requests/reply/{vendorRequest}', [VendorRequestMangementController::class, 'reply'])->name('vendor.requests.reply');
     Route::get('/vendor-requests/all-replies/{vendorRequest}', [VendorRequestMangementController::class, 'allReplies'])->name('vendor.requests.all.replies');
+    Route::get('/vendor-requests/all-replies/{vendorRequest}/get-data', [VendorRequestMangementController::class, 'getAllRepliesData'])->name('vendor.requests.all.replies.get.data');
     Route::post('/vendor-requests/reply/delete/{vendorRequestReply}', [VendorRequestMangementController::class, 'deleteReply'])->name('vendor.requests.reply.delete');
 
     // contact-us

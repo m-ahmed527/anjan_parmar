@@ -177,6 +177,13 @@
                                 <p> Dashboard</p>
                             </a>
                         </li>
+                        <li class="nav-item mb-3">
+                            <a href="{{ route('vendor.account.index') }}" class="nav-link active">
+                                <i class="fa fa-user"></i>
+                                <p> Account Management</p>
+                            </a>
+
+                        </li>
 
 
                         @if (auth()?->user()?->status == 'approved')
@@ -248,13 +255,6 @@
                                 </li>
 
                             </ul>
-                        </li>
-                        <li class="nav-item mb-3">
-                            <a href="{{ route('vendor.account.index') }}" class="nav-link active">
-                                <i class="fa fa-user"></i>
-                                <p> Account Management</p>
-                            </a>
-
                         </li>
 
                         <li class="nav-item mb-3">
